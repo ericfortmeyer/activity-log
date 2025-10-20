@@ -1,0 +1,211 @@
+<?php
+
+declare(strict_types=1);
+
+use EricFortmeyer\ActivityLog\TimeEntriesContext;
+use EricFortmeyer\ActivityLog\TimeEntry;
+use Phpolar\Model\InputTypes;
+
+use function EricFortmeyer\ActivityLog\Templates\Components\input;
+use function EricFortmeyer\ActivityLog\Templates\Components\timeEntriesNav;
+use function EricFortmeyer\ActivityLog\Templates\Layout\head;
+
+(function (TimeEntriesContext $view) {
+?>
+    <!DOCTYPE html>
+    <html lang="en">
+    <?= head(
+        ctx: $view,
+        dialogScript: <<<HTML
+        <script defer src="/resources/js/dialog-handlers.js"></script>
+        HTML
+    )
+    ?>
+
+    <body>
+        <main class="container">
+            <h1>
+                <span>&#9889;</span>
+                <?= $view->getTitle() ?>
+                <a target="_blank" href="/export-data" style="float: right;" rel="prev" data-tooltip="Export">Export</a>
+            </h1>
+            <div class=grid>
+                <article id="activities">
+                    <header>
+                        <h2>
+                            <?= timeEntriesNav($view) ?>
+                            <button type="button" id="remarks-dialog-open-button"><?= $view->getRemarksButtonText() ?></button>
+                            <button type="button" id="credit-hours-dialog-open-button">Credit Hours</button>
+                            <?php if ($view->canShowReport()): ?>
+                                <button type="button" id="report-dialog-open-button">View Report</button>
+                                <form method="post" action="<?= $view->getMonthReportEmailUrl() ?>">
+                                    <input type="text" name="mailTo" required />
+                                    <input type="hidden" name="month" value="<?= $view->getMonth() ?>" />
+                                    <input type="hidden" name="year" value="<?= $view->getYear() ?>" />
+                                    <button type="submit" data-tooltip="Email Report">&#x1F582;</button>
+                                </form>
+                            <?php endif ?>
+                        </h2>
+                    </header>
+                    <hr />
+                    <?php if (count($view->timeEntries) === 0): ?>
+                        <p>No activities recorded yet.</p>
+                    <?php else: ?>
+                        <?php foreach ($view->timeEntries as $entry): ?>
+                            <article>
+                                <header>
+                                    <h3>
+                                        Activity on <?= $entry->getDate() ?>
+                                        <form data-style="delete-button" method="POST" action="<?= $view->getEntryDeleteUrl($entry) ?>" style="display: inline;">
+                                            <button type="submit" class="danger">X</button>
+                                        </form>
+                                    </h3>
+                                </header>
+                                <p>Duration: <?= $entry->getDuration() ?></p>
+                                <footer>
+                                    <a role="button" href="/time-entry/<?= $entry->getPrimaryKey() ?>">View</a>
+                                </footer>
+                            </article>
+                        <?php endforeach ?>
+                    <?php endif ?>
+                </article>
+                <article data-style="entry-form">
+                    <h2><?= $view->getAddActivityFormTitle() ?></h2>
+                    <p><span>&#x1F4A1;</span> <?= $view->getAddActivityInstructions() ?></p>
+                    <form method="POST" action="/time-entry/add">
+                        <div class="grid">
+                            <?= input(
+                                name: "month",
+                                label: $view->currentEntry->getLabel('month'),
+                                type: $view->currentEntry->getInputType('month'),
+                                value: $view->currentEntry->month ?? TimeEntry::getDefaultValue('month'),
+                                placeholder: 'Month',
+                                errorMessage: $view->currentEntry->getFieldErrorMessage('month', stringToAppend: ' ⚠'),
+                                isInvalid: $view->currentEntry->hasError('month')
+                            )
+                            ?>
+                            <?= input(
+                                name: "dayOfMonth",
+                                label: $view->currentEntry->getLabel('dayOfMonth'),
+                                type: $view->currentEntry->getInputType('dayOfMonth'),
+                                value: $view->currentEntry->dayOfMonth ?? TimeEntry::getDefaultValue('dayOfMonth'),
+                                placeholder: 'Day of Month',
+                                errorMessage: $view->currentEntry->getFieldErrorMessage('dayOfMonth', stringToAppend: ' ⚠'),
+                                isInvalid: $view->currentEntry->hasError('dayOfMonth')
+                            )
+                            ?>
+                            <?= input(
+                                name: "year",
+                                label: $view->currentEntry->getLabel('year'),
+                                type: $view->currentEntry->getInputType('year'),
+                                value: $view->currentEntry->year ?? TimeEntry::getDefaultValue('year'),
+                                placeholder: 'Year',
+                                errorMessage: $view->currentEntry->getFieldErrorMessage('year', stringToAppend: ' ⚠'),
+                                isInvalid: $view->currentEntry->hasError('year')
+                            )
+                            ?>
+                        </div>
+                        <div class="grid">
+                            <?= input(
+                                name: "hours",
+                                label: $view->currentEntry->getLabel('hours'),
+                                type: $view->currentEntry->getInputType('hours'),
+                                value: $view->currentEntry->hours ?? TimeEntry::getDefaultValue('hours'),
+                                placeholder: 'Hours',
+                                errorMessage: $view->currentEntry->getFieldErrorMessage('hours', stringToAppend: ' ⚠'),
+                                isInvalid: $view->currentEntry->hasError('hours')
+                            )
+                            ?>
+                            <?= input(
+                                name: "minutes",
+                                label: $view->currentEntry->getLabel('minutes'),
+                                type: $view->currentEntry->getInputType('minutes'),
+                                value: $view->currentEntry->minutes ?? TimeEntry::getDefaultValue('minutes'),
+                                placeholder: 'Minutes',
+                                errorMessage: $view->currentEntry->getFieldErrorMessage('minutes', stringToAppend: ' ⚠'),
+                                isInvalid: $view->currentEntry->hasError('minutes')
+                            )
+                            ?>
+                        </div>
+                        <?php foreach ($view->currentEntry as $field => $value): ?>
+                            <?php $inputType = $view->currentEntry->getInputType($field); ?>
+                            <?php if ($inputType === InputTypes::Hidden): ?>
+                                <input type="<?= $inputType->asString() ?>"
+                                    id="<?= $field ?>"
+                                    name="<?= $field ?>"
+                                    value="<?= $value instanceof DateTimeImmutable ? $value->format(DATE_RSS) : $value ?? TimeEntry::getDefaultValue($field) ?>" />
+                            <?php endif ?>
+                        <?php endforeach ?>
+                        <?php if ($view->hasFilter()): ?>
+                            <input type="hidden" id="filterYear" name="filterYear" value="<?= $view->getYearFilter() ?>" />
+                            <input type="hidden" id="filterMonth" name="filterMonth" value="<?= $view->getMonthFilter() ?>" />
+                        <?php endif ?>
+                        <div class="grid">
+                            <input type="reset">
+                            <input type="submit" value="Submit">
+                        </div>
+                    </form>
+                </article>
+            </div>
+
+        </main>
+        <dialog id="remarks-dialog" aria-labelledby="remarks-dialog-title" aria-describedby="remarks-dialog-description">
+            <article>
+                <header>
+                    <button type="button" id="remarks-dialog-close-button" class="close" aria-label="Close" rel="prev">&times;</button>
+                    <p>&#x1F4D8; <strong>Remarks</strong></p>
+                </header>
+                <form method="post" action="/remarks-for-month">
+                    <?php if ($view->isEditingRemarks()): ?>
+                        <input type="hidden" id="remarks-id" name="id" value="<?= $view->getRemarksId() ?>" />
+                    <?php endif ?>
+                    <input type="hidden" id="remarks-month" name="month" value="<?= $view->getRemarksMonth() ?>" />
+                    <input type="hidden" id="remarks-year" name="year" value="<?= $view->getRemarksYear() ?>" />
+                    <textarea id="remarks" name="remarks" rows="6" cols="50" placeholder="Add remarks here..."><?= $view->getRemarksForCurrentMonth() ?></textarea>
+                    <button type="submit">Save</button>
+                </form>
+            </article>
+        </dialog>
+        <dialog id="report-dialog">
+            <article>
+                <header>
+                    <button type="button" id="report-dialog-close-button" class="close" aria-label="Close" rel="prev">&times;</button>
+                    <p>Report for <?= $view->getMonthTitle() ?></p>
+                </header>
+                <p>
+                    <strong>Total: <?= $view->getTotalHours() ?> Hours</strong>
+                </p>
+                <?php if ($view->shouldShowCreditHours()): ?>
+                    <p>
+                        <strong>Credit: <?= $view->getCreditHours() ?> Hours</strong>
+                    </p>
+                <?php endif ?>
+                <form method="get" action="#">
+                    <label for="report-remarks">Remarks</label>
+                    <textarea readonly id="report-remarks" name="remarks" rows="6" cols="50"><?= $view->getRemarksForCurrentMonth() ?></textarea>
+                </form>
+            </article>
+        </dialog>
+        <dialog id="credit-hours-dialog">
+            <article>
+                <header>
+                    <h2>
+
+                        <button type="button" id="credit-hours-dialog-close-button" class="close" aria-label="Close" rel="prev">&times;</button>
+                        <p>Credit Hours</p>
+                    </h2>
+                </header>
+                <form method="post" action="/credit-hours">
+                    <label for="credit-hours">Hours</label>
+                    <input type="number" id="credit-hours" name="hours" min="0" value="<?= $view->getCreditHours() ?>" />
+                    <input type="hidden" id="credit-hours-month" name="month" value="<?= $view->getRemarksMonth() ?>" />
+                    <input type="hidden" id="credit-hours-year" name="year" value="<?= $view->getRemarksYear() ?>" />
+                    <button type="submit">Save</button>
+                </form>
+            </article>
+        </dialog>
+    </body>
+
+    </html>
+<?php
+})($this);

@@ -1,0 +1,55 @@
+[data-style=danger] {
+    border-color: var(--pico-del-color);
+    background-color: var(--pico-del-color);
+}
+
+form[data-style=delete-button] {
+    display: inline;
+    margin: 0;
+    padding: 0;
+    float: right
+}
+
+form[data-style=delete-button] button[type=submit] {
+    width:unset
+}
+
+li.hide-me {
+    display: none;
+}
+
+/* Add some spacing between grid items */
+.grid article {
+    margin-bottom: 1rem;
+}
+
+/* Style the back button */
+nav ul {
+    padding: 0;
+    margin: 1rem 0;
+}
+
+nav ul li {
+    list-style: none;
+}
+
+/* Add some spacing in the details view */
+.grid > div {
+    margin-bottom: 1.5rem;
+}
+
+[data-style=entry-form] label {
+    white-space: nowrap;
+}
+
+/* Make delete button less prominent */
+[data-style=delete-button] button.danger {
+    --pico-background-color: #e74c3c;
+    --pico-border-color: #c0392b;
+}
+
+[data-style=delete-button] button.danger:hover,
+[data-style=delete-button] button.danger:focus {
+    --pico-background-color: #c0392b;
+    --pico-border-color: #e74c3c;
+}

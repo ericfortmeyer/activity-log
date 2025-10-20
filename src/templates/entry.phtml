@@ -1,0 +1,55 @@
+<?php
+
+declare(strict_types=1);
+
+use EricFortmeyer\ActivityLog\TimeEntryContext;
+use function EricFortmeyer\ActivityLog\Templates\Layout\head;
+
+(function (TimeEntryContext $view) {
+?>
+    <!DOCTYPE html>
+    <html lang="en">
+    <?= head($view) ?>
+
+    <body>
+        <main class="container">
+            <nav>
+                <ul>
+                    <li><a href="/" role="button">← Back to List</a></li>
+                </ul>
+            </nav>
+
+            <article>
+                <header>
+                    <h1>
+                        <?= $view->getTitle() ?>
+                        <form data-style="delete-button" method="POST" action="/time-entry/delete/<?= $view->timeEntry->getPrimaryKey() ?>" style="display: inline;">
+                            <button type="submit" class="danger">X</button>
+                        </form>
+                    </h1>
+                </header>
+
+                <div class="grid">
+                    <div>
+                        <strong>Date:</strong>
+                        <p><?= $view->timeEntry->dayOfMonth ?>/<?= $view->timeEntry->year ?></p>
+                    </div>
+                    <div>
+                        <strong>Duration:</strong>
+                        <p><?= $view->timeEntry->hours ?>h <?= $view->timeEntry->minutes ?>m</p>
+                    </div>
+                    <div>
+                        <strong>Created:</strong>
+                        <p><?= $view->timeEntry->createdOn->format('Y-m-d H:i:s') ?></p>
+                    </div>
+                </div>
+
+                <footer>
+                </footer>
+            </article>
+        </main>
+    </body>
+
+    </html>
+<?php
+})($this);
