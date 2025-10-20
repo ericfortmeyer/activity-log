@@ -1,2 +1,2 @@
-# activity-log
+# Activity Log
 A time tracking application
