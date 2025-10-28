@@ -18,9 +18,9 @@ use const EricFortmeyer\ActivityLog\FileNames\REMARKS_STORAGE;
 use const EricFortmeyer\ActivityLog\FileNames\TIME_ENTRY_STORAGE;
 
 return [
-    TIME_ENTRY_CSV_FILE => join(DIRECTORY_SEPARATOR, [getcwd(), TIME_ENTRY_STORAGE]),
-    REMARKS_CSV_FILE => join(DIRECTORY_SEPARATOR, [getcwd(), REMARKS_STORAGE]),
-    CREDIT_HOURS_CSV_FILE => join(DIRECTORY_SEPARATOR, [getcwd(), CREDIT_HOURS_STORAGE]),
+    TIME_ENTRY_CSV_FILE => join(DIRECTORY_SEPARATOR, ["/srv/www/data", TIME_ENTRY_STORAGE]),
+    REMARKS_CSV_FILE => join(DIRECTORY_SEPARATOR, ["/srv/www/data", REMARKS_STORAGE]),
+    CREDIT_HOURS_CSV_FILE => join(DIRECTORY_SEPARATOR, ["/srv/www/data", CREDIT_HOURS_STORAGE]),
     DiTokensCREDIT_HOURS_STORAGE => static fn(ContainerInterface $container) => new CsvFileStorage(
         filename: $container->get(CREDIT_HOURS_CSV_FILE),
         typeClassName: CreditHours::class,
