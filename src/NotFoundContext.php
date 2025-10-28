@@ -9,8 +9,13 @@ namespace EricFortmeyer\ActivityLog;
  */
 final class NotFoundContext
 {
-    public string $title = "Not Found";
+    private string $title = "Not Found";
     public function __construct(
         public string $message,
     ) {}
+
+    public function getTitle(): string
+    {
+        return $this->title;
+    }
 }

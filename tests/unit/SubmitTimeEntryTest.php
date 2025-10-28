@@ -9,6 +9,7 @@ use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Phpolar\PurePhp\TemplateEngine;
+use Phpolar\Storage\NotFound;
 
 #[CoversClass(SubmitTimeEntry::class)]
 #[UsesClass(TimeEntry::class)]
@@ -19,12 +20,21 @@ final class SubmitTimeEntryTest extends TestCase
     private TimeEntryService&MockObject $timeEntryService;
     private TemplateEngine $templateEngine;
     private SubmitTimeEntry $submitTimeEntry;
+    private RemarksForMonthService&MockObject $remarksForMonthService;
 
     protected function setUp(): void
     {
         $this->timeEntryService = $this->createMock(TimeEntryService::class);
+        $this->remarksForMonthService = $this->createMock(RemarksForMonthService::class);
+        $this->remarksForMonthService
+            ->method("get")
+            ->willReturn(new NotFound());
         $this->templateEngine = new TemplateEngine();
-        $this->submitTimeEntry = new SubmitTimeEntry($this->timeEntryService, $this->templateEngine);
+        $this->submitTimeEntry = new SubmitTimeEntry(
+            timeEntryService: $this->timeEntryService,
+            remarksForMonthService: $this->remarksForMonthService,
+            templateEngine: $this->templateEngine,
+        );
     }
 
     public function testProcessRendersTemplateWithUpdatedTimeEntries(): void

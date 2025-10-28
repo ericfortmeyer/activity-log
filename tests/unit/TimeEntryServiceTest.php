@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace EricFortmeyer\ActivityLog;
 
-use Phpolar\Phpolar\Http\Status\ClientError\NotFound;
+use Phpolar\Storage\NotFound;
 use Phpolar\Storage\StorageContext;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesClass;

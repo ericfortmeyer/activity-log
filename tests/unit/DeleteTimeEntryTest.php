@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace EricFortmeyer\ActivityLog;
 
-use Phpolar\Phpolar\Http\Status\ClientError\NotFound;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Phpolar\PurePhp\TemplateEngine;
+use Phpolar\Storage\NotFound;
 use PHPUnit\Framework\Attributes\UsesClass;
 
 /**
@@ -23,14 +23,23 @@ use PHPUnit\Framework\Attributes\UsesClass;
 final class DeleteTimeEntryTest extends TestCase
 {
     private TimeEntryService&MockObject $timeEntryService;
+    private RemarksForMonthService&MockObject $remarksForMonthService;
     private TemplateEngine $templateEngine;
     private DeleteTimeEntry $deleteTimeEntry;
 
     protected function setUp(): void
     {
         $this->timeEntryService = $this->createMock(TimeEntryService::class);
+        $this->remarksForMonthService = $this->createMock(RemarksForMonthService::class);
+        $this->remarksForMonthService
+            ->method("get")
+            ->willReturn(new NotFound());
         $this->templateEngine = new TemplateEngine();
-        $this->deleteTimeEntry = new DeleteTimeEntry($this->timeEntryService, $this->templateEngine);
+        $this->deleteTimeEntry = new DeleteTimeEntry(
+            timeEntryService: $this->timeEntryService,
+            remarksForMonthService: $this->remarksForMonthService,
+            templateEngine: $this->templateEngine,
+        );
     }
 
     public function testProcessDeletesTimeEntry(): void
@@ -50,7 +59,7 @@ final class DeleteTimeEntryTest extends TestCase
             ->with($entryId)
             ->willReturn($deletedEntry);
 
-        $response = $this->deleteTimeEntry->process($entryId);
+        $response = $this->deleteTimeEntry->process(new MonthFilters(), $entryId);
         $this->assertStringContainsString("Activity", $response);
     }
 
@@ -62,7 +71,7 @@ final class DeleteTimeEntryTest extends TestCase
             ->method("delete")
             ->willReturn(new NotFound());
 
-        $response = $this->deleteTimeEntry->process($entryId);
+        $response = $this->deleteTimeEntry->process(new MonthFilters(), $entryId);
         $this->assertStringContainsString("Not Found", $response);
     }
 }

@@ -18,6 +18,7 @@ final class GetTimeEntriesTest extends TestCase
 {
     private TimeEntryService&MockObject $timeEntryService;
     private RemarksForMonthService&MockObject $remarksForMonthService;
+    private CreditHoursService&MockObject $creditHoursService;
     private TemplateEngine $templateEngine;
     private GetTimeEntries $getTimeEntries;
 
@@ -25,11 +26,13 @@ final class GetTimeEntriesTest extends TestCase
     {
         $this->timeEntryService = $this->createMock(TimeEntryService::class);
         $this->remarksForMonthService = $this->createMock(RemarksForMonthService::class);
+        $this->creditHoursService = $this->createMock(CreditHoursService::class);
         $this->templateEngine = new TemplateEngine();
         $this->getTimeEntries = new GetTimeEntries(
-            $this->timeEntryService,
-            $this->remarksForMonthService,
-            $this->templateEngine
+            timeEntryService: $this->timeEntryService,
+            remarksForMonthService: $this->remarksForMonthService,
+            creditHoursService: $this->creditHoursService,
+            templateEngine: $this->templateEngine,
         );
     }
 
@@ -60,6 +63,9 @@ final class GetTimeEntriesTest extends TestCase
         $this->remarksForMonthService->expects($this->once())
             ->method("get")
             ->willReturn(new NotFound());
+        $this->creditHoursService->expects($this->once())
+            ->method("get")
+            ->willReturn(new NotFound());
 
         $response = $this->getTimeEntries->process();
         $this->assertStringContainsString("Activity", $response);
@@ -72,6 +78,9 @@ final class GetTimeEntriesTest extends TestCase
             ->willReturn([]);
 
         $this->remarksForMonthService->expects($this->once())
+            ->method("get")
+            ->willReturn(new NotFound());
+        $this->creditHoursService->expects($this->once())
             ->method("get")
             ->willReturn(new NotFound());
 

@@ -7,8 +7,8 @@ namespace EricFortmeyer\ActivityLog;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Phpolar\Phpolar\Http\Status\ClientError\NotFound;
 use Phpolar\PurePhp\TemplateEngine;
+use Phpolar\Storage\NotFound;
 use PHPUnit\Framework\Attributes\UsesClass;
 
 #[CoversClass(GetTimeEntry::class)]

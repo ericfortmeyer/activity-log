@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace EricFortmeyer\ActivityLog;
 
 use Phpolar\HttpRequestProcessor\RequestProcessorInterface;
-use Phpolar\Phpolar\Http\Status\ClientError\NotFound;
 use Phpolar\PurePhp\TemplateEngine;
 use Phpolar\PurePhp\HtmlSafeContext;
 use EricFortmeyer\ActivityLog\{NotFoundContext, TimeEntryContext};
+use Phpolar\Storage\NotFound;
 
 final class GetTimeEntry implements RequestProcessorInterface
 {
