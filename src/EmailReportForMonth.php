@@ -76,45 +76,44 @@ final class EmailReportForMonth implements RequestProcessorInterface
         bool $shouldShowCreditHours,
         bool $shouldShowRemarks,
     ): string {
-        return "Boom!";
-        // return match (true) {
-        //     $shouldShowCreditHours && $shouldShowRemarks =>
-        //     <<<HTML
-        //     <p>
-        //         <strong>Total:</strong> {$totalHours} Hours
-        //     </p>
-        //     <p>
-        //         <strong>Credit:</strong> {$creditHours} Hours
-        //     </p>
-        //     <p>
-        //         <strong>Remarks:</strong> {$remarks}
-        //     </p>
-        //     HTML,
-        //     $shouldShowCreditHours =>
-        //     <<<HTML
-        //     <p>
-        //         <strong>Total:</strong> {$totalHours} Hours
-        //     </p>
-        //     <p>
-        //         <strong>Credit:</strong> {$creditHours} Hours
-        //     </p>
-        //     HTML,
-        //     $shouldShowRemarks =>
-        //     <<<HTML
-        //     <p>
-        //         <strong>Total:</strong> {$totalHours} Hours
-        //     </p>
-        //     <p>
-        //         <strong>Remarks:</strong> {$remarks}
-        //     </p>
-        //     HTML,
-        //     default =>
-        //     <<<HTML
-        //     <p>
-        //         <strong>Total:</strong> {$totalHours} Hours
-        //     </p>
-        //     HTML
-        // };
+        return match (true) {
+            $shouldShowCreditHours && $shouldShowRemarks =>
+            <<<HTML
+            <p>
+                <strong>Total:</strong> {$totalHours} Hours
+            </p>
+            <p>
+                <strong>Credit:</strong> {$creditHours} Hours
+            </p>
+            <p>
+                <strong>Remarks:</strong> {$remarks}
+            </p>
+            HTML,
+            $shouldShowCreditHours =>
+            <<<HTML
+            <p>
+                <strong>Total:</strong> {$totalHours} Hours
+            </p>
+            <p>
+                <strong>Credit:</strong> {$creditHours} Hours
+            </p>
+            HTML,
+            $shouldShowRemarks =>
+            <<<HTML
+            <p>
+                <strong>Total:</strong> {$totalHours} Hours
+            </p>
+            <p>
+                <strong>Remarks:</strong> {$remarks}
+            </p>
+            HTML,
+            default =>
+            <<<HTML
+            <p>
+                <strong>Total:</strong> {$totalHours} Hours
+            </p>
+            HTML
+        };
     }
 
     private function getContext(
@@ -124,10 +123,19 @@ final class EmailReportForMonth implements RequestProcessorInterface
         CreditHours|NotFound $creditHours,
     ): TimeEntriesContext {
         return match (true) {
-            $remarks instanceof NotFound && $creditHours instanceof NotFound => new TimeEntriesContext(timeEntries: $timeEntries, filters: $monthFilters),
-            $creditHours instanceof NotFound === false && $remarks instanceof NotFound === false => new TimeEntriesContext(timeEntries: $timeEntries, filters: $monthFilters, remarks: $remarks, creditHours: $creditHours),
-            $creditHours instanceof NotFound === false => new TimeEntriesContext(timeEntries: $timeEntries, filters: $monthFilters, creditHours: $creditHours),
-            $remarks instanceof NotFound === false => new TimeEntriesContext(timeEntries: $timeEntries, filters: $monthFilters, remarks: $remarks),
+            $remarks instanceof NotFound && $creditHours instanceof NotFound =>
+            new TimeEntriesContext(timeEntries: $timeEntries, filters: $monthFilters),
+            $creditHours instanceof NotFound === false && $remarks instanceof NotFound === false =>
+            new TimeEntriesContext(
+                timeEntries: $timeEntries,
+                filters: $monthFilters,
+                remarks: $remarks,
+                creditHours: $creditHours
+            ),
+            $creditHours instanceof NotFound === false =>
+            new TimeEntriesContext(timeEntries: $timeEntries, filters: $monthFilters, creditHours: $creditHours),
+            $remarks instanceof NotFound === false =>
+            new TimeEntriesContext(timeEntries: $timeEntries, filters: $monthFilters, remarks: $remarks),
         };
     }
 }

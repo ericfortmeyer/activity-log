@@ -18,8 +18,10 @@ final class SubmitTimeEntry implements RequestProcessorInterface
         private readonly TemplateEngine $templateEngine,
     ) {}
 
-    public function process(#[Model] TimeEntry $entry = new TimeEntry(), #[Model] MonthFilters $monthFilters = new MonthFilters()): string
-    {
+    public function process(
+        #[Model] TimeEntry $entry = new TimeEntry(),
+        #[Model] MonthFilters $monthFilters = new MonthFilters()
+    ): string {
         if ($entry->isValid() === true) {
             $entry->create();
             $this->timeEntryService->save($entry);

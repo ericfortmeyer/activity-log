@@ -12,8 +12,8 @@ use DateTimeImmutable;
 final class TimeEntriesContext
 {
     public function __construct(
-        /** 
-         * @param TimeEntry[] $timeEntries 
+        /**
+         * @param TimeEntry[] $timeEntries
          */
         public array $timeEntries = [],
         public TimeEntry $currentEntry = new TimeEntry(),
@@ -22,7 +22,8 @@ final class TimeEntriesContext
         public CreditHours $creditHours = new CreditHours(),
         private readonly string $title = "Activity Log",
         private readonly string $addActivityFormTitle = "Add an activity",
-        private readonly string $addActivityInstructions = "Select a date. Then enter the hours and minutes for the duration of the activity.",
+        private readonly string $addActivityInstructions = "Select a date. Then enter the hours and minutes "
+            . "for the duration of the activity.",
         private readonly string $deleteUrl = "/time-entry/delete",
         private readonly string $emailUrl = "/report/send",
     ) {}

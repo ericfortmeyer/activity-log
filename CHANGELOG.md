@@ -1,3 +1,7 @@
+# Changelog
+
+This file documents changes to the Activity Log application.
+
 ## 0.1.0 (2025-10-27)
 
 ### Feat

@@ -7,7 +7,9 @@ use Phpolar\Storage\StorageContext;
 
 class RemarksForMonthService
 {
-    public function __construct(private readonly StorageContext $storageContext) {}
+    public function __construct(private readonly StorageContext $storageContext)
+    {
+    }
 
     public function save(RemarksForMonth $remarks): void
     {

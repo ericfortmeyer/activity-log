@@ -14,7 +14,9 @@ use Phpolar\Storage\StorageContext;
  */
 class TimeEntryService
 {
-    public function __construct(private readonly StorageContext $storageContext) {}
+    public function __construct(private readonly StorageContext $storageContext)
+    {
+    }
 
     /**
      * Deletes a time entry by its ID.

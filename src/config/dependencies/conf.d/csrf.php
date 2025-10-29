@@ -56,23 +56,24 @@ return [
             REQUEST_ID,
         );
     },
-    ResponseFilterInterface::class => static fn (ContainerInterface $container) => new CsrfResponseFilter($container->get(ResponseFilterStrategyInterface::class)),
-    DiTokens::CSRF_CHECK_MIDDLEWARE => static fn (ContainerInterface $container) =>
+    ResponseFilterInterface::class => static fn(ContainerInterface $container) =>
+    new CsrfResponseFilter($container->get(ResponseFilterStrategyInterface::class)),
+    DiTokens::CSRF_CHECK_MIDDLEWARE => static fn(ContainerInterface $container) =>
     new CsrfRequestCheckMiddleware(
         $container->get(CsrfProtectionRequestHandler::class),
     ),
-    DiTokens::CSRF_RESPONSE_FILTER_MIDDLEWARE => static fn (ContainerInterface $container) =>
+    DiTokens::CSRF_RESPONSE_FILTER_MIDDLEWARE => static fn(ContainerInterface $container) =>
     new CsrfResponseFilterMiddleware(
         $container->get(ResponseFilterInterface::class),
     ),
-    CsrfProtectionRequestHandler::class => static fn (ContainerInterface $container) =>
+    CsrfProtectionRequestHandler::class => static fn(ContainerInterface $container) =>
     new CsrfProtectionRequestHandler(
         $container->get("csrf_token"),
         $container->get(AbstractTokenStorage::class),
         $container->get(ResponseFactoryInterface::class),
         REQUEST_ID,
     ),
-    AbstractTokenStorage::class => static fn () =>
+    AbstractTokenStorage::class => static fn() =>
     new SessionTokenStorage(
         new SessionWrapper($_SESSION),
         REQUEST_ID,

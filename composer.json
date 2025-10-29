@@ -34,12 +34,18 @@
     ]
   },
   "require-dev": {
-    "phpunit/phpunit": "^12.0.9"
+    "phpstan/phpstan": "^2.1",
+    "phpunit/phpunit": "^12.0.9",
+    "squizlabs/php_codesniffer": "^4"
   },
   "scripts": {
     "test": [
       "phpunit --color=always"
     ],
+    "cs": "phpcs --exclude=Squiz.Functions.MultiLineFunctionDeclaration,Squiz.WhiteSpace.ScopeClosingBrace --standard=PSR12 ./src ./tests",
+    "cbf": "phpcbf --exclude=Squiz.Functions.MultiLineFunctionDeclaration,Squiz.WhiteSpace.ScopeClosingBrace --standard=PSR12 ./src ./tests",
+    "lint": "composer exec @cs",
+    "lint-fix": "composer exec @cbf",
     "ci:lint": [
       "echo 'linting skipped'"
     ],

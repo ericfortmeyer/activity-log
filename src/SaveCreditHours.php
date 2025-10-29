@@ -15,10 +15,13 @@ final class SaveCreditHours implements RequestProcessorInterface
         private readonly RemarksForMonthService $remarksService,
         private readonly TimeEntryService $timeEntryService,
         private readonly TemplateEngine $templateEngine,
-    ) {}
+    ) {
+    }
 
-    public function process(#[Model] CreditHours $creditHours = new CreditHours(), #[Model] MonthFilters $monthFilters = new MonthFilters()): string
-    {
+    public function process(
+        #[Model] CreditHours $creditHours = new CreditHours(),
+        #[Model] MonthFilters $monthFilters = new MonthFilters()
+    ): string {
         if ($creditHours->isValid() === true) {
             $this->creditHoursService->save($creditHours);
         }

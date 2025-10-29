@@ -24,8 +24,10 @@ final class DeleteTimeEntry implements RequestProcessorInterface
         private readonly TemplateEngine $templateEngine,
     ) {}
 
-    public function process(#[Model] MonthFilters $monthFilters = new MonthFilters(), string $id = ""): string
-    {
+    public function process(
+        #[Model] MonthFilters $monthFilters = new MonthFilters(),
+        string $id = "",
+    ): string {
         $deletedEntry = $this->timeEntryService->delete($id);
 
         if ($deletedEntry instanceof NotFound) {

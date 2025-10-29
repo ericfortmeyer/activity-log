@@ -7,7 +7,9 @@ use Phpolar\Storage\StorageContext;
 
 class CreditHoursService
 {
-    public function __construct(private readonly StorageContext $storageContext) {}
+    public function __construct(private readonly StorageContext $storageContext)
+    {
+    }
 
     public function save(CreditHours $creditHours): void
     {

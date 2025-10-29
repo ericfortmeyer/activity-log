@@ -12,7 +12,8 @@ final class TimeEntryContext
     public function __construct(
         public TimeEntry $timeEntry,
         private readonly string $title = "Activity Details",
-    ) {}
+    ) {
+    }
 
     public function getTitle(): string
     {

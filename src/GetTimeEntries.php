@@ -60,10 +60,19 @@ final class GetTimeEntries implements RequestProcessorInterface
         CreditHours|NotFound $creditHours,
     ): TimeEntriesContext {
         return match (true) {
-            $remarks instanceof NotFound && $creditHours instanceof NotFound => new TimeEntriesContext($timeEntries, $timeEntry, $monthFilters),
-            $creditHours instanceof NotFound === false && $remarks instanceof NotFound === false => new TimeEntriesContext($timeEntries, $timeEntry, $monthFilters, $remarks, $creditHours),
-            $creditHours instanceof NotFound === false => new TimeEntriesContext(timeEntries: $timeEntries, currentEntry: $timeEntry, filters: $monthFilters, creditHours: $creditHours),
-            $remarks instanceof NotFound === false => new TimeEntriesContext($timeEntries, $timeEntry, $monthFilters, $remarks),
+            $remarks instanceof NotFound && $creditHours instanceof NotFound =>
+            new TimeEntriesContext($timeEntries, $timeEntry, $monthFilters),
+            $creditHours instanceof NotFound === false && $remarks instanceof NotFound === false =>
+            new TimeEntriesContext($timeEntries, $timeEntry, $monthFilters, $remarks, $creditHours),
+            $creditHours instanceof NotFound === false =>
+            new TimeEntriesContext(
+                timeEntries: $timeEntries,
+                currentEntry: $timeEntry,
+                filters: $monthFilters,
+                creditHours: $creditHours
+            ),
+            $remarks instanceof NotFound === false =>
+            new TimeEntriesContext($timeEntries, $timeEntry, $monthFilters, $remarks),
         };
     }
 }

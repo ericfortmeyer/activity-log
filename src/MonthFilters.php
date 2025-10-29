@@ -6,7 +6,6 @@ namespace EricFortmeyer\ActivityLog;
 
 use DateTimeImmutable;
 use Phpolar\Model\AbstractModel;
-
 use Phpolar\Validators\Max;
 
 final class MonthFilters extends AbstractModel

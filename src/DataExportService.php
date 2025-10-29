@@ -8,7 +8,9 @@ use DateTimeImmutable;
 
 class DataExportService
 {
-    public function __construct(private string $sourceFileName) {}
+    public function __construct(private string $sourceFileName)
+    {
+    }
 
     public function export(): string
     {

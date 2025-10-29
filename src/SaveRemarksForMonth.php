@@ -15,10 +15,13 @@ final class SaveRemarksForMonth implements RequestProcessorInterface
         private readonly CreditHoursService $creditHoursService,
         private readonly TimeEntryService $timeEntryService,
         private readonly TemplateEngine $templateEngine,
-    ) {}
+    ) {
+    }
 
-    public function process(#[Model] RemarksForMonth $remarks = new RemarksForMonth(), #[Model] MonthFilters $monthFilters = new MonthFilters()): string
-    {
+    public function process(
+        #[Model] RemarksForMonth $remarks = new RemarksForMonth(),
+        #[Model] MonthFilters $monthFilters = new MonthFilters()
+    ): string {
         if ($remarks->isValid() === true) {
             $this->remarksService->save($remarks);
         }

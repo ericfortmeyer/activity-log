@@ -15,7 +15,8 @@ final class GetTimeEntry implements RequestProcessorInterface
     public function __construct(
         private readonly TimeEntryService $timeEntryService,
         private readonly TemplateEngine $templateEngine,
-    ) {}
+    ) {
+    }
 
     public function process(string $id = ""): string
     {

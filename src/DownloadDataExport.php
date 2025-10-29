@@ -8,7 +8,9 @@ use Phpolar\HttpRequestProcessor\RequestProcessorInterface;
 
 final class DownloadDataExport implements RequestProcessorInterface
 {
-    public function __construct(private DataExportService $dataExportService) {}
+    public function __construct(private DataExportService $dataExportService)
+    {
+    }
 
     public function process(): array|bool|int|null|object|string
     {

@@ -12,7 +12,8 @@ final class NotFoundContext
     private string $title = "Not Found";
     public function __construct(
         public string $message,
-    ) {}
+    ) {
+    }
 
     public function getTitle(): string
     {
