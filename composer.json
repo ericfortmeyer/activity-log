@@ -1,8 +1,15 @@
 {
+  "$schema": "https://getcomposer.org/schema.json",
   "name": "ericfortmeyer/activity-log",
   "description": "A time tracking application.",
   "type": "project",
   "license": "GNU GPLv3",
+  "authors": [
+    {
+      "name": "Eric Fortmeyer",
+      "email": "e.fortmeyer01@gmail.com"
+    }
+  ],
   "require": {
     "php": ">=8.4",
     "ext-pdo": "*",
