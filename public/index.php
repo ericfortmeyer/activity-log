@@ -39,24 +39,24 @@ require "vendor/autoload.php";
 $dependencyMap = new \Pimple\Container();
 $psr11Container = new \Pimple\Psr11\Container($dependencyMap);
 
-// set_exception_handler(static function (Throwable $e) {
-//     $log = new Logger("Activity Log");
-//     $syslog = new SyslogHandler("Activity Log");
-//     $formatter = new LineFormatter("%channel%.%level_name%: %message% %context% %extra%");
-//     $syslog->setFormatter($formatter);
-//     $log->pushHandler($syslog);
-//     $log->alert("Exception", ["exception" => $e->getMessage(), "stacktrace" => $e->getTrace()]);
+set_exception_handler(static function (Throwable $e) {
+    $log = new Logger("Activity Log");
+    $syslog = new SyslogHandler("Activity Log");
+    $formatter = new LineFormatter("%channel%.%level_name%: %message% %context% %extra%");
+    $syslog->setFormatter($formatter);
+    $log->pushHandler($syslog);
+    $log->alert("Exception", ["exception" => $e->getMessage(), "stacktrace" => $e->getTrace()]);
 
-//     http_response_code(500);
-//     echo new TemplateEngine()->apply(
-//         "500",
-//         new HtmlSafeContext(
-//             new ServerErrorContext(
-//                 message: "An error occurred. We are investigating."
-//             )
-//         )
-//     );
-// });
+    http_response_code(500);
+    echo new TemplateEngine()->apply(
+        "500",
+        new HtmlSafeContext(
+            new ServerErrorContext(
+                message: "An error occurred. We are investigating."
+            )
+        )
+    );
+});
 
 new ContainerLoader()->load($psr11Container, $dependencyMap);
 
