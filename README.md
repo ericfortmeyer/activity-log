@@ -1,9 +1,13 @@
+# Activity Log
+
 <!-- markdownlint-disable MD033-->
 <!-- markdownlint-disable MD041-->
 <p align=center>
-    <img width="160" src="./public/favicon.svg" alt="Application logo" />
+    <img src="./public/favicon.svg" alt="Application logo" width="120px" height="120px" />
+    <br>
+    <em>A time tracking application
 </p>
 
-# Activity Log
+## Documentation
 
-A time tracking application
+Documentation coming soon
