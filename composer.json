@@ -2,7 +2,7 @@
   "name": "ericfortmeyer/activity-log",
   "description": "A time tracking application.",
   "type": "project",
-  "license": "MIT",
+  "license": "GNU GPLv3",
   "require": {
     "php": ">=8.4",
     "ext-pdo": "*",
