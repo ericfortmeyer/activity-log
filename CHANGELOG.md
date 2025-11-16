@@ -2,6 +2,12 @@
 
 This file documents changes to the Activity Log application.
 
+## 0.3.0 (2025-11-16)
+
+### Feat
+
+- add github actions
+
 ## 0.2.0 (2025-11-16)
 
 ### Feat
