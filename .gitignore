@@ -3,3 +3,5 @@
 /.phpunit.cache/
 /build/
 server/setenv.conf
+/server/
+/scripts/
