@@ -23,6 +23,15 @@ li.hide-me {
     margin-bottom: 1rem;
 }
 
+nav ul:first-of-type() li a[data-style=app-brand] {
+    color: #373c44;
+
+}
+
+nav ul:first-of-type() li a[data-style=app-brand]:hover {
+    text-decoration: none;
+}
+
 /* Style the back button */
 nav ul {
     padding: 0;

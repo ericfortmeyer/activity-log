@@ -2,8 +2,13 @@
 
 declare(strict_types=1);
 
-namespace EricFortmeyer\ActivityLog;
+namespace EricFortmeyer\ActivityLog\Http\RequestProcessors;
 
+use EricFortmeyer\ActivityLog\EmailConfig;
+use EricFortmeyer\ActivityLog\Services\CreditHoursService;
+use EricFortmeyer\ActivityLog\Services\DataExportService;
+use EricFortmeyer\ActivityLog\Services\RemarksForMonthService;
+use EricFortmeyer\ActivityLog\Services\TimeEntryService;
 use Psr\Container\ContainerInterface;
 use Phpolar\PurePhp\TemplateEngine;
 
@@ -47,7 +52,7 @@ return [
         $container->get(DataExportService::class),
     ),
     EmailReportForMonth::class => static fn(ContainerInterface $container) => new EmailReportForMonth(
-        mailConfigurationService: $container->get(MailConfigurationService::class),
+        mailConfig: $container->get(EmailConfig::class),
         timeEntryService: $container->get(TimeEntryService::class),
         remarksService: $container->get(RemarksForMonthService::class),
         creditHoursService: $container->get(CreditHoursService::class),

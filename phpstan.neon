@@ -1,0 +1,16 @@
+includes:
+    - phpstan-baseline.neon
+
+parameters:
+    level: 8
+    paths:
+        - src
+    fileExtensions:
+        - php
+        - phtml
+    ignoreErrors:
+        -
+            message: '#^Variable \$this might not be defined\.$#'
+            identifier: variable.undefined
+            paths:
+                - src/templates/*

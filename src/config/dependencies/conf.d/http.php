@@ -2,16 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Phpolar\MyApp;
+namespace EricFortmeyer\ActivityLog;
 
-use Psr\Http\Message\RequestFactoryInterface;
-use Psr\Http\Message\ResponseFactoryInterface;
-use Psr\Http\Message\StreamFactoryInterface;
-
-$psr17Factory = new \Nyholm\Psr7\Factory\Psr17Factory();
+use Nyholm\Psr7\Factory\Psr17Factory;
+use Psr\Http\Message\{
+    RequestFactoryInterface,
+    ResponseFactoryInterface,
+    StreamFactoryInterface
+};
 
 return array_combine([
     RequestFactoryInterface::class,
     ResponseFactoryInterface::class,
     StreamFactoryInterface::class,
-], array_fill(0, 3, $psr17Factory));
+    Psr17Factory::class,
+], array_fill(0, 4, new Psr17Factory()));

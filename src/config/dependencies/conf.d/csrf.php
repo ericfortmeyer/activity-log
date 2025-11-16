@@ -2,29 +2,37 @@
 
 declare(strict_types=1);
 
-namespace Phpolar\MyApp;
+namespace EricFortmeyer\ActivityLog;
 
 use DateTimeImmutable;
-use PhpContrib\Http\Message\ResponseFilterInterface;
-use PhpContrib\Http\Message\ResponseFilterStrategyInterface;
-use Phpolar\CsrfProtection\CsrfToken;
-use Phpolar\CsrfProtection\Http\CsrfProtectionRequestHandler;
-use Phpolar\CsrfProtection\Http\CsrfRequestCheckMiddleware;
-use Phpolar\CsrfProtection\Http\CsrfResponseFilterMiddleware;
-use Phpolar\CsrfProtection\Storage\AbstractTokenStorage;
-use Phpolar\CsrfProtection\Storage\SessionTokenStorage;
-use Phpolar\CsrfProtection\Storage\SessionWrapper;
+use PhpContrib\Http\Message\{
+    ResponseFilterInterface,
+    ResponseFilterStrategyInterface
+};
+use Phpolar\CsrfProtection\{
+    CsrfToken,
+    Http\CsrfProtectionRequestHandler,
+    Http\CsrfRequestCheckMiddleware,
+    Http\CsrfResponseFilterMiddleware,
+    Storage\AbstractTokenStorage,
+    Storage\SessionTokenStorage,
+    Storage\SessionWrapper
+};
 use Phpolar\CsrfResponseFilter\Http\Message\CsrfResponseFilter;
 use Phpolar\CsrfResponseFilter\Http\Message\ResponseFilterPatternStrategy;
 use Phpolar\Phpolar\DependencyInjection\DiTokens;
 use Psr\Container\ContainerInterface;
-use Psr\Http\Message\ResponseFactoryInterface;
-use Psr\Http\Message\StreamFactoryInterface;
+use Psr\Http\Message\{
+    ResponseFactoryInterface,
+    StreamFactoryInterface
+};
 use Stringable;
 
-use const Phpolar\CsrfProtection\REQUEST_ID_KEY;
-use const Phpolar\CsrfProtection\TOKEN_DEFAULT_TTL;
-use const Phpolar\CsrfProtection\TOKEN_MAX;
+use const Phpolar\CsrfProtection\{
+    REQUEST_ID_KEY,
+    TOKEN_DEFAULT_TTL,
+    TOKEN_MAX
+};
 
 const CSRF_TOKEN_TTL = TOKEN_DEFAULT_TTL;
 const REQUEST_ID = REQUEST_ID_KEY;

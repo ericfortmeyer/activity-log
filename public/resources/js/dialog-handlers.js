@@ -1,5 +1,5 @@
 (function() {
-  const dialogs = ['report', 'remarks', 'credit-hours'];
+  const dialogs = ['report', 'remarks', 'credit-hours', 'profile'];
   const dialogIdSuffix = '-dialog';
   const dialogOpenButtonIdSuffix = '-dialog-open-button';
   const dialogCloseButtonIdSuffix = '-dialog-close-button';

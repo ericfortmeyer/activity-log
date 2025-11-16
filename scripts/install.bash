@@ -4,7 +4,6 @@ HOSTNAME=activity-log.phpolar.org
 PROXY_SERVER_PROG=nginx
 BACKEND_SERVER_PROG=lighttpd
 MAX_DELETE=2000
-
 ICON_COMPUTER='\U1F5A5';
 ICON_COG='\U2699';
 ICON_CIRCLE_ARROW='\U1F501'
@@ -23,7 +22,7 @@ iLog () {
 	echo -e "$icon:\\033[${color}[$HOSTNAME]\\033[00m:$message" | column -t -s ':'
 }
 
-iLog 'Installing libraries...' $ICON_DOWN_ARROW $GREEN
+iLog 'Installing libraries...' $ICON_DOWN_ARROW $PURPLE
 composer \
 	--quiet \
 	--no-progress \
@@ -33,7 +32,7 @@ composer \
 	--audit \
 	install
 
-iLog 'Installing web application...' $ICON_DOWN_ARROW $PURPLE
+iLog 'Installing web application...' $ICON_FILE_FOLDER $PURPLE
 sudo rsync \
 	--quiet \
 	--times \
@@ -70,6 +69,7 @@ sudo cp "/tmp/$HOSTNAME/server/$PROXY_SERVER_PROG.conf" "/etc/$PROXY_SERVER_PROG
 
 iLog 'Installing backend server configuration...' $ICON_DOWN_ARROW $BLUE
 sudo cp "/tmp/$HOSTNAME/server/$BACKEND_SERVER_PROG.conf" "/etc/$BACKEND_SERVER_PROG/vhosts.d/$HOSTNAME.conf"
+sudo cp "/tmp/$HOSTNAME/server/setenv.conf" "/etc/$BACKEND_SERVER_PROG/conf.d/"
 
 iLog 'Restarting proxy server...' $ICON_TRAFFICLIGHT $BLUE
 sudo systemctl restart $PROXY_SERVER_PROG

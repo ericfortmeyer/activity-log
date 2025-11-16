@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-use EricFortmeyer\ActivityLog\TimeEntriesContext;
 use EricFortmeyer\ActivityLog\TimeEntry;
+use EricFortmeyer\ActivityLog\UserInterface\Contexts\TimeEntriesContext;
 use Phpolar\Model\InputTypes;
 
-use function EricFortmeyer\ActivityLog\Templates\Components\input;
-use function EricFortmeyer\ActivityLog\Templates\Components\timeEntriesNav;
-use function EricFortmeyer\ActivityLog\Templates\Layout\head;
+use function EricFortmeyer\ActivityLog\UserInterface\Components\formInput;
+use function EricFortmeyer\ActivityLog\UserInterface\Components\timeEntriesNav;
+use function EricFortmeyer\ActivityLog\UserInterface\HTMLElements\head;
 
 (function (TimeEntriesContext $view) {
 ?>
@@ -23,12 +23,35 @@ use function EricFortmeyer\ActivityLog\Templates\Layout\head;
     ?>
 
     <body>
+        <header>
+            <div class="container">
+                <nav>
+                    <ul>
+                        <li>
+                            <h1>
+                                <span>&#9889;</span>
+                                <?= $view->title ?>
+                            </h1>
+                        </li>
+                    </ul>
+                    <ul>
+                        <li>
+                            <a href="#" style="float: right;" id="profile-dialog-open-button">
+                                <span style="box-sizing: border-box;">
+                                    <img
+                                        src="<?= $view->user->picture  ?>"
+                                        alt="Avatar of <?= $view->user->name ?>"
+                                        width="32"
+                                        height="32"
+                                        style="border-radius: 50%;" />
+                                </span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
         <main class="container">
-            <h1>
-                <span>&#9889;</span>
-                <?= $view->getTitle() ?>
-                <a target="_blank" href="/export-data" style="float: right;" rel="prev" data-tooltip="Export">Export</a>
-            </h1>
             <div class=grid>
                 <article id="activities">
                     <header>
@@ -74,7 +97,7 @@ use function EricFortmeyer\ActivityLog\Templates\Layout\head;
                     <p><span>&#x1F4A1;</span> <?= $view->getAddActivityInstructions() ?></p>
                     <form method="POST" action="/time-entry/add">
                         <div class="grid">
-                            <?= input(
+                            <?= formInput(
                                 name: "month",
                                 label: $view->currentEntry->getLabel('month'),
                                 type: $view->currentEntry->getInputType('month'),
@@ -84,7 +107,7 @@ use function EricFortmeyer\ActivityLog\Templates\Layout\head;
                                 isInvalid: $view->currentEntry->hasError('month')
                             )
                             ?>
-                            <?= input(
+                            <?= formInput(
                                 name: "dayOfMonth",
                                 label: $view->currentEntry->getLabel('dayOfMonth'),
                                 type: $view->currentEntry->getInputType('dayOfMonth'),
@@ -94,7 +117,7 @@ use function EricFortmeyer\ActivityLog\Templates\Layout\head;
                                 isInvalid: $view->currentEntry->hasError('dayOfMonth')
                             )
                             ?>
-                            <?= input(
+                            <?= formInput(
                                 name: "year",
                                 label: $view->currentEntry->getLabel('year'),
                                 type: $view->currentEntry->getInputType('year'),
@@ -106,7 +129,7 @@ use function EricFortmeyer\ActivityLog\Templates\Layout\head;
                             ?>
                         </div>
                         <div class="grid">
-                            <?= input(
+                            <?= formInput(
                                 name: "hours",
                                 label: $view->currentEntry->getLabel('hours'),
                                 type: $view->currentEntry->getInputType('hours'),
@@ -116,7 +139,7 @@ use function EricFortmeyer\ActivityLog\Templates\Layout\head;
                                 isInvalid: $view->currentEntry->hasError('hours')
                             )
                             ?>
-                            <?= input(
+                            <?= formInput(
                                 name: "minutes",
                                 label: $view->currentEntry->getLabel('minutes'),
                                 type: $view->currentEntry->getInputType('minutes'),
@@ -147,7 +170,6 @@ use function EricFortmeyer\ActivityLog\Templates\Layout\head;
                     </form>
                 </article>
             </div>
-
         </main>
         <dialog id="remarks-dialog" aria-labelledby="remarks-dialog-title" aria-describedby="remarks-dialog-description">
             <article>
@@ -202,6 +224,28 @@ use function EricFortmeyer\ActivityLog\Templates\Layout\head;
                     <input type="hidden" id="credit-hours-year" name="year" value="<?= $view->getRemarksYear() ?>" />
                     <button type="submit">Save</button>
                 </form>
+            </article>
+        </dialog>
+        <dialog id="profile-dialog">
+            <article>
+                <header>
+                    <h2>
+                        <button type="button" id="profile-dialog-close-button" class="close" aria-label="Close" rel="prev">&times;</button>
+                        <p>Manage Profile</p>
+                    </h2>
+                    <h4><?= $view->user->name ?></h4>
+                    <nav>
+                        <ul>
+                            <li>
+                                <a href="/logout">Logout</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </header>
+                <p>This is your profile</p>
+                <footer>
+                    <a target="_blank" href="/export-data" class="secondary" role="button" data-tooltip="Export">Export</a>
+                </footer>
             </article>
         </dialog>
     </body>

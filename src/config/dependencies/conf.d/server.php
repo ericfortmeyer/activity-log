@@ -2,14 +2,16 @@
 
 declare(strict_types=1);
 
-namespace EricFortmeyer\ActivityLog;
+namespace EricFortmeyer\ActivityLog\Http\RequestProcessors;
 
 use PhpCommonEnums\HttpMethod\Enumeration\HttpMethodEnum as HttpMethod;
 use PhpCommonEnums\MimeType\Enumeration\MimeTypeEnum as MimeType;
-use Phpolar\Phpolar\Http\Representations;
-use Phpolar\Phpolar\Http\Server;
-use Phpolar\Phpolar\Http\ServerInterface;
-use Phpolar\Phpolar\Http\Target;
+use Phpolar\Phpolar\Http\{
+    Representations,
+    Server,
+    ServerInterface,
+    Target
+};
 use Psr\Container\ContainerInterface;
 
 return [

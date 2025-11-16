@@ -3,9 +3,9 @@ repos:
     rev: v4.3.0
     hooks:
       - id: trailing-whitespace
-        exclude: (docs|\.phan|tests/__templates__)
+        exclude: (docs|\.phan|src\/templates|src\/UserInterface\/Components|data|scripts|server|public\/resources)
       - id: end-of-file-fixer
-        exclude: (docs|tests|.vscode|bin)
+        exclude: (docs|tests|\.vscode|bin|scripts|\.gitignore)
       - id: check-json
         exclude: (.vscode)
       - id: check-xml
@@ -22,12 +22,12 @@ repos:
     rev: 1.4.0
     hooks:
       - id: php-lint
-        exclude: (tests\/__data-providers__)
+        exclude: (tests\/DataProviders)
       - id: php-cs
         files: \.(php)$
-        exclude: (examples|\.phan)
+        exclude: (tests|src\/config|public|phpstan\.php|tests\/unit\/DataProviders)
         args: ["--standard=PSR12", "--exclude=Squiz.Functions.MultiLineFunctionDeclaration,Squiz.WhiteSpace.ScopeClosingBrace", "-p"]
       - id: php-unit
       - id: php-stan
         files: \.(php)$
-        exclude: (examples|test|config)
+        exclude: (tests|src\/config|public|phpstan\.php|tests\/unit\/DataProviders)

@@ -5,78 +5,240 @@ declare(strict_types=1);
 namespace EricFortmeyer\ActivityLog;
 
 use DateTimeImmutable;
+use EricFortmeyer\ActivityLog\UnitTests\DataProviders\TimeEntryDataProvider;
+use Phpolar\Phpolar\Auth\User;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProviderExternal;
+use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(TimeEntry::class)]
+#[CoversClass(TenantData::class)]
 final class TimeEntryTest extends TestCase
 {
-    public function testCreateGeneratesIdAndTimestamp(): void
-    {
-        $entry = new TimeEntry();
-        $entry->dayOfMonth = 1;
-        $entry->year = 2025;
-        $entry->hours = 8;
-        $entry->minutes = 30;
+    protected User $user;
 
-        $entry->create();
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->user = new User(
+            name: "FAKE_NAME",
+            nickname: "FAKE_NICKNAME",
+            email: "FAKE@FAKE.FAKE",
+            avatarUrl: "https://FAKE.FAKE/FAKE.png",
+        );
+    }
+
+    #[Test]
+    #[DataProviderExternal(TimeEntryDataProvider::class, 'validTimeEntryData')]
+    #[TestDox("Shall generate Id and Timestamp when created")]
+    public function dopk(
+        string $id,
+        string $tenantId,
+        int $dayOfMonth,
+        int $year,
+        int $month,
+        int $hours,
+        int $minutes,
+    ): void {
+        $entry = new TimeEntry(
+            compact(
+                "id",
+                "tenantId",
+                "dayOfMonth",
+                "year",
+                "month",
+                "hours",
+                "minutes",
+            )
+        );
+
+        $entry->create($this->user);
 
         $this->assertNotEmpty($entry->id);
         $this->assertInstanceOf(DateTimeImmutable::class, $entry->createdOn);
     }
 
-    public function testFromDataCreatesTimeEntryFromArray(): void
-    {
-        $data = [
-            "id" => "test-id",
-            "dayOfMonth" => 1,
-            "year" => 2025,
-            "hours" => 8,
-            "minutes" => 30,
-            "createdOn" => new DateTimeImmutable("2025-09-30 10:00:00"),
-        ];
+    #[Test]
+    #[DataProviderExternal(TimeEntryDataProvider::class, 'validTimeEntryData')]
+    #[TestDox("Shall create a TimeEntry from an array of data")]
+    public function adfskpo(
+        string $id,
+        string $tenantId,
+        int $dayOfMonth,
+        int $year,
+        int $month,
+        int $hours,
+        int $minutes,
+    ): void {
+        $createdOn = new DateTimeImmutable("now");
 
-        $entry = TimeEntry::fromData($data);
+        $entry = TimeEntry::fromData(
+            compact(
+                "id",
+                "tenantId",
+                "dayOfMonth",
+                "year",
+                "month",
+                "hours",
+                "minutes",
+                "createdOn",
+            )
+        );
 
         $this->assertInstanceOf(TimeEntry::class, $entry);
-        $this->assertEquals("test-id", $entry->id);
-        $this->assertEquals(1, $entry->dayOfMonth);
-        $this->assertEquals(2025, $entry->year);
-        $this->assertEquals(8, $entry->hours);
-        $this->assertEquals(30, $entry->minutes);
-        $this->assertEquals($data["createdOn"], $entry->createdOn);
+        $this->assertEquals($id, $entry->id);
+        $this->assertEquals($dayOfMonth, $entry->dayOfMonth);
+        $this->assertEquals($year, $entry->year);
+        $this->assertEquals($hours, $entry->hours);
+        $this->assertEquals($minutes, $entry->minutes);
+        $this->assertEquals($createdOn, $entry->createdOn);
     }
 
-    public function testValidationPassesWithValidData(): void
-    {
-        $entry = new TimeEntry();
-        $entry->id = "test-id";
-        $entry->dayOfMonth = 1;
-        $entry->year = 2025;
-        $entry->hours = 8;
-        $entry->minutes = 30;
-        $entry->createdOn = new DateTimeImmutable();
+    #[Test]
+    #[DataProviderExternal(TimeEntryDataProvider::class, 'validTimeEntryData')]
+    #[TestDox(
+        <<<TEXT
+        Shall determine that the entry is valid: [
+            id => \$id,
+            tenantId => \$tenantId,
+            dayOfMonth => \$dayOfMonth,
+            month => \$month,
+            year => \$year,
+            hours => \$hours,
+            minutes => \$minutes
+           ]
+        TEXT
+    )]
+    public function vmzcx(
+        string $id,
+        string $tenantId,
+        int $dayOfMonth,
+        int $year,
+        int $month,
+        int $hours,
+        int $minutes,
+
+    ): void {
+        $createdOn = new DateTimeImmutable();
+        $entry = new TimeEntry(
+            compact(
+                "id",
+                "tenantId",
+                "dayOfMonth",
+                "year",
+                "month",
+                "hours",
+                "minutes",
+                "createdOn",
+            )
+        );
 
         $this->assertTrue($entry->isValid());
     }
 
-    public function testValidationFailsWithInvalidData(): void
+    #[Test]
+    #[DataProviderExternal(TimeEntryDataProvider::class, 'invalidTimeEntryData')]
+    #[TestDox("Shall determine that the entry is invalid when given an invalid \$invalidProp: value => \$invalidValue")]
+    public function qwkefop(
+        string $invalidProp,
+        string|int $invalidValue,
+        string $id,
+        string $tenantId,
+        int $dayOfMonth,
+        int $year,
+        int $month,
+        int $hours,
+        int $minutes,
+    ): void {
+        $entry = new TimeEntry(
+            compact(
+                "id",
+                "tenantId",
+                "dayOfMonth",
+                "year",
+                "month",
+                "hours",
+                "minutes",
+                "createdOn",
+            )
+        );
+
+        $this->assertFalse($entry->isValid());
+    }
+
+    #[Test]
+    #[TestWith(["01/01/2025", 1, 1, 2025])]
+    #[TestWith(["11/01/2025", 11, 1, 2025])]
+    #[TestWith(["01/11/2025", 1, 11, 2025])]
+    #[TestDox("Shall provide the date in the expected format")]
+    public function a(string $expectedDateFormatted, int $month, int $dayOfMonth, int $year)
     {
-        $invalidCases = [
-            "invalidDayOfMonth" => ["dayOfMonth" => 32, "year" => 2025, "hours" => 8, "minutes" => 30],
-            "invalidYear" => ["dayOfMonth" => 1, "year" => 2024, "hours" => 8, "minutes" => 30],
-            "invalidHours" => ["dayOfMonth" => 1, "year" => 2025, "hours" => 25, "minutes" => 30],
-            "invalidMinutes" => ["dayOfMonth" => 1, "year" => 2025, "hours" => 8, "minutes" => 60],
-        ];
+        $entry = new TimeEntry(compact("month", "year", "dayOfMonth"));
+        $result = $entry->getDate();
+        $this->assertSame($expectedDateFormatted, $result);
+    }
 
-        foreach ($invalidCases as $case => $data) {
-            $entry = new TimeEntry();
-            $entry->dayOfMonth = $data["dayOfMonth"];
-            $entry->year = $data["year"];
-            $entry->hours = $data["hours"];
-            $entry->minutes = $data["minutes"];
+    #[Test]
+    #[TestWith(["5h 10m", 5, 10])]
+    #[TestWith(["15h 1m", 15, 1])]
+    #[TestDox("Shall provide the duration in the expected format")]
+    public function testf(string $expectedDateFormatted, int $hours, int $minutes)
+    {
+        $entry = new TimeEntry(compact("minutes", "hours"));
+        $result = $entry->getDuration();
+        $this->assertSame($expectedDateFormatted, $result);
+    }
 
-            $this->assertFalse($entry->isValid(), "Validation should fail for $case");
-        }
+    #[Test]
+    #[TestWith(["dayOfMonth", 10, "2025/01/10"])]
+    #[TestWith(["month", 1, "2025/01/10"])]
+    #[TestWith(["year", 2025, "2025/01/10"])]
+    #[TestWith(["hours", 0, "2025/01/10"])]
+    #[TestWith(["minutes", 0, "2025/01/10"])]
+    #[TestWith(["NOT A PROPERTY", null, "2025/01/10"])]
+    #[TestDox("Shall provide the default value (\$expectedDefaultValue) for \$propName")]
+    public function xxx(string $propName, mixed $expectedDefaultValue, string $dateString)
+    {
+        $date = new DateTimeImmutable($dateString);
+        $result = TimeEntry::getDefaultValue($propName, $date);
+        $this->assertSame($expectedDefaultValue, $result);
+    }
+
+    #[Test]
+    #[TestWith(["tenant-id", "tenant-id", true])]
+    #[TestWith(["tenant-id", "something else", false])]
+    #[TestDox("Shall support filtering of instances by tenant id")]
+    public function foadisj(
+        string $tenantId,
+        string $testTenantId,
+        bool $expectedResult,
+    ): void {
+        $entry = new TimeEntry(compact("tenantId"));
+
+        $filterFn = TimeEntry::forTenant($testTenantId);
+        $result = $filterFn($entry);
+        $this->assertSame($expectedResult, $result);
+    }
+
+    #[Test]
+    #[TestWith([10, 2025, 10, 2025, true])]
+    #[TestWith([10, 2025, 10, 2026, false])]
+    #[TestWith([10, 2025, 1, 2025, false])]
+    #[TestDox("Shall support filtering of instances by month and year")]
+    public function foadisjx(
+        int $month,
+        int $year,
+        int $testMonth,
+        int $testYear,
+        bool $expectedResult,
+    ): void {
+        $entry = new TimeEntry(compact("month", "year"));
+
+        $filterFn = TimeEntry::byMonthAndYear(month: $testMonth, year: $testYear);
+        $result = $filterFn($entry);
+        $this->assertSame($expectedResult, $result);
     }
 }

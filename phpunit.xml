@@ -8,9 +8,9 @@
          beStrictAboutCoverageMetadata="true"
          beStrictAboutOutputDuringTests="true"
          displayDetailsOnPhpunitDeprecations="true"
-         failOnPhpunitDeprecation="true"
-         failOnRisky="true"
-         failOnWarning="true">
+         colors="true"
+         failOnAllIssues="true"
+         testdox="true">
     <testsuites>
         <testsuite name="default">
             <directory>tests/unit</directory>

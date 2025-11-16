@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-use EricFortmeyer\ActivityLog\TimeEntryContext;
-use function EricFortmeyer\ActivityLog\Templates\Layout\head;
+use EricFortmeyer\ActivityLog\UserInterface\Contexts\TimeEntryContext;
+
+use function EricFortmeyer\ActivityLog\UserInterface\HTMLElements\head;
 
 (function (TimeEntryContext $view) {
 ?>
@@ -22,7 +23,7 @@ use function EricFortmeyer\ActivityLog\Templates\Layout\head;
             <article>
                 <header>
                     <h1>
-                        <?= $view->getTitle() ?>
+                        <?= $view->title ?>
                         <form data-style="delete-button" method="POST" action="/time-entry/delete/<?= $view->timeEntry->getPrimaryKey() ?>" style="display: inline;">
                             <button type="submit" class="danger">X</button>
                         </form>

@@ -2,15 +2,18 @@
 
 declare(strict_types=1);
 
-namespace EricFortmeyer\ActivityLog;
+namespace EricFortmeyer\ActivityLog\Services;
 
+use EricFortmeyer\ActivityLog\EmailConfig;
 use Psr\Container\ContainerInterface;
 
-use const EricFortmeyer\ActivityLog\DiTokens\CREDIT_HOURS_STORAGE;
-use const EricFortmeyer\ActivityLog\DiTokens\MAIL_CONFIG;
-use const EricFortmeyer\ActivityLog\DiTokens\REMARKS_STORAGE;
-use const EricFortmeyer\ActivityLog\DiTokens\TIME_ENTRY_CSV_FILE;
-use const EricFortmeyer\ActivityLog\DiTokens\TIME_ENTRY_STORAGE;
+use const EricFortmeyer\ActivityLog\config\DiTokens\{
+    CREDIT_HOURS_STORAGE,
+    MAIL_CONFIG,
+    REMARKS_STORAGE,
+    TIME_ENTRY_CSV_FILE,
+    TIME_ENTRY_STORAGE
+};
 
 return [
     TimeEntryService::class => static fn(ContainerInterface $container) => new TimeEntryService(
@@ -25,7 +28,7 @@ return [
     DataExportService::class => static fn(ContainerInterface $container) => new DataExportService(
         $container->get(TIME_ENTRY_CSV_FILE),
     ),
-    MailConfigurationService::class => static fn(ContainerInterface $container) => new MailConfigurationService(
+    EmailConfig::class => static fn(ContainerInterface $container) => new EmailConfig(
         headers: $container->get(MAIL_CONFIG),
     ),
 ];

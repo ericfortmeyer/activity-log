@@ -1,0 +1,31 @@
+<?php
+
+declare(strict_types=1);
+
+use EricFortmeyer\ActivityLog\UserInterface\Contexts\BadRequestContext;
+
+use function EricFortmeyer\ActivityLog\UserInterface\HTMLElements\head;
+
+(function (BadRequestContext $view) {
+?>
+    <!DOCTYPE html>
+    <html lang="en">
+    <?= head($view) ?>
+
+    <body>
+        <main>
+            <article>
+                <header>
+                    <h1><?= $view->title ?></h1>
+                </header>
+                <p><?= $view->message ?></p>
+                <footer>
+                    <a href="/" role="button">← Back to Home</a>
+                </footer>
+            </article>
+        </main>
+    </body>
+
+    </html>
+<?php
+})($this);

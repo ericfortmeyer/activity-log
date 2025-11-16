@@ -5,6 +5,12 @@
   "license": "MIT",
   "require": {
     "php": ">=8.4",
+    "ext-pdo": "*",
+    "auth0/auth0-php": "^8.17",
+    "guzzlehttp/guzzle": "^7.10",
+    "guzzlehttp/psr7": "^2.8",
+    "http-interop/http-factory-guzzle": "^1.2",
+    "monolog/monolog": "^3.9",
     "nyholm/psr7": "^1.7",
     "nyholm/psr7-server": "~1.1.0",
     "phpolar/csrf-protection": "^3.0",
@@ -19,18 +25,22 @@
     "pimple/pimple": "^3.5"
   },
   "config": {
-    "sort-packages": true
+    "sort-packages": true,
+    "allow-plugins": {
+      "php-http/discovery": true
+    }
   },
   "autoload": {
     "psr-4": {
-      "EricFortmeyer\\ActivityLog\\": "src/"
+      "EricFortmeyer\\ActivityLog\\": "src/",
+      "EricFortmeyer\\ActivityLog\\UnitTests\\": "tests/unit/"
     },
     "files": [
-      "src/DiTokens/index.php",
-      "src/FileNames/index.php",
-      "src/templates/layout/head.php",
-      "src/templates/components/time-entries-nav.php",
-      "src/templates/components/input.php"
+      "src/config/DiTokens.php",
+      "src/config/FileNames.php",
+      "src/UserInterface/HTMLElements/head.php",
+      "src/UserInterface/Components/timeEntriesNav.php",
+      "src/UserInterface/Components/formInput.php"
     ]
   },
   "require-dev": {
@@ -42,15 +52,18 @@
     "test": [
       "phpunit --color=always"
     ],
-    "cs": "phpcs --exclude=Squiz.Functions.MultiLineFunctionDeclaration,Squiz.WhiteSpace.ScopeClosingBrace --standard=PSR12 ./src ./tests",
-    "cbf": "phpcbf --exclude=Squiz.Functions.MultiLineFunctionDeclaration,Squiz.WhiteSpace.ScopeClosingBrace --standard=PSR12 ./src ./tests",
-    "lint": "composer exec @cs",
-    "lint-fix": "composer exec @cbf",
+    "phpstan": "XDEBUG_MODE=off phpstan analyze",
+    "analyze": "@phpstan --memory-limit=256M",
+    "cs": "phpcs --exclude=Squiz.Functions.MultiLineFunctionDeclaration,Squiz.WhiteSpace.ScopeClosingBrace --ignore='*DataProviders*' --standard=PSR12",
+    "cbf": "phpcbf --exclude=Squiz.Functions.MultiLineFunctionDeclaration,Squiz.WhiteSpace.ScopeClosingBrace --standard=PSR12",
+    "lint": "@cs ./src ./tests",
+    "lint-fix": "@cbf ./src ./tests",
+    "ci:analyze": "@phpstan --no-progress ./src",
     "ci:lint": [
-      "echo 'linting skipped'"
+      "@cs -q --no-colors ./src ./tests"
     ],
     "ci:test": [
-      "composer exec \"@test --configuration=phpunit.ci.xml\""
+      "@test --configuration=phpunit.ci.xml"
     ],
     "link-css-framework": [
       "ln -s -f ../../../vendor/picocss/pico/css/pico.min.css public/resources/css/"

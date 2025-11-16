@@ -2,14 +2,16 @@
 
 namespace EricFortmeyer\ActivityLog;
 
-use Phpolar\Model\AbstractModel;
-use Phpolar\Model\Hidden;
-use Phpolar\Model\PrimaryKey;
-use Phpolar\Validators\Max;
-use Phpolar\Validators\MaxLength;
-use Phpolar\Validators\Min;
+use Phpolar\Phpolar\Auth\User;
+use Phpolar\{
+    Model\Hidden,
+    Model\PrimaryKey,
+    Validators\Max,
+    Validators\MaxLength,
+    Validators\Min
+};
 
-final class RemarksForMonth extends AbstractModel
+final class RemarksForMonth extends TenantData
 {
     #[PrimaryKey]
     #[Hidden]
@@ -28,16 +30,20 @@ final class RemarksForMonth extends AbstractModel
     #[MaxLength(2100)]
     public string $remarks = "";
 
-    public function create(): void
+    public function create(User $user): void
     {
-        $this->id = self::getIdFromMonth($this->year, $this->month);
+        parent::initForTenant($user);
+        $this->id = self::getIdFromMonth($this->year, $this->month, $user->nickname);
     }
 
-    public static function getIdFromMonth(int $year, int $month): string
+    public static function getIdFromMonth(int $year, int $month, string $tenantId): string
     {
-        return sprintf("%d-%02d", $year, $month);
+        return sprintf("%s-%d-%02d", $tenantId, $year, $month);
     }
 
+    /**
+     * @param array<string|int,string|int>|object $data
+     */
     public static function fromData(array | object $data): self
     {
         return new self($data);

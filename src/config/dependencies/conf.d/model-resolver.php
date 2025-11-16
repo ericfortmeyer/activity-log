@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Phpolar\MyApp;
+namespace EricFortmeyer\ActivityLog;
 
 use Phpolar\Model\ParsedBodyResolver;
 use Phpolar\ModelResolver\ModelResolverInterface;

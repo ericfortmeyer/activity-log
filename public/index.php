@@ -10,12 +10,16 @@ declare(strict_types=1);
  * See `src/config/dependencies/conf.d/`.
  */
 
-namespace Phpolar\Example;
-
-use PhpCommonEnums\MimeType\Enumeration\MimeTypeEnum as MimeType;
-use Phpolar\Phpolar\App;
+use EricFortmeyer\ActivityLog\UserInterface\Contexts\ServerErrorContext;
+use Monolog\Formatter\LineFormatter;
+use Monolog\Handler\SyslogHandler;
+use Monolog\Logger;
 use Phpolar\Phpolar\DependencyInjection\ContainerLoader;
-use Psr\Http\Message\ServerRequestInterface;
+use Phpolar\PurePhp\{
+    HtmlSafeContext,
+    TemplateEngine
+};
+use Psr\Log\LoggerInterface;
 
 ini_set("display_errors", true);
 chdir("../");
@@ -34,30 +38,33 @@ require "vendor/autoload.php";
  */
 $dependencyMap = new \Pimple\Container();
 $psr11Container = new \Pimple\Psr11\Container($dependencyMap);
+
+// set_exception_handler(static function (Throwable $e) {
+//     $log = new Logger("Activity Log");
+//     $syslog = new SyslogHandler("Activity Log");
+//     $formatter = new LineFormatter("%channel%.%level_name%: %message% %context% %extra%");
+//     $syslog->setFormatter($formatter);
+//     $log->pushHandler($syslog);
+//     $log->alert("Exception", ["exception" => $e->getMessage(), "stacktrace" => $e->getTrace()]);
+
+//     http_response_code(500);
+//     echo new TemplateEngine()->apply(
+//         "500",
+//         new HtmlSafeContext(
+//             new ServerErrorContext(
+//                 message: "An error occurred. We are investigating."
+//             )
+//         )
+//     );
+// });
+
+new ContainerLoader()->load($psr11Container, $dependencyMap);
+
 /**
- *
- * Get the request
- * ==========================================================
- *
- * Use any PSR-17 request factory you like.
- * Just `composer require <some-psr-17-factory>`,
- * then replace the configuration in
- * `src/config/dependencies/conf.d/http.php`
+ * @var \Closure
  */
-
-$serverRequest = (new \Nyholm\Psr7Server\ServerRequestCreator(
-    ...array_fill(0, 4, new \Nyholm\Psr7\Factory\Psr17Factory()),
-))->fromGlobals()
-    ->withHeader("Accept", [MimeType::TextHtml->value]);
-
-$dependencyMap[ServerRequestInterface::class] = $serverRequest;
-
-(new ContainerLoader())->load($psr11Container, $dependencyMap);
+$bootstrapper = $psr11Container->get("BOOTSTRAPPER");
 /**
- *
- * Configure the web application
- * ==========================================================
+ * Start the application
  */
-$app = App::create($psr11Container);
-// $app->useCsrfMiddleware();
-$app->receive($serverRequest);
+$bootstrapper();
