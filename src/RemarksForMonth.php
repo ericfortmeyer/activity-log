@@ -30,10 +30,10 @@ final class RemarksForMonth extends TenantData
     #[MaxLength(2100)]
     public string $remarks = "";
 
-    public function create(User $user): void
+    public function create(string $tenantId): void
     {
-        parent::initForTenant($user);
-        $this->id = self::getIdFromMonth($this->year, $this->month, $user->nickname);
+        $this->tenantId = $tenantId;
+        $this->id = self::getIdFromMonth($this->year, $this->month, $tenantId);
     }
 
     public static function getIdFromMonth(int $year, int $month, string $tenantId): string

@@ -10,27 +10,38 @@ use Phpolar\{
     PurePhp\HtmlSafeContext,
     Storage\NotFound
 };
-use EricFortmeyer\ActivityLog\Services\{TimeEntryService, RemarksForMonthService};
-use EricFortmeyer\ActivityLog\{MonthFilters, TimeEntry, RemarksForMonth};
+use EricFortmeyer\ActivityLog\Services\{
+    TimeEntryService,
+    RemarksForMonthService
+};
+use EricFortmeyer\ActivityLog\{
+    MonthFilters,
+    TimeEntry,
+    RemarksForMonth
+};
 use EricFortmeyer\ActivityLog\UserInterface\Contexts\TimeEntriesContext;
-use Phpolar\Phpolar\Auth\AbstractProtectedRoutable;
 use Phpolar\Phpolar\Auth\Authorize;
 
-final class SubmitTimeEntry extends AbstractProtectedRoutable
+final class SubmitTimeEntry extends AbstractTenantBasedRequestProcessor
 {
     public function __construct(
         private readonly TimeEntryService $timeEntryService,
         private readonly RemarksForMonthService $remarksForMonthService,
         private readonly TemplateEngine $templateEngine,
-    ) {}
+        readonly string $hashingKey = "",
+    ) {
+        parent::__construct(hashingKey: $hashingKey);
+    }
 
     #[Authorize]
     public function process(
         #[Model] TimeEntry $entry = new TimeEntry(),
         #[Model] MonthFilters $monthFilters = new MonthFilters()
     ): string {
-        if ($entry->isValid() === true) {
-            $entry->create($this->user);
+        if (empty($entry->id) === true) {
+            $entry->create($this->getTenantId());
+        }
+        if ($entry->isValid()) {
             $this->timeEntryService->save($entry);
         }
         $entry->isPosted();
@@ -40,12 +51,12 @@ final class SubmitTimeEntry extends AbstractProtectedRoutable
         $timeEntries = $this->timeEntryService->getAllByMonth(
             month: $month,
             year: $year,
-            tenantId: $this->user->nickname
+            tenantId: $this->getTenantId(),
         );
         $remarks = $this->remarksForMonthService->get(RemarksForMonth::getIdFromMonth(
             year: $year,
             month: $month,
-            tenantId: $this->user->nickname,
+            tenantId: $this->getTenantId(),
         ));
 
         return (string) $this->templateEngine->apply(
