@@ -154,6 +154,7 @@ return [
         appConfig: $container->get(AppConfig::class),
     ),
     DiTokens::UNAUTHORIZED_HANDLER => static fn(ContainerInterface $container) =>
+    // phpcs:ignore
     new readonly class($container->get(APP_LOGIN_PATH)) implements RequestHandlerInterface {
         public function __construct(private string $loginPath) {}
         public function handle(ServerRequestInterface $request): ResponseInterface
