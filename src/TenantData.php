@@ -10,7 +10,6 @@ use Phpolar\{
     Validators\MaxLength,
     Validators\Required
 };
-use Phpolar\Phpolar\Auth\User;
 
 abstract class TenantData extends AbstractModel
 {
@@ -18,9 +17,4 @@ abstract class TenantData extends AbstractModel
     #[Required]
     #[Hidden]
     public string $tenantId;
-
-    protected function initForTenant(User $user): void
-    {
-        $this->tenantId = $user->nickname;
-    }
 }

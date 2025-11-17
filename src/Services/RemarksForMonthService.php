@@ -16,10 +16,10 @@ readonly class RemarksForMonthService
      */
     public function __construct(private StorageContext $storageContext) {}
 
-    public function save(RemarksForMonth $remarks, User $user): void
+    public function save(RemarksForMonth $remarks, string $tenantId): void
     {
         if (empty($remarks->id)) {
-            $remarks->create($user);
+            $remarks->create($tenantId);
             $this->storageContext->save($remarks->id, $remarks);
             return;
         }

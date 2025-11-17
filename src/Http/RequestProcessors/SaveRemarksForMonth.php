@@ -8,22 +8,31 @@ use Phpolar\{
     PurePhp\TemplateEngine,
     Storage\NotFound
 };
-use Phpolar\Phpolar\Auth\{
-    AbstractProtectedRoutable,
-    Authorize
+use Phpolar\Phpolar\Auth\Authorize;
+use EricFortmeyer\ActivityLog\{
+    RemarksForMonth,
+    MonthFilters,
+    CreditHours,
+    TimeEntry
 };
-use EricFortmeyer\ActivityLog\{RemarksForMonth, MonthFilters, CreditHours, TimeEntry};
-use EricFortmeyer\ActivityLog\Services\{RemarksForMonthService, CreditHoursService, TimeEntryService};
+use EricFortmeyer\ActivityLog\Services\{
+    RemarksForMonthService,
+    CreditHoursService,
+    TimeEntryService
+};
 use EricFortmeyer\ActivityLog\UserInterface\Contexts\TimeEntriesContext;
 
-final class SaveRemarksForMonth extends AbstractProtectedRoutable
+final class SaveRemarksForMonth extends AbstractTenantBasedRequestProcessor
 {
     public function __construct(
         private readonly RemarksForMonthService $remarksService,
         private readonly CreditHoursService $creditHoursService,
         private readonly TimeEntryService $timeEntryService,
         private readonly TemplateEngine $templateEngine,
-    ) {}
+        readonly string $hashingKey = "",
+    ) {
+        parent::__construct(hashingKey: $hashingKey);
+    }
 
     #[Authorize]
     public function process(
@@ -31,7 +40,7 @@ final class SaveRemarksForMonth extends AbstractProtectedRoutable
         #[Model] MonthFilters $monthFilters = new MonthFilters()
     ): string {
         if ($remarks->isValid() === true) {
-            $this->remarksService->save($remarks, $this->user);
+            $this->remarksService->save($remarks, $this->getTenantId());
         }
         $remarks->isPosted();
 
@@ -39,14 +48,14 @@ final class SaveRemarksForMonth extends AbstractProtectedRoutable
             CreditHours::getIdFromMonth(
                 year: $remarks->year,
                 month: $remarks->month,
-                tenantId: $this->user->nickname,
+                tenantId: $this->getTenantId(),
             ),
         );
 
         $timeEntries = $this->timeEntryService->getAllByMonth(
             month: $remarks->month ?? TimeEntry::getDefaultValue("month"),
             year: $remarks->year ?? TimeEntry::getDefaultValue("year"),
-            tenantId: $this->user->nickname,
+            tenantId: $this->getTenantId(),
         );
         $currentEntry = new TimeEntry();
         return (string) $this->templateEngine->apply(

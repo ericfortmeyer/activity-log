@@ -16,10 +16,10 @@ readonly class CreditHoursService
      */
     public function __construct(private StorageContext $storageContext) {}
 
-    public function save(CreditHours $creditHours, User $user): void
+    public function save(CreditHours $creditHours, string $tenantId): void
     {
         if (empty($creditHours->id)) {
-            $creditHours->create($user);
+            $creditHours->create($tenantId);
             $this->storageContext->save($creditHours->id, $creditHours);
             return;
         }

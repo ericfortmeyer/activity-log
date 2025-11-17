@@ -55,7 +55,7 @@ final class TimeEntryTest extends TestCase
             )
         );
 
-        $entry->create($this->user);
+        $entry->create($this->user->name);
 
         $this->assertNotEmpty($entry->id);
         $this->assertInstanceOf(DateTimeImmutable::class, $entry->createdOn);

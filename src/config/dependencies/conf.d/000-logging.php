@@ -14,11 +14,10 @@ use const EricFortmeyer\ActivityLog\config\DiTokens\APP_NAME;
 
 return [
     LoggerInterface::class => static function (ContainerInterface $container) {
-        $log = new Logger($container->get(APP_NAME));
-        $syslog = new SyslogHandler($container->get(APP_NAME));
-        $formatter = new LineFormatter("%channel%.%level_name%: %message% %context% %extra%");
-        $syslog->setFormatter($formatter);
-        $log->pushHandler($syslog);
-        return $log;
+        return new Logger($container->get(APP_NAME))->pushHandler(
+            new SyslogHandler($container->get(APP_NAME))->setFormatter(
+                new LineFormatter("%channel%.%level_name%: %message% %context% %extra%")
+            )
+        );
     },
 ];

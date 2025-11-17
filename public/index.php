@@ -19,7 +19,6 @@ use Phpolar\PurePhp\{
     HtmlSafeContext,
     TemplateEngine
 };
-use Psr\Log\LoggerInterface;
 
 ini_set("display_errors", true);
 chdir("../");

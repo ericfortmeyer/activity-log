@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace EricFortmeyer\ActivityLog\Http\RequestProcessors;
 
 use Phpolar\Phpolar\Auth\{
-    AbstractProtectedRoutable,
     Authorize
 };
 use Phpolar\{
@@ -23,14 +22,17 @@ use EricFortmeyer\ActivityLog\UserInterface\Contexts\{TimeEntriesContext, BadReq
  *
  * @package EricFortmeyer\ActivityLog
  */
-final class GetTimeEntries extends AbstractProtectedRoutable
+final class GetTimeEntries extends AbstractTenantBasedRequestProcessor
 {
     public function __construct(
         private readonly TimeEntryService $timeEntryService,
         private readonly RemarksForMonthService $remarksForMonthService,
         private readonly CreditHoursService $creditHoursService,
         private readonly TemplateEngine $templateEngine,
-    ) {}
+        readonly string $hashingKey = "",
+    ) {
+        parent::__construct(hashingKey: $hashingKey);
+    }
 
     /**
      * Process the request to get all time entries.
@@ -59,17 +61,17 @@ final class GetTimeEntries extends AbstractProtectedRoutable
         $timeEntries = $this->timeEntryService->getAllByMonth(
             month: $month,
             year: $year,
-            tenantId: $this->user->nickname,
+            tenantId: $this->getTenantId(),
         );
         $remarks = $this->remarksForMonthService->get(RemarksForMonth::getIdFromMonth(
             month: $month,
             year: $year,
-            tenantId: $this->user->nickname
+            tenantId: $this->getTenantId(),
         ));
         $creditHours = $this->creditHoursService->get(CreditHours::getIdFromMonth(
             month: $month,
             year: $year,
-            tenantId: $this->user->nickname
+            tenantId: $this->getTenantId(),
         ));
         return (string) $this->templateEngine->apply(
             "index",

@@ -12,12 +12,15 @@ use EricFortmeyer\ActivityLog\Services\TimeEntryService;
 use Psr\Container\ContainerInterface;
 use Phpolar\PurePhp\TemplateEngine;
 
+use const EricFortmeyer\ActivityLog\config\DiTokens\HASH_KEY;
+
 return [
     GetTimeEntries::class => static fn(ContainerInterface $container) => new GetTimeEntries(
         timeEntryService: $container->get(TimeEntryService::class),
         remarksForMonthService: $container->get(RemarksForMonthService::class),
         creditHoursService: $container->get(CreditHoursService::class),
         templateEngine: $container->get(TemplateEngine::class),
+        hashingKey: $container->get(HASH_KEY),
     ),
 
     GetTimeEntry::class => static fn(ContainerInterface $container) => new GetTimeEntry(
@@ -29,24 +32,28 @@ return [
         $container->get(TimeEntryService::class),
         $container->get(RemarksForMonthService::class),
         $container->get(TemplateEngine::class),
+        hashingKey: $container->get(HASH_KEY),
     ),
 
     SubmitTimeEntry::class => static fn(ContainerInterface $container) => new SubmitTimeEntry(
         $container->get(TimeEntryService::class),
         $container->get(RemarksForMonthService::class),
         $container->get(TemplateEngine::class),
+        hashingKey: $container->get(HASH_KEY),
     ),
     SaveRemarksForMonth::class => static fn(ContainerInterface $container) => new SaveRemarksForMonth(
         creditHoursService: $container->get(CreditHoursService::class),
         remarksService: $container->get(RemarksForMonthService::class),
         timeEntryService: $container->get(TimeEntryService::class),
         templateEngine: $container->get(TemplateEngine::class),
+        hashingKey: $container->get(HASH_KEY),
     ),
     SaveCreditHours::class => static fn(ContainerInterface $container) => new SaveCreditHours(
         creditHoursService: $container->get(CreditHoursService::class),
         remarksService: $container->get(RemarksForMonthService::class),
         timeEntryService: $container->get(TimeEntryService::class),
         templateEngine: $container->get(TemplateEngine::class),
+        hashingKey: $container->get(HASH_KEY),
     ),
     DownloadDataExport::class => static fn(ContainerInterface $container) => new DownloadDataExport(
         $container->get(DataExportService::class),
@@ -57,5 +64,6 @@ return [
         remarksService: $container->get(RemarksForMonthService::class),
         creditHoursService: $container->get(CreditHoursService::class),
         templateEngine: $container->get(TemplateEngine::class),
+        hashingKey: $container->get(HASH_KEY),
     )
 ];

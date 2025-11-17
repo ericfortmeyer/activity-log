@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Auth0\SDK\Configuration\SdkConfiguration;
 use EricFortmeyer\ActivityLog\AppConfig;
-use GuzzleHttp\Client;
+use EricFortmeyer\ActivityLog\Clients\SecretsClient;
 use PhpContrib\Authenticator\AuthenticatorInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
@@ -31,40 +31,24 @@ use const EricFortmeyer\ActivityLog\config\DiTokens\{
     AUTH_DOMAIN,
     CALLBACK_MIDDLEWARE,
     LOGIN_MIDDLEWARE,
-    LOGIN_PASSWD_FILE,
     LOGOUT_MIDDLEWARE,
-    SECRETS_APP_PATH,
-    SECRETS_BASE_URI,
-    SECRETS_CLIENT,
-    SECRETS_LOGIN_PATH,
-    SECRETS_SERVICE_HOST,
-    SECRETS_SERVICE_PORT
 };
 
 return [
-    SECRETS_APP_PATH => static fn() => join("/", [getenv(SECRETS_APP_PATH), "activity-log"]),
-    SECRETS_LOGIN_PATH => static fn() => join("/", [getenv(SECRETS_LOGIN_PATH), "activity-log-application"]),
-    SECRETS_SERVICE_HOST => static fn() => getenv(SECRETS_SERVICE_HOST),
-    SECRETS_SERVICE_PORT => static fn() => getenv(SECRETS_SERVICE_PORT),
-    SECRETS_BASE_URI => static fn(ContainerInterface $container) => sprintf(
-        "%s:%s/v1/",
-        $container->get(SECRETS_SERVICE_HOST),
-        $container->get(SECRETS_SERVICE_PORT)
-    ),
-    SECRETS_CLIENT => static fn(ContainerInterface $container) => new Client([
-        "base_uri" => $container->get(SECRETS_BASE_URI)
-    ]),
     AuthConfigService::class => static fn(ContainerInterface $container) => new AuthConfigService(
-        client: $container->get(SECRETS_CLIENT),
-        logger: $container->get(LoggerInterface::class),
-        secretServiceAppPath: $container->get(SECRETS_APP_PATH),
-        secretServiceLoginPath: $container->get(SECRETS_LOGIN_PATH),
-        loginPasswdFilename: $container->get(LOGIN_PASSWD_FILE),
+        secretsClient: $container->get(SecretsClient::class),
     ),
     AUTH_CLIENT_ID => static function (ContainerInterface $container): string {
+        /**
+         * @var LoggerInterface
+         */
+        $logger = $container->get(LoggerInterface::class);
         if (\apcu_exists(AUTH_CLIENT_ID) === true) {
             $fetched = \apcu_fetch(AUTH_CLIENT_ID);
             if ($fetched !== false) {
+                if (getenv("ACTIVITY_LOG_CACHE_ENABLED")) {
+                    $logger->info("Returned cached client id");
+                }
                 return $fetched;
             }
         }
@@ -77,9 +61,16 @@ return [
         return $authClientId;
     },
     AUTH_CLIENT_SECRET => static function (ContainerInterface $container): string {
+        /**
+         * @var LoggerInterface
+         */
+        $logger = $container->get(LoggerInterface::class);
         if (\apcu_exists(AUTH_CLIENT_SECRET) === true) {
             $fetched = \apcu_fetch(AUTH_CLIENT_SECRET);
             if ($fetched !== false) {
+                if (getenv("ACTIVITY_LOG_CACHE_ENABLED")) {
+                    $logger->info("Returned cached client secret");
+                }
                 return $fetched;
             }
         }
@@ -92,9 +83,16 @@ return [
         return $authClientSecret;
     },
     AUTH_COOKIE_SECRET => static function (ContainerInterface $container): string {
+        /**
+         * @var LoggerInterface
+         */
+        $logger = $container->get(LoggerInterface::class);
         if (\apcu_exists(AUTH_COOKIE_SECRET) === true) {
             $fetched = \apcu_fetch(AUTH_COOKIE_SECRET);
             if ($fetched !== false) {
+                if (getenv("ACTIVITY_LOG_CACHE_ENABLED")) {
+                    $logger->info("Returned cached cookie secret");
+                }
                 return $fetched;
             }
         }
@@ -112,10 +110,12 @@ return [
          */
         $logger = $container->get(LoggerInterface::class);
         if (\apcu_exists(AUTH_DOMAIN) === true) {
-            $logger->info("Returned cached domain value", ["domain" => \apcu_fetch(AUTH_DOMAIN)]);
             $fetched = \apcu_fetch(AUTH_DOMAIN);
 
             if ($fetched !== false) {
+                if (getenv("ACTIVITY_LOG_CACHE_ENABLED")) {
+                    $logger->info("Returned cached domain value");
+                }
                 return $fetched;
             }
         }
@@ -154,7 +154,7 @@ return [
         appConfig: $container->get(AppConfig::class),
     ),
     DiTokens::UNAUTHORIZED_HANDLER => static fn(ContainerInterface $container) =>
-    new readonly class ($container->get(APP_LOGIN_PATH)) implements RequestHandlerInterface {
+    new readonly class($container->get(APP_LOGIN_PATH)) implements RequestHandlerInterface {
         public function __construct(private string $loginPath) {}
         public function handle(ServerRequestInterface $request): ResponseInterface
         {

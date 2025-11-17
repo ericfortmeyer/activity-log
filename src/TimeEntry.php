@@ -11,7 +11,6 @@ use Phpolar\Model\{
     Label,
     PrimaryKey
 };
-use Phpolar\Phpolar\Auth\User;
 use Phpolar\Validators\{
     Max,
     MaxLength,
@@ -55,9 +54,9 @@ class TimeEntry extends TenantData
     #[Hidden]
     public DateTimeImmutable $createdOn;
 
-    public function create(User $user): void
+    public function create(string $tenantId): void
     {
-        parent::initForTenant($user);
+        $this->tenantId = $tenantId;
         $this->id = uniqid();
         $this->createdOn = new DateTimeImmutable("now");
     }

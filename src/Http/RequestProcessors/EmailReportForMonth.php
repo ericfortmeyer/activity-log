@@ -19,12 +19,11 @@ use EricFortmeyer\ActivityLog\Services\{
     CreditHoursService,
 };
 use Phpolar\Model\Model;
-use Phpolar\Phpolar\Auth\AbstractProtectedRoutable;
 use Phpolar\PurePhp\HtmlSafeContext;
 use Phpolar\PurePhp\TemplateEngine;
 use Phpolar\Storage\NotFound;
 
-final class EmailReportForMonth extends AbstractProtectedRoutable
+final class EmailReportForMonth extends AbstractTenantBasedRequestProcessor
 {
     public function __construct(
         private readonly EmailConfig $mailConfig,
@@ -32,7 +31,10 @@ final class EmailReportForMonth extends AbstractProtectedRoutable
         private readonly RemarksForMonthService $remarksService,
         private readonly CreditHoursService $creditHoursService,
         private readonly TemplateEngine $templateEngine,
-    ) {}
+        readonly string $hashingKey,
+    ) {
+        parent::__construct(hashingKey: $hashingKey);
+    }
 
     public function process(
         #[Model] EmailReport $emailReportContext = new EmailReport(),
@@ -43,17 +45,17 @@ final class EmailReportForMonth extends AbstractProtectedRoutable
         $timeEntries = $this->timeEntryService->getAllByMonth(
             month: $month,
             year: $year,
-            tenantId: $this->user->nickname,
+            tenantId: $this->getTenantId(),
         );
         $remarks = $this->remarksService->get(RemarksForMonth::getIdFromMonth(
             month: $month,
             year: $year,
-            tenantId: $this->user->nickname
+            tenantId: $this->getTenantId(),
         ));
         $creditHours = $this->creditHoursService->get(CreditHours::getIdFromMonth(
             month: $month,
             year: $year,
-            tenantId: $this->user->nickname
+            tenantId: $this->getTenantId(),
         ));
         $context = $this->getContext(
             timeEntries: $timeEntries,

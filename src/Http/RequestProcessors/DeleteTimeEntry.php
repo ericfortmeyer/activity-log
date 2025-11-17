@@ -10,26 +10,30 @@ use Phpolar\PurePhp\{
 };
 use Phpolar\Model\Model;
 use Phpolar\Phpolar\Auth\{
-    AbstractProtectedRoutable,
     Authorize
 };
 use Phpolar\Storage\NotFound;
 use EricFortmeyer\ActivityLog\UserInterface\Contexts\{NotFoundContext, TimeEntriesContext};
 use EricFortmeyer\ActivityLog\Services\{TimeEntryService, RemarksForMonthService};
 use EricFortmeyer\ActivityLog\{MonthFilters, RemarksForMonth};
+use SensitiveParameter;
 
 /**
  * Class DeleteTimeEntry
  *
  * @package EricFortmeyer\ActivityLog
  */
-final class DeleteTimeEntry extends AbstractProtectedRoutable
+final class DeleteTimeEntry extends AbstractTenantBasedRequestProcessor
 {
     public function __construct(
         private readonly TimeEntryService $timeEntryService,
         private readonly RemarksForMonthService $remarksForMonthService,
         private readonly TemplateEngine $templateEngine,
-    ) {}
+        #[SensitiveParameter]
+        readonly string $hashingKey = "",
+    ) {
+        parent::__construct(hashingKey: $hashingKey);
+    }
 
     #[Authorize]
     public function process(
@@ -51,12 +55,12 @@ final class DeleteTimeEntry extends AbstractProtectedRoutable
         $timeEntries = $this->timeEntryService->getAllByMonth(
             month: $month,
             year: $year,
-            tenantId: $this->user->nickname,
+            tenantId: $this->getTenantId(),
         );
         $remarks = $this->remarksForMonthService->get(RemarksForMonth::getIdFromMonth(
             year: $year,
             month: $month,
-            tenantId: $this->user->nickname,
+            tenantId: $this->getTenantId(),
         ));
 
         return (string) $this->templateEngine->apply(
