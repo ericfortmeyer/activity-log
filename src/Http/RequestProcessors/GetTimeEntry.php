@@ -7,14 +7,14 @@ namespace EricFortmeyer\ActivityLog\Http\RequestProcessors;
 use Phpolar\PurePhp\TemplateEngine;
 use Phpolar\PurePhp\HtmlSafeContext;
 use Phpolar\Phpolar\Auth\{
-    AbstractProtectedRoutable,
+    AbstractRestrictedAccessRequestProcessor,
     Authorize
 };
 use Phpolar\Storage\NotFound;
 use EricFortmeyer\ActivityLog\Services\TimeEntryService;
 use EricFortmeyer\ActivityLog\UserInterface\Contexts\{NotFoundContext, TimeEntryContext};
 
-final class GetTimeEntry extends AbstractProtectedRoutable
+final class GetTimeEntry extends AbstractRestrictedAccessRequestProcessor
 {
     public function __construct(
         private readonly TimeEntryService $timeEntryService,

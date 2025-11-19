@@ -8,7 +8,6 @@ use Phpolar\Model\{
     Hidden,
     PrimaryKey
 };
-use Phpolar\Phpolar\Auth\User;
 use Phpolar\Validators\{
     Max,
     Min

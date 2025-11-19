@@ -5,6 +5,7 @@ declare(strict_types=1);
 use Auth0\SDK\Configuration\SdkConfiguration;
 use EricFortmeyer\ActivityLog\AppConfig;
 use EricFortmeyer\ActivityLog\Clients\SecretsClient;
+use EricFortmeyer\ActivityLog\Http\UnauthorizedHandler;
 use PhpContrib\Authenticator\AuthenticatorInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
@@ -16,12 +17,7 @@ use EricFortmeyer\ActivityLog\Infrastructure\Auth\{
     LoginMiddleware,
     LogoutMiddleware,
 };
-use GuzzleHttp\Psr7\Response;
-use PhpCommonEnums\HttpResponseCode\Enumeration\HttpResponseCodeEnum as ResponseCode;
 use Phpolar\Phpolar\DependencyInjection\DiTokens;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Server\RequestHandlerInterface;
 
 use const EricFortmeyer\ActivityLog\config\DiTokens\{
     APP_LOGIN_PATH,
@@ -154,15 +150,5 @@ return [
         appConfig: $container->get(AppConfig::class),
     ),
     DiTokens::UNAUTHORIZED_HANDLER => static fn(ContainerInterface $container) =>
-    // phpcs:ignore
-    new readonly class($container->get(APP_LOGIN_PATH)) implements RequestHandlerInterface {
-        public function __construct(private string $loginPath) {}
-        public function handle(ServerRequestInterface $request): ResponseInterface
-        {
-            return new Response(
-                ResponseCode::TemporaryRedirect->value,
-                ["Location" => $this->loginPath]
-            );
-        }
-    },
+    new UnauthorizedHandler($container->get(APP_LOGIN_PATH), $container->get(ResponseFactoryInterface::class)),
 ];

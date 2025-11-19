@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace EricFortmeyer\ActivityLog\Http\RequestProcessors;
 
-use Phpolar\Phpolar\Auth\AbstractProtectedRoutable;
+use Phpolar\Phpolar\Auth\AbstractRestrictedAccessRequestProcessor;
 use SensitiveParameter;
 
-abstract class AbstractTenantBasedRequestProcessor extends AbstractProtectedRoutable
+abstract class AbstractTenantBasedRequestProcessor extends AbstractRestrictedAccessRequestProcessor
 {
     public function __construct(
         #[SensitiveParameter]
