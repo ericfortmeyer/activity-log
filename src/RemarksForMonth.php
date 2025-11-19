@@ -2,7 +2,6 @@
 
 namespace EricFortmeyer\ActivityLog;
 
-use Phpolar\Phpolar\Auth\User;
 use Phpolar\{
     Model\Hidden,
     Model\PrimaryKey,

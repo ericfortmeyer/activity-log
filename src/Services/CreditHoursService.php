@@ -3,7 +3,6 @@
 namespace EricFortmeyer\ActivityLog\Services;
 
 use EricFortmeyer\ActivityLog\CreditHours;
-use Phpolar\Phpolar\Auth\User;
 use Phpolar\Storage\{
     NotFound,
     StorageContext

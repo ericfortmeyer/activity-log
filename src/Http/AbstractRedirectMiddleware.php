@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace EricFortmeyer\ActivityLog\Infrastructure\Auth;
+namespace EricFortmeyer\ActivityLog\Http;
 
 use PhpCommonEnums\HttpResponseCode\Enumeration\HttpResponseCodeEnum;
 use Psr\Http\Message\ResponseFactoryInterface;

@@ -6,6 +6,7 @@ namespace EricFortmeyer\ActivityLog\Infrastructure\Auth;
 
 use Auth0\SDK\Exception\ConfigurationException;
 use EricFortmeyer\ActivityLog\AppConfig;
+use EricFortmeyer\ActivityLog\Http\AbstractRedirectMiddleware;
 use Psr\Http\{
     Message\RequestInterface,
     Message\ResponseInterface,
