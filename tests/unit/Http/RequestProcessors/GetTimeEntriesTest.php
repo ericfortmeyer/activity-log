@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace EricFortmeyer\ActivityLog\Http\RequestProcessors;
 
+use EricFortmeyer\ActivityLog\CreditHours;
 use EricFortmeyer\ActivityLog\MonthFilters;
+use EricFortmeyer\ActivityLog\RemarksForMonth;
 use EricFortmeyer\ActivityLog\Services\CreditHoursService;
 use EricFortmeyer\ActivityLog\Services\RemarksForMonthService;
 use EricFortmeyer\ActivityLog\Services\TimeEntryService;
@@ -12,7 +14,6 @@ use EricFortmeyer\ActivityLog\TimeEntry;
 use EricFortmeyer\ActivityLog\UserInterface\Contexts\TimeEntriesContext;
 use Phpolar\Phpolar\Auth\User;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Phpolar\PurePhp\TemplateEngine;
@@ -20,7 +21,10 @@ use Phpolar\Storage\NotFound;
 
 #[CoversClass(GetTimeEntries::class)]
 #[CoversClass(TimeEntriesContext::class)]
-#[UsesClass(TimeEntry::class)]
+#[CoversClass(TimeEntry::class)]
+#[CoversClass(MonthFilters::class)]
+#[CoversClass(RemarksForMonth::class)]
+#[CoversClass(CreditHours::class)]
 final class GetTimeEntriesTest extends TestCase
 {
     private TimeEntryService&MockObject $timeEntryService;

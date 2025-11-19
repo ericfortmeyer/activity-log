@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace EricFortmeyer\ActivityLog\Http\RequestProcessors;
 
 use EricFortmeyer\ActivityLog\MonthFilters;
+use EricFortmeyer\ActivityLog\RemarksForMonth;
 use EricFortmeyer\ActivityLog\Services\RemarksForMonthService;
 use EricFortmeyer\ActivityLog\Services\TimeEntryService;
 use EricFortmeyer\ActivityLog\TimeEntry;
@@ -16,7 +17,6 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Phpolar\PurePhp\TemplateEngine;
 use Phpolar\Storage\NotFound;
-use PHPUnit\Framework\Attributes\UsesClass;
 
 /**
  * Class DeleteTimeEntry
@@ -24,9 +24,11 @@ use PHPUnit\Framework\Attributes\UsesClass;
  * @package EricFortmeyer\ActivityLog
  */
 #[CoversClass(DeleteTimeEntry::class)]
-#[UsesClass(TimeEntriesContext::class)]
-#[UsesClass(TimeEntry::class)]
-#[UsesClass(NotFoundContext::class)]
+#[CoversClass(TimeEntriesContext::class)]
+#[CoversClass(TimeEntry::class)]
+#[CoversClass(NotFoundContext::class)]
+#[CoversClass(MonthFilters::class)]
+#[CoversClass(RemarksForMonth::class)]
 final class DeleteTimeEntryTest extends TestCase
 {
     private TimeEntryService&MockObject $timeEntryService;

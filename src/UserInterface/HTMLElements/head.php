@@ -8,6 +8,8 @@ use EricFortmeyer\ActivityLog\UserInterface\Contexts\AbstractContext;
 
 /**
  * Contains machine-readable metadata about the document.
+ *
+ * @codeCoverageIgnore
  */
 function head(AbstractContext $ctx, string $dialogScript = ""): string
 {
