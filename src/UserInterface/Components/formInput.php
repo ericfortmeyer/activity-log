@@ -4,6 +4,9 @@ namespace EricFortmeyer\ActivityLog\UserInterface\Components;
 
 use Phpolar\Model\InputTypes;
 
+/**
+ * @codeCoverageIgnore
+ */
 function formInput(
     string $name,
     string $label,

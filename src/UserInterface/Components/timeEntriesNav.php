@@ -4,6 +4,9 @@ namespace EricFortmeyer\ActivityLog\UserInterface\Components;
 
 use EricFortmeyer\ActivityLog\UserInterface\Contexts\TimeEntriesContext;
 
+/**
+ * @codeCoverageIgnore
+ */
 function timeEntriesNav(TimeEntriesContext $view): string
 {
     return <<<HTML

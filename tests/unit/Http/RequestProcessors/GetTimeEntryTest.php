@@ -14,12 +14,11 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Phpolar\PurePhp\TemplateEngine;
 use Phpolar\Storage\NotFound;
-use PHPUnit\Framework\Attributes\UsesClass;
 
 #[CoversClass(GetTimeEntry::class)]
 #[CoversClass(NotFoundContext::class)]
 #[CoversClass(TimeEntryContext::class)]
-#[UsesClass(TimeEntry::class)]
+#[CoversClass(TimeEntry::class)]
 final class GetTimeEntryTest extends TestCase
 {
     private TimeEntryService&MockObject $timeEntryService;

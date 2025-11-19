@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace EricFortmeyer\ActivityLog\Http\RequestProcessors;
 
+use EricFortmeyer\ActivityLog\MonthFilters;
+use EricFortmeyer\ActivityLog\RemarksForMonth;
 use EricFortmeyer\ActivityLog\Services\RemarksForMonthService;
 use EricFortmeyer\ActivityLog\Services\TimeEntryService;
 use EricFortmeyer\ActivityLog\TimeEntry;
@@ -12,7 +14,6 @@ use EricFortmeyer\ActivityLog\UserInterface\Contexts\TimeEntriesContext;
 use EricFortmeyer\ActivityLog\UserInterface\Contexts\TimeEntryContext;
 use Phpolar\Phpolar\Auth\User;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Phpolar\PurePhp\TemplateEngine;
@@ -20,7 +21,9 @@ use Phpolar\Storage\NotFound;
 use PHPUnit\Framework\Attributes\DataProviderExternal;
 
 #[CoversClass(SubmitTimeEntry::class)]
-#[UsesClass(TimeEntry::class)]
+#[CoversClass(TimeEntry::class)]
+#[CoversClass(MonthFilters::class)]
+#[CoversClass(RemarksForMonth::class)]
 #[CoversClass(TimeEntryContext::class)]
 #[CoversClass(TimeEntriesContext::class)]
 final class SubmitTimeEntryTest extends TestCase
