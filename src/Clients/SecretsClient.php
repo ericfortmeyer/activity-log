@@ -15,7 +15,7 @@ use SensitiveParameter;
  *
  * Values are cached
  */
-final readonly class SecretsClient
+readonly class SecretsClient
 {
     private string $authClientTokenCacheKey;
 

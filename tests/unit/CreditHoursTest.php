@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace EricFortmeyer\ActivityLog;
 
-use EricFortmeyer\ActivityLog\Services\CreditHoursService;
 use EricFortmeyer\ActivityLog\UnitTests\DataProviders\CreditHoursDataProvider;
-use EricFortmeyer\ActivityLog\UnitTests\DataProviders\RemarksForMonthDataProvider;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProviderExternal;
 use PHPUnit\Framework\Attributes\Test;
@@ -15,6 +13,7 @@ use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(CreditHours::class)]
+#[CoversClass(TenantData::class)]
 final class CreditHoursTest extends TestCase
 {
     #[Test]

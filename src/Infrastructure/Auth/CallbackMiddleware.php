@@ -22,8 +22,10 @@ final readonly class CallbackMiddleware extends AbstractRedirectMiddleware
         private Auth0Adapter $auth,
         private LoggerInterface $log,
         private AppConfig $appConfig,
-        protected ResponseFactoryInterface $responseFactory,
-    ) {}
+        ResponseFactoryInterface $responseFactory,
+    ) {
+        parent::__construct($responseFactory);
+    }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {

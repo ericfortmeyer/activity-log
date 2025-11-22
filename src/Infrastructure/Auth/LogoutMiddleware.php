@@ -12,6 +12,7 @@ use Psr\Http\{
     Message\ServerRequestInterface,
     Server\RequestHandlerInterface
 };
+use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Log\LoggerInterface;
 
@@ -35,15 +36,21 @@ final readonly class LogoutMiddleware extends AbstractRedirectMiddleware
         $this->auth->clear();
 
         try {
-            $logoutUrl = $this->auth->logout(
-                $request->getUri()->getScheme() . "://" . $request->getUri()->getHost()
+            return $this->getRedirectResponse(
+                $this->auth->logout(
+                    $this->getRedirectUrl($request)
+                )
             );
-            return $this->getRedirectResponse($logoutUrl);
         } catch (ConfigurationException $e) {
             $this->log->critical($e->getMessage());
             return $this->getRedirectResponse(
                 $this->appConfig->loginPath
             );
         }
+    }
+
+    private function getRedirectUrl(RequestInterface $request): string
+    {
+        return $request->getUri()->getScheme() . "://" . $request->getUri()->getHost();
     }
 }

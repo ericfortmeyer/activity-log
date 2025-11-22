@@ -66,6 +66,10 @@
     "cbf": "phpcbf --exclude=Squiz.Functions.MultiLineFunctionDeclaration,Squiz.WhiteSpace.ScopeClosingBrace --standard=PSR12",
     "lint": "@cs ./src ./tests",
     "lint-fix": "@cbf ./src ./tests",
+    "start:test": [
+      "Composer\\Config::disableProcessTimeout",
+      "watch -n 5 -cx composer exec @test"
+    ],
     "ci:analyze": "@phpstan --no-progress ./src",
     "ci:lint": [
       "@cs -q --no-colors ./src ./tests"

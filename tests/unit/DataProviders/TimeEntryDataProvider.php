@@ -9,7 +9,15 @@ final readonly class TimeEntryDataProvider
     public static function validTimeEntryData(): array
     {
         return [
-            [str_repeat("a", 20), str_repeat("a", 100), 31, 2025, 12, 24, 59]
+            [
+                "id" => str_repeat("a", 20),
+                "tenantId" => str_repeat("a", 100),
+                "dayOfMonth" => 31,
+                "year" => 2025,
+                "month" => 12,
+                "hours" => 24,
+                "minutes" => 59
+            ]
         ];
     }
 
