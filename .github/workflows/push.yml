@@ -12,4 +12,10 @@ jobs:
   coverage:
     uses: phpolar/github-workflows/.github/workflows/coverage.yml@v1
   os_build_check:
+    strategy:
+      matrix:
+        operating-system:
+          ['ubuntu-24.04', 'ubuntu-22.04', 'windows-2025', 'windows-2022']
+        php-versions: ['8.4']
+        phpunit-versions: ['latest']
     uses: phpolar/github-workflows/.github/workflows/os-build-check.yml@v1
