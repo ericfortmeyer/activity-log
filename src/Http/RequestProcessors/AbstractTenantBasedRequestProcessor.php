@@ -7,6 +7,11 @@ namespace EricFortmeyer\ActivityLog\Http\RequestProcessors;
 use Phpolar\Phpolar\Auth\AbstractRestrictedAccessRequestProcessor;
 use SensitiveParameter;
 
+use function sodium_bin2hex;
+use function sodium_crypto_generichash;
+
+use const SODIUM_CRYPTO_GENERICHASH_BYTES_MIN;
+
 abstract class AbstractTenantBasedRequestProcessor extends AbstractRestrictedAccessRequestProcessor
 {
     public function __construct(
