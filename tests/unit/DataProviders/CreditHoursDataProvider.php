@@ -13,7 +13,7 @@ final readonly class CreditHoursDataProvider
         ];
     }
 
-    public static function invalidTimeEntryData(): array
+    public static function invalidData(): array
     {
         return [
             "invalidId" => ["invalidProp" => "id", "invalidValue" => str_repeat("a", 21), "id" => str_repeat("a", 21), "tenantId" => "FAKE_TENANTID", "dayOfMonth" => 30, "year" => 2025, "month" => 1, "hours" => 8, "minutes" => 30],

@@ -13,6 +13,7 @@ use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(RemarksForMonth::class)]
+#[CoversClass(TenantData::class)]
 final class RemarksForMonthTest extends TestCase
 {
     #[Test]

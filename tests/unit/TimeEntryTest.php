@@ -84,7 +84,7 @@ final class TimeEntryTest extends TestCase
                 "month",
                 "hours",
                 "minutes",
-                "createdOn",
+                "createdOn"
             )
         );
 
@@ -162,7 +162,6 @@ final class TimeEntryTest extends TestCase
                 "month",
                 "hours",
                 "minutes",
-                "createdOn",
             )
         );
 

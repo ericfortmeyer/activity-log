@@ -15,7 +15,10 @@ use Auth0\SDK\Contract\{
 use PhpContrib\Authenticator\AuthenticatorInterface;
 use Exception;
 
-final readonly class Auth0Adapter implements Auth0Interface, AuthenticatorInterface
+/**
+ * @codeCoverageIgnore
+ */
+readonly class Auth0Adapter implements Auth0Interface, AuthenticatorInterface
 {
     private Auth0 $auth;
 

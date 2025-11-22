@@ -10,11 +10,6 @@ use Phpolar\Storage\{
     StorageContext
 };
 
-/**
- * Class TimeEntryService
- *
- * @package EricFortmeyer\ActivityLog
- */
 readonly class TimeEntryService
 {
     /**
@@ -66,9 +61,14 @@ readonly class TimeEntryService
         );
     }
 
-    public function save(TimeEntry $entry): void
+    public function save(TimeEntry $entry, string $tenantId): void
     {
-        $this->storageContext->save($entry->id, $entry);
+        if (empty($entry->id) === true) {
+            $entry->create($tenantId);
+            $this->storageContext->save($entry->id, $entry);
+            return;
+        }
+        $this->storageContext->replace($entry->id, $entry);
     }
 
     /**
