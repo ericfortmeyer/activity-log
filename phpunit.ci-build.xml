@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+    bootstrap="vendor/autoload.php"
+    cacheDirectory=".phpunit.cache"
+    cacheResult="true"
+    executionOrder="depends,defects"
+    requireCoverageMetadata="false"
+    beStrictAboutCoverageMetadata="false"
+    beStrictAboutOutputDuringTests="true"
+    displayDetailsOnPhpunitDeprecations="true"
+    failOnPhpunitDeprecation="false"
+    failOnRisky="false"
+    failOnWarning="false">
+    <testsuites>
+        <testsuite name="default">
+            <directory>tests/unit/Infrastructure</directory>
+            <directory>tests/unit/Services</directory>
+            <file>tests/unit/AppConfigTest.php</file>
+            <file>tests/unit/CreditHoursTest.php</file>
+            <file>tests/unit/EmailConfigTest.php</file>
+            <file>tests/unit/EmailReportTest.php</file>
+            <file>tests/unit/RemarksForMonthTest.php</file>
+            <file>tests/unit/TimeEntryTest.php</file>
+        </testsuite>
+    </testsuites>
+    <source ignoreIndirectDeprecations="true" restrictNotices="true" restrictWarnings="true">
+        <include>
+            <directory>src</directory>
+        </include>
+        <exclude>
+            <directory>src/templates</directory>
+            <directory>src/config</directory>
+        </exclude>
+    </source>
+</phpunit>
