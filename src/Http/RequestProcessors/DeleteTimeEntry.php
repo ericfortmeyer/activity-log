@@ -16,6 +16,7 @@ use Phpolar\Storage\NotFound;
 use EricFortmeyer\ActivityLog\UserInterface\Contexts\{NotFoundContext, TimeEntriesContext};
 use EricFortmeyer\ActivityLog\Services\{TimeEntryService, RemarksForMonthService};
 use EricFortmeyer\ActivityLog\{MonthFilters, RemarksForMonth};
+use EricFortmeyer\ActivityLog\Utils\Hasher;
 use SensitiveParameter;
 
 /**
@@ -29,10 +30,9 @@ final class DeleteTimeEntry extends AbstractTenantBasedRequestProcessor
         private readonly TimeEntryService $timeEntryService,
         private readonly RemarksForMonthService $remarksForMonthService,
         private readonly TemplateEngine $templateEngine,
-        #[SensitiveParameter]
-        readonly string $hashingKey = "",
+        readonly Hasher $hasher,
     ) {
-        parent::__construct(hashingKey: $hashingKey);
+        parent::__construct($hasher);
     }
 
     #[Authorize]

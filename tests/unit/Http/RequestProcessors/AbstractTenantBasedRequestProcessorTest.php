@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace EricFortmeyer\ActivityLog\UnitTests\Http\RequestProcessors;
 
 use EricFortmeyer\ActivityLog\Http\RequestProcessors\AbstractTenantBasedRequestProcessor;
+use EricFortmeyer\ActivityLog\Utils\Hasher;
 use Phpolar\Phpolar\Auth\User;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -29,13 +30,18 @@ final class AbstractTenantBasedRequestProcessorTest extends TestCase
     }
 
     #[Test]
-    #[TestDox("Shall compute (\$rawHashingKey) as the expected tenant id (\$computedTenantId)")]
-    #[TestWith(["hashhashhashhash", "c9b1304638e067d3957a7921f3f75dec"])]
-    #[TestWith(["hashhashhashhash", "c9b1304638e067d3957a7921f3f75dec"])]
-    #[TestWith(["", "c4b3726644bc9313463e951cc83abf6a"])]
-    public function ewoijf(string $rawHashingKey, string $computedTenantId)
+    #[TestDox("Shall compute the expected tenant id (\$computedTenantId)")]
+    #[TestWith(["c9b1304638e067d3957a7921f3f75dec"])]
+    #[TestWith(["c4b3726644bc9313463e951cc83abf6a"])]
+    public function ewoijf(string $computedTenantId)
     {
-        $requestProcessor = new class ($rawHashingKey) extends AbstractTenantBasedRequestProcessor {
+        $hasherMock = $this->createMock(Hasher::class);
+        $hasherMock->expects($this->once())
+            ->method("hash")
+            ->with(self::$user->nickname)
+            ->willReturn($computedTenantId);
+
+        $requestProcessor = new class ($hasherMock) extends AbstractTenantBasedRequestProcessor {
             public function process(): array|bool|int|null|object|string
             {
                 throw new \Exception('Not implemented');

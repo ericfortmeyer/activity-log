@@ -20,6 +20,7 @@ use EricFortmeyer\ActivityLog\{
     RemarksForMonth
 };
 use EricFortmeyer\ActivityLog\UserInterface\Contexts\TimeEntriesContext;
+use EricFortmeyer\ActivityLog\Utils\Hasher;
 use Phpolar\Phpolar\Auth\Authorize;
 
 final class SubmitTimeEntry extends AbstractTenantBasedRequestProcessor
@@ -28,9 +29,9 @@ final class SubmitTimeEntry extends AbstractTenantBasedRequestProcessor
         private readonly TimeEntryService $timeEntryService,
         private readonly RemarksForMonthService $remarksForMonthService,
         private readonly TemplateEngine $templateEngine,
-        readonly string $hashingKey = "",
+        readonly Hasher $hasher,
     ) {
-        parent::__construct(hashingKey: $hashingKey);
+        parent::__construct(hasher: $hasher);
     }
 
     #[Authorize]

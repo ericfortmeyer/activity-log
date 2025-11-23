@@ -16,6 +16,7 @@ use Phpolar\{
 use EricFortmeyer\ActivityLog\{RemarksForMonth, MonthFilters, CreditHours, TimeEntry};
 use EricFortmeyer\ActivityLog\Services\{RemarksForMonthService, CreditHoursService, TimeEntryService};
 use EricFortmeyer\ActivityLog\UserInterface\Contexts\{TimeEntriesContext, BadRequestContext};
+use EricFortmeyer\ActivityLog\Utils\Hasher;
 
 /**
  * Class GetTimeEntries
@@ -29,9 +30,9 @@ final class GetTimeEntries extends AbstractTenantBasedRequestProcessor
         private readonly RemarksForMonthService $remarksForMonthService,
         private readonly CreditHoursService $creditHoursService,
         private readonly TemplateEngine $templateEngine,
-        readonly string $hashingKey = "",
+        readonly Hasher $hasher,
     ) {
-        parent::__construct(hashingKey: $hashingKey);
+        parent::__construct($hasher);
     }
 
     /**
