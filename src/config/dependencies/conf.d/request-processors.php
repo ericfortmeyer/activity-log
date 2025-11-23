@@ -9,10 +9,9 @@ use EricFortmeyer\ActivityLog\Services\CreditHoursService;
 use EricFortmeyer\ActivityLog\Services\DataExportService;
 use EricFortmeyer\ActivityLog\Services\RemarksForMonthService;
 use EricFortmeyer\ActivityLog\Services\TimeEntryService;
+use EricFortmeyer\ActivityLog\Utils\Hasher;
 use Psr\Container\ContainerInterface;
 use Phpolar\PurePhp\TemplateEngine;
-
-use const EricFortmeyer\ActivityLog\config\DiTokens\HASH_KEY;
 
 return [
     GetTimeEntries::class => static fn(ContainerInterface $container) => new GetTimeEntries(
@@ -20,7 +19,7 @@ return [
         remarksForMonthService: $container->get(RemarksForMonthService::class),
         creditHoursService: $container->get(CreditHoursService::class),
         templateEngine: $container->get(TemplateEngine::class),
-        hashingKey: $container->get(HASH_KEY),
+        hasher: $container->get(Hasher::class),
     ),
 
     GetTimeEntry::class => static fn(ContainerInterface $container) => new GetTimeEntry(
@@ -32,28 +31,28 @@ return [
         $container->get(TimeEntryService::class),
         $container->get(RemarksForMonthService::class),
         $container->get(TemplateEngine::class),
-        hashingKey: $container->get(HASH_KEY),
+        hasher: $container->get(Hasher::class),
     ),
 
     SubmitTimeEntry::class => static fn(ContainerInterface $container) => new SubmitTimeEntry(
         $container->get(TimeEntryService::class),
         $container->get(RemarksForMonthService::class),
         $container->get(TemplateEngine::class),
-        hashingKey: $container->get(HASH_KEY),
+        hasher: $container->get(Hasher::class),
     ),
     SaveRemarksForMonth::class => static fn(ContainerInterface $container) => new SaveRemarksForMonth(
         creditHoursService: $container->get(CreditHoursService::class),
         remarksService: $container->get(RemarksForMonthService::class),
         timeEntryService: $container->get(TimeEntryService::class),
         templateEngine: $container->get(TemplateEngine::class),
-        hashingKey: $container->get(HASH_KEY),
+        hasher: $container->get(Hasher::class),
     ),
     SaveCreditHours::class => static fn(ContainerInterface $container) => new SaveCreditHours(
         creditHoursService: $container->get(CreditHoursService::class),
         remarksService: $container->get(RemarksForMonthService::class),
         timeEntryService: $container->get(TimeEntryService::class),
         templateEngine: $container->get(TemplateEngine::class),
-        hashingKey: $container->get(HASH_KEY),
+        hasher: $container->get(Hasher::class),
     ),
     DownloadDataExport::class => static fn(ContainerInterface $container) => new DownloadDataExport(
         $container->get(DataExportService::class),
@@ -64,6 +63,6 @@ return [
         remarksService: $container->get(RemarksForMonthService::class),
         creditHoursService: $container->get(CreditHoursService::class),
         templateEngine: $container->get(TemplateEngine::class),
-        hashingKey: $container->get(HASH_KEY),
+        hasher: $container->get(Hasher::class),
     )
 ];

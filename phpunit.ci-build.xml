@@ -14,6 +14,7 @@
     failOnWarning="false">
     <testsuites>
         <testsuite name="default">
+            <directory>tests/unit/Http</directory>
             <directory>tests/unit/Infrastructure</directory>
             <directory>tests/unit/Services</directory>
             <file>tests/unit/AppConfigTest.php</file>

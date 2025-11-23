@@ -12,6 +12,7 @@ use EricFortmeyer\ActivityLog\Services\RemarksForMonthService;
 use EricFortmeyer\ActivityLog\Services\TimeEntryService;
 use EricFortmeyer\ActivityLog\TimeEntry;
 use EricFortmeyer\ActivityLog\UserInterface\Contexts\TimeEntriesContext;
+use EricFortmeyer\ActivityLog\Utils\Hasher;
 use Phpolar\Phpolar\Auth\User;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -35,6 +36,7 @@ final class GetTimeEntriesTest extends TestCase
 
     protected function setUp(): void
     {
+        $hasher = $this->createStub(Hasher::class);
         $this->timeEntryService = $this->createMock(TimeEntryService::class);
         $this->remarksForMonthService = $this->createMock(RemarksForMonthService::class);
         $this->creditHoursService = $this->createMock(CreditHoursService::class);
@@ -44,6 +46,7 @@ final class GetTimeEntriesTest extends TestCase
             remarksForMonthService: $this->remarksForMonthService,
             creditHoursService: $this->creditHoursService,
             templateEngine: $this->templateEngine,
+            hasher: $hasher,
         );
         $this->getTimeEntries->user = new User(
             name: "",

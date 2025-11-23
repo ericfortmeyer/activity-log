@@ -11,6 +11,7 @@ use EricFortmeyer\ActivityLog\Services\TimeEntryService;
 use EricFortmeyer\ActivityLog\TimeEntry;
 use EricFortmeyer\ActivityLog\UserInterface\Contexts\NotFoundContext;
 use EricFortmeyer\ActivityLog\UserInterface\Contexts\TimeEntriesContext;
+use EricFortmeyer\ActivityLog\Utils\Hasher;
 use Phpolar\Phpolar\Auth\User;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -38,6 +39,7 @@ final class DeleteTimeEntryTest extends TestCase
 
     protected function setUp(): void
     {
+        $hasher = $this->createStub(Hasher::class);
         $this->timeEntryService = $this->createMock(TimeEntryService::class);
         $this->remarksForMonthService = $this->createMock(RemarksForMonthService::class);
         $this->remarksForMonthService
@@ -48,6 +50,7 @@ final class DeleteTimeEntryTest extends TestCase
             timeEntryService: $this->timeEntryService,
             remarksForMonthService: $this->remarksForMonthService,
             templateEngine: $this->templateEngine,
+            hasher: $hasher,
         );
         $this->deleteTimeEntry->user = new User(
             name: "",

@@ -18,6 +18,7 @@ use EricFortmeyer\ActivityLog\Services\{
     RemarksForMonthService,
     CreditHoursService,
 };
+use EricFortmeyer\ActivityLog\Utils\Hasher;
 use Phpolar\Model\Model;
 use Phpolar\PurePhp\HtmlSafeContext;
 use Phpolar\PurePhp\TemplateEngine;
@@ -31,9 +32,9 @@ final class EmailReportForMonth extends AbstractTenantBasedRequestProcessor
         private readonly RemarksForMonthService $remarksService,
         private readonly CreditHoursService $creditHoursService,
         private readonly TemplateEngine $templateEngine,
-        readonly string $hashingKey,
+        readonly Hasher $hasher,
     ) {
-        parent::__construct(hashingKey: $hashingKey);
+        parent::__construct($hasher);
     }
 
     public function process(

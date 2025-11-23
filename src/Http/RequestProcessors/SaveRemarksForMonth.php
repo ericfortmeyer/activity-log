@@ -21,6 +21,7 @@ use EricFortmeyer\ActivityLog\Services\{
     TimeEntryService
 };
 use EricFortmeyer\ActivityLog\UserInterface\Contexts\TimeEntriesContext;
+use EricFortmeyer\ActivityLog\Utils\Hasher;
 
 final class SaveRemarksForMonth extends AbstractTenantBasedRequestProcessor
 {
@@ -29,9 +30,9 @@ final class SaveRemarksForMonth extends AbstractTenantBasedRequestProcessor
         private readonly CreditHoursService $creditHoursService,
         private readonly TimeEntryService $timeEntryService,
         private readonly TemplateEngine $templateEngine,
-        readonly string $hashingKey = "",
+        readonly Hasher $hasher,
     ) {
-        parent::__construct(hashingKey: $hashingKey);
+        parent::__construct($hasher);
     }
 
     #[Authorize]
