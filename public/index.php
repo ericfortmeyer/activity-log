@@ -10,6 +10,7 @@ declare(strict_types=1);
  * See `src/config/dependencies/conf.d/`.
  */
 
+use EricFortmeyer\ActivityLog\Bootstrapper;
 use EricFortmeyer\ActivityLog\UserInterface\Contexts\ServerErrorContext;
 use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\SyslogHandler;
@@ -19,6 +20,8 @@ use Phpolar\PurePhp\{
     HtmlSafeContext,
     TemplateEngine
 };
+
+use const EricFortmeyer\ActivityLog\config\DiTokens\BOOTSTRAPPER;
 
 ini_set("display_errors", true);
 chdir("../");
@@ -60,9 +63,9 @@ set_exception_handler(static function (Throwable $e) {
 new ContainerLoader()->load($psr11Container, $dependencyMap);
 
 /**
- * @var \Closure
+ * @var Bootstrapper
  */
-$bootstrapper = $psr11Container->get("BOOTSTRAPPER");
+$bootstrapper = $psr11Container->get(BOOTSTRAPPER);
 /**
  * Start the application
  */

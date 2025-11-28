@@ -27,8 +27,13 @@ readonly class CreditHoursService
 
     public function get(string $id): CreditHours|NotFound
     {
-        return $this->storageContext->find($id)
+        /**
+         * @var CreditHours|NotFound
+         */
+        $creditHours = $this->storageContext->find($id)
             ->orElse(static fn() => new NotFound())
             ->tryUnwrap();
+
+        return $creditHours;
     }
 }

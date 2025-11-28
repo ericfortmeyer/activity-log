@@ -42,9 +42,14 @@ final readonly class CallbackMiddleware extends AbstractRedirectMiddleware
             );
         } catch (StateException $e) {
             $this->log->critical($e->getMessage());
-            return $this->getRedirectResponse(
+            /**
+             * @var ResponseInterface
+             */
+            $response = $this->getRedirectResponse(
                 $this->appConfig->logoutPath
             );
+
+            return $response;
         }
     }
 

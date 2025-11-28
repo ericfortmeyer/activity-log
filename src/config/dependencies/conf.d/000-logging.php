@@ -10,12 +10,14 @@ use Monolog\Logger;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 
-use const EricFortmeyer\ActivityLog\config\DiTokens\APP_NAME;
-
 return [
     LoggerInterface::class => static function (ContainerInterface $container) {
-        return new Logger($container->get(APP_NAME))->pushHandler(
-            new SyslogHandler($container->get(APP_NAME))->setFormatter(
+        /**
+         * @var AppConfig
+         */
+        $appConfig = $container->get(AppConfig::class);
+        return new Logger($appConfig->appName)->pushHandler(
+            new SyslogHandler($appConfig->appName)->setFormatter(
                 new LineFormatter("%channel%.%level_name%: %message% %context% %extra%")
             )
         );

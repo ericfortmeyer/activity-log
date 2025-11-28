@@ -15,40 +15,68 @@ final class AppConfigTest extends TestCase
 {
     #[Test]
     #[TestDox("Shall have an appName property")]
-    #[TestWith(["app-name"])]
-    public function dijoa(string $appName)
+    #[TestWith(
+        [
+            ["appName" => "app-name", "callbackPath" => "", "loginPath" => "", "logoutPath" => ""],
+            "app-name"
+        ]
+    )]
+    public function dijoa(array $data, string $appName)
     {
-        $sut = new AppConfig(appName: $appName, callbackPath: "", loginPath: "", logoutPath: "");
+        $sut = new AppConfig($data);
 
         $this->assertSame($appName, $sut->appName);
     }
 
     #[Test]
     #[TestDox("Shall have an callbackPath property")]
-    #[TestWith(["callback-path"])]
-    public function dijdoa(string $callbackPath)
+    #[TestWith(
+        [
+            ["appName" => "app-name", "callbackPath" => "callback-path", "loginPath" => "", "logoutPath" => ""],
+            "callback-path"
+        ]
+    )]
+    public function dijdoa(array $data, string $callbackPath)
     {
-        $sut = new AppConfig(appName: "", callbackPath: $callbackPath, loginPath: "", logoutPath: "");
+        $sut = new AppConfig($data);
 
         $this->assertSame($callbackPath, $sut->callbackPath);
     }
 
     #[Test]
     #[TestDox("Shall have an loginPath property")]
-    #[TestWith(["login-path"])]
-    public function dijxoa(string $loginPath)
+    #[TestWith(
+        [
+            [
+                "appName" => "app-name",
+                "callbackPath" => "callback-path",
+                "loginPath" => "login-path",
+                "logoutPath" => ""
+            ],
+            "login-path"
+        ]
+    )]
+    public function dijxoa(array $data, string $loginPath)
     {
-        $sut = new AppConfig(appName: "", callbackPath: "", loginPath: $loginPath, logoutPath: "");
+        $sut = new AppConfig($data);
 
         $this->assertSame($loginPath, $sut->loginPath);
     }
 
     #[Test]
     #[TestDox("Shall have an logoutPath property")]
-    #[TestWith(["logout-path"])]
-    public function dijgoa(string $logoutPath)
+    #[TestWith([
+        [
+            "appName" => "app-name",
+            "callbackPath" => "callback-path",
+            "loginPath" => "login-path",
+            "logoutPath" => "logout-path"
+        ],
+        "logout-path"
+    ])]
+    public function dijgoa(array $data, string $logoutPath)
     {
-        $sut = new AppConfig(appName: "", callbackPath: "", loginPath: "", logoutPath: $logoutPath);
+        $sut = new AppConfig($data);
 
         $this->assertSame($logoutPath, $sut->logoutPath);
     }
