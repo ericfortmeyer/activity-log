@@ -2,6 +2,12 @@
 
 This file documents changes to the Activity Log application.
 
+## 0.5.0 (2025-11-28)
+
+### Feat
+
+- use sqlite-storage library
+
 ## 0.4.0 (2025-11-22)
 
 ### Feat
