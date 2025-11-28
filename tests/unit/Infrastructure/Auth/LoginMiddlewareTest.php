@@ -71,7 +71,9 @@ final class LoginMiddlewareTest extends TestCase
         $middleware = new LoginMiddleware(
             auth: $this->auth0Adapter,
             log: $this->logger,
-            appConfig: new AppConfig(["appName" => "", "callbackPath" => "", "loginPath" => $loginPath, "logoutPath" => ""]),
+            appConfig: new AppConfig(
+                ["appName" => "", "callbackPath" => "", "loginPath" => $loginPath, "logoutPath" => ""]
+            ),
             responseFactory: $this->responseFactory,
         );
 
@@ -122,7 +124,9 @@ final class LoginMiddlewareTest extends TestCase
         $middleware = new LoginMiddleware(
             auth: $this->auth0Adapter,
             log: $this->logger,
-            appConfig: new AppConfig(["appName" => "", "callbackPath" => $callbackPath, "loginPath" => $loginPath, "logoutPath" => ""]),
+            appConfig: new AppConfig(
+                ["appName" => "", "callbackPath" => $callbackPath, "loginPath" => $loginPath, "logoutPath" => ""]
+            ),
             responseFactory: $this->responseFactory,
         );
 

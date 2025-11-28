@@ -71,7 +71,9 @@ final class CallbackMiddlewareTest extends TestCase
         $callbackMiddleware = new CallbackMiddleware(
             auth: $this->auth0Adapter,
             log: $this->logger,
-            appConfig: new AppConfig(["appName" => "", "callbackPath" => $callbackPath, "loginPath" => "", "logoutPath" => ""]),
+            appConfig: new AppConfig(
+                ["appName" => "", "callbackPath" => $callbackPath, "loginPath" => "", "logoutPath" => ""]
+            ),
             responseFactory: $this->responseFactory,
         );
 
@@ -116,7 +118,9 @@ final class CallbackMiddlewareTest extends TestCase
         $callbackMiddleware = new CallbackMiddleware(
             auth: $this->auth0Adapter,
             log: $this->logger,
-            appConfig: new AppConfig(["appName" => "", "callbackPath" => $callbackPath, "loginPath" => "", "logoutPath" => ""]),
+            appConfig: new AppConfig(
+                ["appName" => "", "callbackPath" => $callbackPath, "loginPath" => "", "logoutPath" => ""]
+            ),
             responseFactory: $this->responseFactory,
         );
 
@@ -173,7 +177,9 @@ final class CallbackMiddlewareTest extends TestCase
         $callbackMiddleware = new CallbackMiddleware(
             auth: $this->auth0Adapter,
             log: $this->logger,
-            appConfig: new AppConfig(["appName" => "", "callbackPath" => $callbackPath, "loginPath" => "", "logoutPath" => $logoutPath]),
+            appConfig: new AppConfig(
+                ["appName" => "", "callbackPath" => $callbackPath, "loginPath" => "", "logoutPath" => $logoutPath]
+            ),
             responseFactory: $this->responseFactory,
         );
 

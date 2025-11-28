@@ -15,7 +15,12 @@ final class AppConfigTest extends TestCase
 {
     #[Test]
     #[TestDox("Shall have an appName property")]
-    #[TestWith([["appName" => "app-name", "callbackPath" => "", "loginPath" => "", "logoutPath" => ""], "app-name"])]
+    #[TestWith(
+        [
+            ["appName" => "app-name", "callbackPath" => "", "loginPath" => "", "logoutPath" => ""],
+            "app-name"
+        ]
+    )]
     public function dijoa(array $data, string $appName)
     {
         $sut = new AppConfig($data);
@@ -25,7 +30,12 @@ final class AppConfigTest extends TestCase
 
     #[Test]
     #[TestDox("Shall have an callbackPath property")]
-    #[TestWith([["appName" => "app-name", "callbackPath" => "callback-path", "loginPath" => "", "logoutPath" => ""], "callback-path"])]
+    #[TestWith(
+        [
+            ["appName" => "app-name", "callbackPath" => "callback-path", "loginPath" => "", "logoutPath" => ""],
+            "callback-path"
+        ]
+    )]
     public function dijdoa(array $data, string $callbackPath)
     {
         $sut = new AppConfig($data);
@@ -35,7 +45,17 @@ final class AppConfigTest extends TestCase
 
     #[Test]
     #[TestDox("Shall have an loginPath property")]
-    #[TestWith([["appName" => "app-name", "callbackPath" => "callback-path", "loginPath" => "login-path", "logoutPath" => ""], "login-path"])]
+    #[TestWith(
+        [
+            [
+                "appName" => "app-name",
+                "callbackPath" => "callback-path",
+                "loginPath" => "login-path",
+                "logoutPath" => ""
+            ],
+            "login-path"
+        ]
+    )]
     public function dijxoa(array $data, string $loginPath)
     {
         $sut = new AppConfig($data);
@@ -45,7 +65,15 @@ final class AppConfigTest extends TestCase
 
     #[Test]
     #[TestDox("Shall have an logoutPath property")]
-    #[TestWith([["appName" => "app-name", "callbackPath" => "callback-path", "loginPath" => "login-path", "logoutPath" => "logout-path"], "logout-path"])]
+    #[TestWith([
+        [
+            "appName" => "app-name",
+            "callbackPath" => "callback-path",
+            "loginPath" => "login-path",
+            "logoutPath" => "logout-path"
+        ],
+        "logout-path"
+    ])]
     public function dijgoa(array $data, string $logoutPath)
     {
         $sut = new AppConfig($data);
