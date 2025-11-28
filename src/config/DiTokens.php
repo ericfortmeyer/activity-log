@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace EricFortmeyer\ActivityLog\config\DiTokens;
 
 const APP_CALLBACK_PATH = "APP_CALLBACK_PATH";
+const APP_CONFIG_SQLITE_STORAGE = "APP_CONFIG_SQLITE_STORAGE";
+const APP_CONFIG_TABLE_NAME = "APP_CONFIG_TABLE_NAME";
 const APP_DB = "APP_DB";
 const APP_DB_FILE = "APP_DB_FILE";
 const APP_LOGIN_PATH = "APP_LOGIN_PATH";

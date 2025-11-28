@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "192697493ffa6c700f589543b8e91e7a",
+    "content-hash": "437d557efb910748c56a7bdf983c1dae",
     "packages": [
         {
             "name": "auth0/auth0-php",
@@ -1902,6 +1902,52 @@
                 "source": "https://github.com/phpolar/serializers/tree/1.0.6"
             },
             "time": "2025-10-03T07:25:54+00:00"
+        },
+        {
+            "name": "phpolar/sqlite-storage",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phpolar/sqlite-storage.git",
+                "reference": "8f34d72e9390bbed914030930cd1c20454c01ffa"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phpolar/sqlite-storage/zipball/8f34d72e9390bbed914030930cd1c20454c01ffa",
+                "reference": "8f34d72e9390bbed914030930cd1c20454c01ffa",
+                "shasum": ""
+            },
+            "require": {
+                "ext-sqlite3": "*",
+                "php": ">=8.4",
+                "phpolar/storage": "^7.0"
+            },
+            "require-dev": {
+                "ext-ast": "*",
+                "ext-openssl": "*",
+                "phan/phan": "^5.4",
+                "php-coveralls/php-coveralls": "^2.5",
+                "phpmd/phpmd": "^2.13",
+                "phpstan/phpstan": "^2.0.3",
+                "phpunit/phpunit": "^12",
+                "squizlabs/php_codesniffer": "^4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Phpolar\\SqliteStorage\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Adds support for storing data in SQLite databases.",
+            "support": {
+                "issues": "https://github.com/phpolar/sqlite-storage/issues",
+                "source": "https://github.com/phpolar/sqlite-storage/tree/1.0.1"
+            },
+            "time": "2025-11-28T17:47:40+00:00"
         },
         {
             "name": "phpolar/storage",
@@ -6118,5 +6164,5 @@
         "ext-pdo": "*"
     },
     "platform-dev": {},
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.9.0"
 }

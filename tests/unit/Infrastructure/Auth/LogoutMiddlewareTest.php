@@ -5,16 +5,15 @@ declare(strict_types=1);
 namespace EricFortmeyer\ActivityLog\UnitTests\Infrastructure\Auth;
 
 use Auth0\SDK\Exception\ConfigurationException;
-use Auth0\SDK\Exception\StateException;
 use EricFortmeyer\ActivityLog\AppConfig;
 use EricFortmeyer\ActivityLog\Http\AbstractRedirectMiddleware;
 use EricFortmeyer\ActivityLog\Infrastructure\Auth\Auth0Adapter;
-use EricFortmeyer\ActivityLog\Infrastructure\Auth\CallbackMiddleware;
 use EricFortmeyer\ActivityLog\Infrastructure\Auth\LogoutMiddleware;
 use Nyholm\Psr7\Factory\Psr17Factory;
 use PhpCommonEnums\HttpResponseCode\Enumeration\HttpResponseCodeEnum;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -53,7 +52,7 @@ final class LogoutMiddlewareTest extends TestCase
     }
 
     #[Test]
-    #[TestCase("Shall initiate the request handling when the request path is not the callback path")]
+    #[TestDox("Shall initiate the request handling when the request path is not the callback path")]
     #[TestWith([
         "requestPath" => "/some-path",
         "logoutPath" => "/another-path",
@@ -72,7 +71,15 @@ final class LogoutMiddlewareTest extends TestCase
         $middleware = new LogoutMiddleware(
             auth: $this->auth0Adapter,
             log: $this->logger,
-            appConfig: new AppConfig(appName: "", callbackPath: "", loginPath: "", logoutPath: $logoutPath),
+            appConfig: new AppConfig(
+                [
+                    "appName" => "",
+                    "callbackPath" => "",
+                    "loginPath" => "",
+                    "logoutPath" => $logoutPath
+
+                ]
+            ),
             responseFactory: $this->responseFactory,
         );
 
@@ -85,7 +92,7 @@ final class LogoutMiddlewareTest extends TestCase
     }
 
     #[Test]
-    #[TestCase("Shall initiate the auth exchange and redirect to the return url when request matches callback path")]
+    #[TestDox("Shall initiate the auth exchange and redirect to the return url when request matches callback path")]
     #[TestWith([
         "requestPath" => "/same-path",
         "logoutPath" => "/same-path",
@@ -121,7 +128,12 @@ final class LogoutMiddlewareTest extends TestCase
         $middleware = new LogoutMiddleware(
             auth: $this->auth0Adapter,
             log: $this->logger,
-            appConfig: new AppConfig(appName: "", callbackPath: "", loginPath: "", logoutPath: $logoutPath),
+            appConfig: new AppConfig([
+                "appName" => "",
+                "callbackPath" => "",
+                "loginPath" => "",
+                "logoutPath" => $logoutPath
+            ]),
             responseFactory: $this->responseFactory,
         );
 
@@ -142,7 +154,7 @@ final class LogoutMiddlewareTest extends TestCase
     }
 
     #[Test]
-    #[TestCase("Shall log the exception message and redirect to the logout path when a StateException is thrown")]
+    #[TestDox("Shall log the exception message and redirect to the logout path when a StateException is thrown")]
     #[TestWith([
         "requestPath" => "/same-path",
         "logoutPath" => "/same-path",
@@ -178,7 +190,12 @@ final class LogoutMiddlewareTest extends TestCase
         $middleware = new LogoutMiddleware(
             auth: $this->auth0Adapter,
             log: $this->logger,
-            appConfig: new AppConfig(appName: "", callbackPath: "", loginPath: $loginPath, logoutPath: $logoutPath),
+            appConfig: new AppConfig([
+                "appName" => "",
+                "callbackPath" => "",
+                "loginPath" => $loginPath,
+                "logoutPath" => $logoutPath
+            ]),
             responseFactory: $this->responseFactory,
         );
 

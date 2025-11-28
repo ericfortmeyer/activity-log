@@ -31,9 +31,15 @@ use const EricFortmeyer\ActivityLog\config\DiTokens\{
 };
 
 return [
-    AuthConfigService::class => static fn(ContainerInterface $container) => new AuthConfigService(
-        secretsClient: $container->get(SecretsClient::class),
-    ),
+    AuthConfigService::class => static function (ContainerInterface $container) {
+        /**
+         * @var SecretsClient
+         */
+        $secretsClient = $container->get(SecretsClient::class);
+        return new AuthConfigService(
+            secretsClient: $secretsClient,
+        );
+    },
     AUTH_CLIENT_ID => static function (ContainerInterface $container): string {
         /**
          * @var LoggerInterface
@@ -45,7 +51,7 @@ return [
                 if (getenv("ACTIVITY_LOG_CACHE_ENABLED")) {
                     $logger->info("Returned cached client id");
                 }
-                return $fetched;
+                return (string) $fetched;
             }
         }
         /**
@@ -67,7 +73,7 @@ return [
                 if (getenv("ACTIVITY_LOG_CACHE_ENABLED")) {
                     $logger->info("Returned cached client secret");
                 }
-                return $fetched;
+                return (string) $fetched;
             }
         }
         /**
@@ -89,7 +95,7 @@ return [
                 if (getenv("ACTIVITY_LOG_CACHE_ENABLED")) {
                     $logger->info("Returned cached cookie secret");
                 }
-                return $fetched;
+                return (string) $fetched;
             }
         }
         /**
@@ -112,7 +118,7 @@ return [
                 if (getenv("ACTIVITY_LOG_CACHE_ENABLED")) {
                     $logger->info("Returned cached domain value");
                 }
-                return $fetched;
+                return (string) $fetched;
             }
         }
         /**
@@ -131,24 +137,90 @@ return [
             "domain" => $container->get(AUTH_DOMAIN),
         ]),
     ),
-    LOGIN_MIDDLEWARE => static fn(ContainerInterface $container) => new LoginMiddleware(
-        auth: $container->get(AuthenticatorInterface::class),
-        log: $container->get(LoggerInterface::class),
-        responseFactory: $container->get(ResponseFactoryInterface::class),
-        appConfig: $container->get(AppConfig::class),
-    ),
-    LOGOUT_MIDDLEWARE => static fn(ContainerInterface $container) => new LogoutMiddleware(
-        auth: $container->get(AuthenticatorInterface::class),
-        log: $container->get(LoggerInterface::class),
-        responseFactory: $container->get(ResponseFactoryInterface::class),
-        appConfig: $container->get(AppConfig::class),
-    ),
-    CALLBACK_MIDDLEWARE => static fn(ContainerInterface $container) => new CallbackMiddleware(
-        auth: $container->get(AuthenticatorInterface::class),
-        log: $container->get(LoggerInterface::class),
-        responseFactory: $container->get(ResponseFactoryInterface::class),
-        appConfig: $container->get(AppConfig::class),
-    ),
-    DiTokens::UNAUTHORIZED_HANDLER => static fn(ContainerInterface $container) =>
-    new UnauthorizedHandler($container->get(APP_LOGIN_PATH), $container->get(ResponseFactoryInterface::class)),
+    LOGOUT_MIDDLEWARE => static function (ContainerInterface $container): LogoutMiddleware {
+        /**
+         * @var Auth0Adapter
+         */
+        $auth = $container->get(AuthenticatorInterface::class);
+        /**
+         * @var LoggerInterface
+         */
+        $log = $container->get(LoggerInterface::class);
+        /**
+         * @var ResponseFactoryInterface
+         */
+        $responseFactory = $container->get(ResponseFactoryInterface::class);
+        /**
+         * @var AppConfig
+         */
+        $appConfig = $container->get(AppConfig::class);
+        return new LogoutMiddleware(
+            auth: $auth,
+            log: $log,
+            responseFactory: $responseFactory,
+            appConfig: $appConfig,
+        );
+    },
+    LOGIN_MIDDLEWARE => static function (ContainerInterface $container): LoginMiddleware {
+        /**
+         * @var Auth0Adapter
+         */
+        $auth = $container->get(AuthenticatorInterface::class);
+        /**
+         * @var LoggerInterface
+         */
+        $log = $container->get(LoggerInterface::class);
+        /**
+         * @var ResponseFactoryInterface
+         */
+        $responseFactory = $container->get(ResponseFactoryInterface::class);
+        /**
+         * @var AppConfig
+         */
+        $appConfig = $container->get(AppConfig::class);
+        return new LoginMiddleware(
+            auth: $auth,
+            log: $log,
+            responseFactory: $responseFactory,
+            appConfig: $appConfig,
+        );
+    },
+    CALLBACK_MIDDLEWARE => static function (ContainerInterface $container): CallbackMiddleware {
+        /**
+         * @var Auth0Adapter
+         */
+        $auth = $container->get(AuthenticatorInterface::class);
+        /**
+         * @var LoggerInterface
+         */
+        $log = $container->get(LoggerInterface::class);
+        /**
+         * @var ResponseFactoryInterface
+         */
+        $responseFactory = $container->get(ResponseFactoryInterface::class);
+        /**
+         * @var AppConfig
+         */
+        $appConfig = $container->get(AppConfig::class);
+        return new CallbackMiddleware(
+            auth: $auth,
+            log: $log,
+            responseFactory: $responseFactory,
+            appConfig: $appConfig,
+        );
+    },
+    DiTokens::UNAUTHORIZED_HANDLER => static function (ContainerInterface $container): UnauthorizedHandler {
+        /**
+         * @var AppConfig
+         */
+        $appConfig = $container->get(AppConfig::class);
+        /**
+         * @var ResponseFactoryInterface
+         */
+        $responseFactory = $container->get(ResponseFactoryInterface::class);
+        return new UnauthorizedHandler(
+            loginPath: $appConfig->loginPath,
+            responseFactory: $responseFactory,
+        );
+    },
 ];
