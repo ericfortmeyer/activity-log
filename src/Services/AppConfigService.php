@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace EricFortmeyer\ActivityLog\Services;
 
 use EricFortmeyer\ActivityLog\AppConfig;
-use Phpolar\SqliteStorage\SqliteStorage;
+use Phpolar\SqliteStorage\SqliteReadOnlyStorage;
 
 class AppConfigService
 {
     public function __construct(
-        private readonly SqliteStorage $sqliteStorage,
+        private readonly SqliteReadOnlyStorage $sqliteStorage,
     ) {}
 
     public function get(): AppConfig|false
