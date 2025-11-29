@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace EricFortmeyer\ActivityLog;
 
 use EricFortmeyer\ActivityLog\Services\AppConfigService;
-use Phpolar\SqliteStorage\SqliteStorage;
+use Phpolar\SqliteStorage\SqliteReadOnlyStorage;
 use Psr\Container\ContainerInterface;
 use RuntimeException;
 use SQLite3;
@@ -37,14 +37,14 @@ return [
                 APP_DB_STORAGE
             ]
         ),
-        flags: \SQLITE3_OPEN_READWRITE
+        flags: \SQLITE3_OPEN_READONLY
     ),
-    APP_CONFIG_SQLITE_STORAGE => static function (ContainerInterface $container): SqliteStorage {
+    APP_CONFIG_SQLITE_STORAGE => static function (ContainerInterface $container): SqliteReadOnlyStorage {
         /**
          * @var SQLite3
          */
         $connection = $container->get(APP_DB);
-        return new SqliteStorage(
+        return new SqliteReadOnlyStorage(
             connection: $connection,
             tableName: "activity_log_config",
             typeClassName: AppConfig::class,
@@ -52,7 +52,7 @@ return [
     },
     AppConfigService::class => static function (ContainerInterface $container): AppConfigService {
         /**
-         * @var SqliteStorage
+         * @var SqliteReadOnlyStorage
          */
         $sqliteStorage = $container->get(APP_CONFIG_SQLITE_STORAGE);
         return new AppConfigService(
