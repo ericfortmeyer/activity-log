@@ -3,13 +3,10 @@
 declare(strict_types=1);
 
 use Auth0\SDK\Configuration\SdkConfiguration;
-use EricFortmeyer\ActivityLog\AppConfig;
-use EricFortmeyer\ActivityLog\Clients\SecretsClient;
+use EricFortmeyer\ActivityLog\DI\ServiceProvider;
 use EricFortmeyer\ActivityLog\Http\UnauthorizedHandler;
 use PhpContrib\Authenticator\AuthenticatorInterface;
 use Psr\Container\ContainerInterface;
-use Psr\Http\Message\ResponseFactoryInterface;
-use Psr\Log\LoggerInterface;
 use EricFortmeyer\ActivityLog\Infrastructure\Auth\{
     Auth0Adapter,
     AuthConfigService,
@@ -19,8 +16,7 @@ use EricFortmeyer\ActivityLog\Infrastructure\Auth\{
 };
 use Phpolar\Phpolar\DependencyInjection\DiTokens;
 
-use const EricFortmeyer\ActivityLog\config\DiTokens\{
-    APP_LOGIN_PATH,
+use const EricFortmeyer\ActivityLog\DI\Tokens\{
     AUTH_CLIENT_ID,
     AUTH_CLIENT_SECRET,
     AUTH_COOKIE_SECRET,
@@ -32,19 +28,17 @@ use const EricFortmeyer\ActivityLog\config\DiTokens\{
 
 return [
     AuthConfigService::class => static function (ContainerInterface $container) {
-        /**
-         * @var SecretsClient
-         */
-        $secretsClient = $container->get(SecretsClient::class);
+        $serviceProvider = new ServiceProvider($container);
+
         return new AuthConfigService(
-            secretsClient: $secretsClient,
+            secretsClient: $serviceProvider->secretsClient,
         );
     },
     AUTH_CLIENT_ID => static function (ContainerInterface $container): string {
-        /**
-         * @var LoggerInterface
-         */
-        $logger = $container->get(LoggerInterface::class);
+        $serviceProvider = new ServiceProvider($container);
+        $logger = $serviceProvider->logger;
+        $authConfigService = $serviceProvider->authConfigService;
+
         if (\apcu_exists(AUTH_CLIENT_ID) === true) {
             $fetched = \apcu_fetch(AUTH_CLIENT_ID);
             if ($fetched !== false) {
@@ -54,19 +48,16 @@ return [
                 return (string) $fetched;
             }
         }
-        /**
-         * @var AuthConfigService
-         */
-        $authConfigService = $container->get(AuthConfigService::class);
+
         $authClientId = $authConfigService->getClientId();
         \apcu_store(AUTH_CLIENT_ID, $authClientId);
         return $authClientId;
     },
     AUTH_CLIENT_SECRET => static function (ContainerInterface $container): string {
-        /**
-         * @var LoggerInterface
-         */
-        $logger = $container->get(LoggerInterface::class);
+        $serviceProvider = new ServiceProvider($container);
+        $logger = $serviceProvider->logger;
+        $authConfigService = $serviceProvider->authConfigService;
+
         if (\apcu_exists(AUTH_CLIENT_SECRET) === true) {
             $fetched = \apcu_fetch(AUTH_CLIENT_SECRET);
             if ($fetched !== false) {
@@ -76,19 +67,16 @@ return [
                 return (string) $fetched;
             }
         }
-        /**
-         * @var AuthConfigService
-         */
-        $authConfigService = $container->get(AuthConfigService::class);
+
         $authClientSecret = $authConfigService->getClientSecret();
         \apcu_store(AUTH_CLIENT_SECRET, $authClientSecret);
         return $authClientSecret;
     },
     AUTH_COOKIE_SECRET => static function (ContainerInterface $container): string {
-        /**
-         * @var LoggerInterface
-         */
-        $logger = $container->get(LoggerInterface::class);
+        $serviceProvider = new ServiceProvider($container);
+        $logger = $serviceProvider->logger;
+        $authConfigService = $serviceProvider->authConfigService;
+
         if (\apcu_exists(AUTH_COOKIE_SECRET) === true) {
             $fetched = \apcu_fetch(AUTH_COOKIE_SECRET);
             if ($fetched !== false) {
@@ -98,19 +86,16 @@ return [
                 return (string) $fetched;
             }
         }
-        /**
-         * @var AuthConfigService
-         */
-        $authConfigService = $container->get(AuthConfigService::class);
+
         $authCookieSecret = $authConfigService->getCookieSecret();
         \apcu_store(AUTH_COOKIE_SECRET, $authCookieSecret);
         return $authCookieSecret;
     },
     AUTH_DOMAIN => static function (ContainerInterface $container): string {
-        /**
-         * @var LoggerInterface
-         */
-        $logger = $container->get(LoggerInterface::class);
+        $serviceProvider = new ServiceProvider($container);
+        $logger = $serviceProvider->logger;
+        $authConfigService = $serviceProvider->authConfigService;
+
         if (\apcu_exists(AUTH_DOMAIN) === true) {
             $fetched = \apcu_fetch(AUTH_DOMAIN);
 
@@ -121,10 +106,7 @@ return [
                 return (string) $fetched;
             }
         }
-        /**
-         * @var AuthConfigService
-         */
-        $authConfigService = $container->get(AuthConfigService::class);
+
         $authDomain = $authConfigService->getDomain();
         \apcu_store(AUTH_DOMAIN, $authDomain);
         return $authDomain;
@@ -138,86 +120,52 @@ return [
         ]),
     ),
     LOGOUT_MIDDLEWARE => static function (ContainerInterface $container): LogoutMiddleware {
-        /**
-         * @var Auth0Adapter
-         */
-        $auth = $container->get(AuthenticatorInterface::class);
-        /**
-         * @var LoggerInterface
-         */
-        $log = $container->get(LoggerInterface::class);
-        /**
-         * @var ResponseFactoryInterface
-         */
-        $responseFactory = $container->get(ResponseFactoryInterface::class);
-        /**
-         * @var AppConfig
-         */
-        $appConfig = $container->get(AppConfig::class);
+        $serviceProvider = new ServiceProvider($container);
+        $logger = $serviceProvider->logger;
+        $responseFactory = $serviceProvider->responseFactory;
+        $appConfig = $serviceProvider->appConfig;
+        $auth = $serviceProvider->auth0Adapter;
+
         return new LogoutMiddleware(
             auth: $auth,
-            log: $log,
+            log: $logger,
             responseFactory: $responseFactory,
             appConfig: $appConfig,
         );
     },
     LOGIN_MIDDLEWARE => static function (ContainerInterface $container): LoginMiddleware {
-        /**
-         * @var Auth0Adapter
-         */
-        $auth = $container->get(AuthenticatorInterface::class);
-        /**
-         * @var LoggerInterface
-         */
-        $log = $container->get(LoggerInterface::class);
-        /**
-         * @var ResponseFactoryInterface
-         */
-        $responseFactory = $container->get(ResponseFactoryInterface::class);
-        /**
-         * @var AppConfig
-         */
-        $appConfig = $container->get(AppConfig::class);
+        $serviceProvider = new ServiceProvider($container);
+        $logger = $serviceProvider->logger;
+        $responseFactory = $serviceProvider->responseFactory;
+        $appConfig = $serviceProvider->appConfig;
+        $auth = $serviceProvider->auth0Adapter;
+
         return new LoginMiddleware(
             auth: $auth,
-            log: $log,
+            log: $logger,
             responseFactory: $responseFactory,
             appConfig: $appConfig,
         );
     },
     CALLBACK_MIDDLEWARE => static function (ContainerInterface $container): CallbackMiddleware {
-        /**
-         * @var Auth0Adapter
-         */
-        $auth = $container->get(AuthenticatorInterface::class);
-        /**
-         * @var LoggerInterface
-         */
-        $log = $container->get(LoggerInterface::class);
-        /**
-         * @var ResponseFactoryInterface
-         */
-        $responseFactory = $container->get(ResponseFactoryInterface::class);
-        /**
-         * @var AppConfig
-         */
-        $appConfig = $container->get(AppConfig::class);
+        $serviceProvider = new ServiceProvider($container);
+        $logger = $serviceProvider->logger;
+        $responseFactory = $serviceProvider->responseFactory;
+        $appConfig = $serviceProvider->appConfig;
+        $auth = $serviceProvider->auth0Adapter;
+
         return new CallbackMiddleware(
             auth: $auth,
-            log: $log,
+            log: $logger,
             responseFactory: $responseFactory,
             appConfig: $appConfig,
         );
     },
     DiTokens::UNAUTHORIZED_HANDLER => static function (ContainerInterface $container): UnauthorizedHandler {
-        /**
-         * @var AppConfig
-         */
-        $appConfig = $container->get(AppConfig::class);
-        /**
-         * @var ResponseFactoryInterface
-         */
-        $responseFactory = $container->get(ResponseFactoryInterface::class);
+        $serviceProvider = new ServiceProvider($container);
+        $responseFactory = $serviceProvider->responseFactory;
+        $appConfig = $serviceProvider->appConfig;
+
         return new UnauthorizedHandler(
             loginPath: $appConfig->loginPath,
             responseFactory: $responseFactory,

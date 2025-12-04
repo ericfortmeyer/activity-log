@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace EricFortmeyer\ActivityLog\Http\RequestProcessors;
 
+use EricFortmeyer\ActivityLog\DI\ServiceProvider;
 use PhpCommonEnums\HttpMethod\Enumeration\HttpMethodEnum as HttpMethod;
 use PhpCommonEnums\MimeType\Enumeration\MimeTypeEnum as MimeType;
 use Phpolar\Phpolar\Http\{
@@ -15,7 +16,9 @@ use Phpolar\Phpolar\Http\{
 use Psr\Container\ContainerInterface;
 
 return [
-    ServerInterface::class => static fn(ContainerInterface $container) => new Server(
+    ServerInterface::class => static fn(ContainerInterface $container)
+    =>
+    new Server(
         interface: [
             new Target(
                 location: "/",
@@ -23,7 +26,7 @@ return [
                 representations: new Representations([
                     MimeType::TextHtml,
                 ]),
-                requestProcessor: $container->get(GetTimeEntries::class),
+                requestProcessor: new ServiceProvider($container)->getTimeEntries,
             ),
             new Target(
                 location: "/time-entry/{id}",
@@ -31,7 +34,7 @@ return [
                 representations: new Representations([
                     MimeType::TextHtml,
                 ]),
-                requestProcessor: $container->get(GetTimeEntry::class),
+                requestProcessor: new ServiceProvider($container)->getTimeEntry,
             ),
             new Target(
                 location: "/time-entry/add",
@@ -39,7 +42,7 @@ return [
                 representations: new Representations([
                     MimeType::TextHtml,
                 ]),
-                requestProcessor: $container->get(SubmitTimeEntry::class),
+                requestProcessor: new ServiceProvider($container)->submitTimeEntry,
             ),
             new Target(
                 location: "/time-entry/delete/{id}",
@@ -47,7 +50,7 @@ return [
                 representations: new Representations([
                     MimeType::TextHtml,
                 ]),
-                requestProcessor: $container->get(DeleteTimeEntry::class),
+                requestProcessor: new ServiceProvider($container)->deleteTimeEntry,
             ),
             new Target(
                 location: "/remarks-for-month",
@@ -55,7 +58,7 @@ return [
                 representations: new Representations([
                     MimeType::TextHtml,
                 ]),
-                requestProcessor: $container->get(SaveRemarksForMonth::class),
+                requestProcessor: new ServiceProvider($container)->saveRemarksForMonth,
             ),
             new Target(
                 location: "/credit-hours",
@@ -63,7 +66,7 @@ return [
                 representations: new Representations([
                     MimeType::TextHtml,
                 ]),
-                requestProcessor: $container->get(SaveCreditHours::class),
+                requestProcessor: new ServiceProvider($container)->saveCreditHours,
             ),
             new Target(
                 location: "/export-data",
@@ -71,7 +74,7 @@ return [
                 representations: new Representations(
                     [MimeType::TextHtml],
                 ),
-                requestProcessor: $container->get(DownloadDataExport::class),
+                requestProcessor: new ServiceProvider($container)->downloadDataExport,
             ),
             new Target(
                 location: "/report/send",
@@ -79,7 +82,7 @@ return [
                 representations: new Representations(
                     [MimeType::TextHtml],
                 ),
-                requestProcessor: $container->get(EmailReportForMonth::class),
+                requestProcessor: new ServiceProvider($container)->emailReportForMonth,
             ),
         ]
     ),

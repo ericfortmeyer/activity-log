@@ -25,6 +25,7 @@
     "phpolar/csv-file-storage": "^3.1",
     "phpolar/model": "^2.0",
     "phpolar/model-resolver": "^1.0",
+    "phpolar/mysql-storage": "0.1.0",
     "phpolar/phpolar": "^8.0",
     "phpolar/pure-php": "^2.0 || ^3.0",
     "phpolar/sqlite-storage": "^1.0",
@@ -41,17 +42,23 @@
   "autoload": {
     "psr-4": {
       "EricFortmeyer\\ActivityLog\\": "src/",
-      "EricFortmeyer\\ActivityLog\\UnitTests\\": "tests/unit/"
+      "EricFortmeyer\\ActivityLog\\Migrations\\": "migrations/"
     },
     "files": [
-      "src/config/DiTokens.php",
+      "src/DI/Tokens.php",
       "src/config/FileNames.php",
-      "src/UserInterface/HTMLElements/head.php",
+      "src/UserInterface/Components/formInput.php",
       "src/UserInterface/Components/timeEntriesNav.php",
-      "src/UserInterface/Components/formInput.php"
+      "src/UserInterface/HTMLElements/head.php"
     ]
   },
+  "autoload-dev": {
+    "psr-4": {
+      "EricFortmeyer\\ActivityLog\\UnitTests\\": "tests/unit/"
+    }
+  },
   "require-dev": {
+    "phan/phan": "~6.0.0-beta",
     "php-coveralls/php-coveralls": "^2.7.0",
     "phpstan/phpstan": "^2.1",
     "phpunit/phpunit": "^12.0.9",
@@ -63,10 +70,12 @@
     ],
     "phpstan": "XDEBUG_MODE=off phpstan analyze",
     "analyze": "@phpstan --memory-limit=256M",
-    "cs": "phpcs --exclude=Squiz.Functions.MultiLineFunctionDeclaration,Squiz.WhiteSpace.ScopeClosingBrace --ignore='*DataProviders*' --standard=PSR12",
-    "cbf": "phpcbf --exclude=Squiz.Functions.MultiLineFunctionDeclaration,Squiz.WhiteSpace.ScopeClosingBrace --standard=PSR12",
-    "lint": "@cs ./src ./tests",
-    "lint-fix": "@cbf ./src ./tests",
+    "analyze:strict": "XDEBUG_MODE=off phan --no-progress-bar --strict-type-checking --analyze-twice --color --output-mode=text --color-scheme=light",
+    "analyze:dead-code": "@analyze:strict --color-scheme=light --config-file=.phan/config_deadcode.php",
+    "cs": "phpcs --exclude=Squiz.Functions.MultiLineFunctionDeclaration,Squiz.WhiteSpace.ScopeClosingBrace --ignore='*DataProviders*,*ServiceProvider*'  --standard=PSR12",
+    "cbf": "phpcbf --exclude=Squiz.Functions.MultiLineFunctionDeclaration,Squiz.WhiteSpace.ScopeClosingBrace --ignore='*DataProviders*,*ServiceProvider*' --standard=PSR12",
+    "lint": "@cs ./src ./tests ./migrations",
+    "lint-fix": "@cbf ./src ./tests ./migrations",
     "start:test": [
       "Composer\\Config::disableProcessTimeout",
       "watch -n 5 -cx composer exec @test"

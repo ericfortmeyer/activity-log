@@ -174,7 +174,7 @@ final class TimeEntriesContext extends AbstractContext
             "%s/%s",
             $this->deleteUrl,
             $this->hasFilter()
-                ? sprintf("%s?%s", $entry->getPrimaryKey(), $this->getMonthQuery())
+                ? sprintf("%s?%s", (string) $entry->getPrimaryKey(), $this->getMonthQuery())
                 : (string) $entry->getPrimaryKey()
         );
     }

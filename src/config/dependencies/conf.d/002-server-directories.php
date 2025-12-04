@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use const EricFortmeyer\ActivityLog\config\DiTokens\{
+use const EricFortmeyer\ActivityLog\DI\Tokens\{
     APP_CONFIG_TABLE_NAME,
     DATA_DIR,
     SECRETS_DIR

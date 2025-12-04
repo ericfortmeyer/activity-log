@@ -17,7 +17,6 @@ use EricFortmeyer\ActivityLog\UserInterface\Contexts\{NotFoundContext, TimeEntri
 use EricFortmeyer\ActivityLog\Services\{TimeEntryService, RemarksForMonthService};
 use EricFortmeyer\ActivityLog\{MonthFilters, RemarksForMonth};
 use EricFortmeyer\ActivityLog\Utils\Hasher;
-use SensitiveParameter;
 
 /**
  * Class DeleteTimeEntry

@@ -20,7 +20,7 @@ final readonly class UnauthorizedHandler implements RequestHandlerInterface
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         return $this->responseFactory->createResponse(
-            ResponseCode::TemporaryRedirect->value,
+            (int) ResponseCode::TemporaryRedirect->value,
             ResponseCode::TemporaryRedirect->getLabel(),
         )->withHeader("Location", $this->loginPath);
     }

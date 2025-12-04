@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace EricFortmeyer\ActivityLog;
 
-use const EricFortmeyer\ActivityLog\config\DiTokens\MAIL_CONFIG;
+use const EricFortmeyer\ActivityLog\DI\Tokens\MAIL_CONFIG;
 
 return [
     MAIL_CONFIG => [

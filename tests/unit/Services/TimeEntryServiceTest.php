@@ -112,7 +112,7 @@ final class TimeEntryServiceTest extends TestCase
 
         $this->storageContext->expects($this->once())
             ->method("findAll")
-            ->willReturn($entries);
+            ->willReturn(array_map(TimeEntry::fromData(...), $entries));
 
         $result = $this->timeEntryService->getAll($tenantId);
 
@@ -153,7 +153,7 @@ final class TimeEntryServiceTest extends TestCase
 
         $this->storageContext->expects($this->once())
             ->method("findAll")
-            ->willReturn($entries);
+            ->willReturn(array_map(TimeEntry::fromData(...), $entries));
 
         $result = $this->timeEntryService->getAll($tenantId);
 
@@ -198,7 +198,7 @@ final class TimeEntryServiceTest extends TestCase
 
         $this->storageContext->expects($this->once())
             ->method("findAll")
-            ->willReturn($entries);
+            ->willReturn(array_map(TimeEntry::fromData(...), $entries));
 
         $result = $this->timeEntryService->getAllByMonth($requestedMonth, $requestedYear, $tenantId);
 

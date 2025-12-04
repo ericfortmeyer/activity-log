@@ -43,7 +43,7 @@ readonly class SecretsClient
                 if (getenv("ACTIVITY_LOG_CACHE_ENABLED")) {
                     $this->logger->info("Cached value fetched", ["key" => $key]);
                 }
-                return $fetchedValue;
+                return (string) $fetchedValue;
             }
         }
 
@@ -64,20 +64,27 @@ readonly class SecretsClient
                         $valueResponse->getBody()->getContents(),
                         true,
                     );
+
+                    if (\is_array($response) === false) {
+                        return "";
+                    }
+
                     if (array_key_exists("errors", $response) === true) {
                         $this->logger->error("Client error", $response);
                         return "";
                     }
 
-                    // success!, cache and return the value
-                    $value = $response["data"]["data"][$key];
-                    \apcu_store(
-                        $key,
-                        $value,
-                        $this->valueTtl,
-                    );
+                    if (\array_key_exists("data", $response)) {
+                        // success!, cache and return the value
+                        $value = $response["data"]["data"][$key];
+                        \apcu_store(
+                            $key,
+                            $value,
+                            $this->valueTtl,
+                        );
 
-                    return $value;
+                        return (string) $value;
+                    }
                 }
 
                 // we encountered an error retrieving the secret, report it
@@ -118,8 +125,17 @@ readonly class SecretsClient
 
         if ($authClientTokenResponse->getStatusCode() === HttpResponse::Ok->value) {
             $jsonResponse = json_decode($authClientTokenResponse->getBody()->getContents(), true);
+
+            if (\is_array($jsonResponse) === false) {
+                return "";
+            }
+
             if (array_key_exists("errors", $jsonResponse)) {
                 $this->logger->critical("Login error", $jsonResponse);
+                return "";
+            }
+
+            if (\array_key_exists("auth", $jsonResponse) === false) {
                 return "";
             }
 
@@ -145,8 +161,17 @@ readonly class SecretsClient
                     $valueResponse->getBody()->getContents(),
                     true,
                 );
+
+                if (\is_array($result) === false) {
+                    return "";
+                }
+
                 if (array_key_exists("errors", $result) === true) {
                     $this->logger->error("JSON decode error", $result);
+                    return "";
+                }
+
+                if (\array_key_exists("data", $result) === false) {
                     return "";
                 }
 
@@ -158,7 +183,7 @@ readonly class SecretsClient
                     $value,
                     $this->valueTtl,
                 );
-                return $value;
+                return (string) $value;
             }
             // we encountered an error retrieving the secret, report it
             $this->logger->critical(
