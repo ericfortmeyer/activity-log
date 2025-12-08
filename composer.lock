@@ -1905,16 +1905,16 @@
         },
         {
             "name": "phpolar/sqlite-storage",
-            "version": "1.1.0",
+            "version": "1.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpolar/sqlite-storage.git",
-                "reference": "0584becd738f2793438239bb5cd82502d4751742"
+                "reference": "23d7734081118e1be141b7eb6a710469e1a23a82"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpolar/sqlite-storage/zipball/0584becd738f2793438239bb5cd82502d4751742",
-                "reference": "0584becd738f2793438239bb5cd82502d4751742",
+                "url": "https://api.github.com/repos/phpolar/sqlite-storage/zipball/23d7734081118e1be141b7eb6a710469e1a23a82",
+                "reference": "23d7734081118e1be141b7eb6a710469e1a23a82",
                 "shasum": ""
             },
             "require": {
@@ -1945,9 +1945,9 @@
             "description": "Adds support for storing data in SQLite databases.",
             "support": {
                 "issues": "https://github.com/phpolar/sqlite-storage/issues",
-                "source": "https://github.com/phpolar/sqlite-storage/tree/1.1.0"
+                "source": "https://github.com/phpolar/sqlite-storage/tree/1.1.2"
             },
-            "time": "2025-11-29T12:12:12+00:00"
+            "time": "2025-12-04T23:52:21+00:00"
         },
         {
             "name": "phpolar/storage",
