@@ -10,16 +10,14 @@ use EricFortmeyer\ActivityLog\RemarksForMonth;
 use EricFortmeyer\ActivityLog\TimeEntry;
 use EricFortmeyer\ActivityLog\UnitTests\DataProviders\TimeEntryDataProvider;
 use Phpolar\Phpolar\Auth\User;
-use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\Attributes\DataProviderExternal;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\Attributes\TestWith;
-use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(TimeEntriesContext::class)]
-#[UsesClass(MonthFilters::class)]
+#[CoversNothing]
 final class TimeEntriesContextTest extends TestCase
 {
     #[Test]
