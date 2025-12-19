@@ -62,7 +62,7 @@ final class GetTimeEntriesTest extends TestCase
         $entry1->id = "test-id-1";
         $entry1->month = 1;
         $entry1->dayOfMonth = 1;
-        $entry1->year = 2025;
+        $entry1->year = "2025";
         $entry1->hours = 8;
         $entry1->minutes = 30;
 
@@ -70,7 +70,7 @@ final class GetTimeEntriesTest extends TestCase
         $entry2->id = "test-id-2";
         $entry2->month = 2;
         $entry2->dayOfMonth = 2;
-        $entry2->year = 2025;
+        $entry2->year = "2025";
         $entry2->hours = 6;
         $entry2->minutes = 45;
 

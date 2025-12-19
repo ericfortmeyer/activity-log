@@ -67,7 +67,7 @@ final class DeleteTimeEntryTest extends TestCase
         $deletedEntry = new TimeEntry();
         $deletedEntry->id = $entryId;
         $deletedEntry->dayOfMonth = 1;
-        $deletedEntry->year = 2025;
+        $deletedEntry->year = "2025";
         $deletedEntry->hours = 8;
         $deletedEntry->minutes = 30;
         $deletedEntry->createdOn = new \DateTimeImmutable();

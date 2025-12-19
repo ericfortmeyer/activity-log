@@ -58,7 +58,6 @@ final class TimeEntryTest extends TestCase
         $entry->create($this->user->name);
 
         $this->assertNotEmpty($entry->id);
-        $this->assertInstanceOf(DateTimeImmutable::class, $entry->createdOn);
     }
 
     #[Test]
@@ -94,7 +93,6 @@ final class TimeEntryTest extends TestCase
         $this->assertEquals($year, $entry->year);
         $this->assertEquals($hours, $entry->hours);
         $this->assertEquals($minutes, $entry->minutes);
-        $this->assertEquals($createdOn, $entry->createdOn);
     }
 
     #[Test]

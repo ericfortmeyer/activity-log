@@ -62,7 +62,9 @@ class TimeEntry extends TenantData
             if (is_string($value) === true) {
                 $value = new DateTimeImmutable($value);
             }
+            $value = $value;
         }
+        get => $this->createdOn ?? new DateTimeImmutable("now");
     }
     // phpcs:enable
 
