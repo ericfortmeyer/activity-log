@@ -75,7 +75,7 @@
     "ci:generate-coverage-badge": [
       "@putenv XDEBUG_MODE=coverage",
       "@test --configuration=phpunit.coverage.xml",
-      "php-coveralls"
+      "composer exec \"php-coveralls -v\""
     ],
     "ci:lint": "@cs -q --no-colors ./src ./tests",
     "ci:test-build": "@test --configuration=phpunit.ci-build.xml",
