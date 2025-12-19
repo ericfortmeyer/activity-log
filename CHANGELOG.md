@@ -2,6 +2,16 @@
 
 This file documents changes to the Activity Log application.
 
+## 0.7.0 (2025-12-19)
+
+### Feat
+
+- add rdbms storage (#56)
+
+## 0.5.2 (2025-12-15)
+
+## 0.5.1 (2025-12-08)
+
 ## 0.6.0 (2025-12-04)
 
 ### Feat
