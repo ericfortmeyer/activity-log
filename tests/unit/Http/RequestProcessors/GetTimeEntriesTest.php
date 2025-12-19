@@ -11,7 +11,6 @@ use EricFortmeyer\ActivityLog\Services\CreditHoursService;
 use EricFortmeyer\ActivityLog\Services\RemarksForMonthService;
 use EricFortmeyer\ActivityLog\Services\TimeEntryService;
 use EricFortmeyer\ActivityLog\TimeEntry;
-use EricFortmeyer\ActivityLog\UserInterface\Contexts\TimeEntriesContext;
 use EricFortmeyer\ActivityLog\Utils\Hasher;
 use Phpolar\Phpolar\Auth\User;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -19,10 +18,8 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Phpolar\PurePhp\TemplateEngine;
 use Phpolar\Storage\NotFound;
-use PHPUnit\Framework\Attributes\UsesClass;
 
 #[CoversClass(GetTimeEntries::class)]
-#[UsesClass(TimeEntriesContext::class)]
 #[CoversClass(TimeEntry::class)]
 #[CoversClass(MonthFilters::class)]
 #[CoversClass(RemarksForMonth::class)]

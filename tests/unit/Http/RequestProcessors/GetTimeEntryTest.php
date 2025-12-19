@@ -6,19 +6,14 @@ namespace EricFortmeyer\ActivityLog\Http\RequestProcessors;
 
 use EricFortmeyer\ActivityLog\Services\TimeEntryService;
 use EricFortmeyer\ActivityLog\TimeEntry;
-use EricFortmeyer\ActivityLog\UserInterface\Contexts\NotFoundContext;
-use EricFortmeyer\ActivityLog\UserInterface\Contexts\TimeEntryContext;
 use Phpolar\Phpolar\Auth\User;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Phpolar\PurePhp\TemplateEngine;
 use Phpolar\Storage\NotFound;
-use PHPUnit\Framework\Attributes\UsesClass;
 
 #[CoversClass(GetTimeEntry::class)]
-#[UsesClass(NotFoundContext::class)]
-#[UsesClass(TimeEntryContext::class)]
 #[CoversClass(TimeEntry::class)]
 final class GetTimeEntryTest extends TestCase
 {

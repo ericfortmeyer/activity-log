@@ -73,6 +73,7 @@
     "cbf": "phpcbf --exclude=Squiz.Functions.MultiLineFunctionDeclaration,Squiz.WhiteSpace.ScopeClosingBrace --ignore='*DataProviders*,*ServiceProvider*'",
     "ci:analyze": "@phpstan --no-progress ./src",
     "ci:generate-coverage-badge": [
+      "@putenv XDEBUG_MODE=coverage",
       "@test --configuration=phpunit.coverage.xml",
       "php-coveralls"
     ],
