@@ -19,14 +19,15 @@ use PHPUnit\Framework\TestCase;
 use Phpolar\PurePhp\TemplateEngine;
 use Phpolar\Storage\NotFound;
 use PHPUnit\Framework\Attributes\DataProviderExternal;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\MockObject\Stub;
 
 #[CoversClass(SubmitTimeEntry::class)]
 #[CoversClass(TimeEntry::class)]
 #[CoversClass(MonthFilters::class)]
 #[CoversClass(RemarksForMonth::class)]
-#[CoversClass(TimeEntryContext::class)]
-#[CoversClass(TimeEntriesContext::class)]
+#[UsesClass(TimeEntryContext::class)]
+#[UsesClass(TimeEntriesContext::class)]
 final class SubmitTimeEntryTest extends TestCase
 {
     private TemplateEngine $templateEngine;

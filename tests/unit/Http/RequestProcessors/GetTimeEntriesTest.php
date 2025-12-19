@@ -19,9 +19,10 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Phpolar\PurePhp\TemplateEngine;
 use Phpolar\Storage\NotFound;
+use PHPUnit\Framework\Attributes\UsesClass;
 
 #[CoversClass(GetTimeEntries::class)]
-#[CoversClass(TimeEntriesContext::class)]
+#[UsesClass(TimeEntriesContext::class)]
 #[CoversClass(TimeEntry::class)]
 #[CoversClass(MonthFilters::class)]
 #[CoversClass(RemarksForMonth::class)]
