@@ -15,9 +15,8 @@ use Phpolar\Phpolar\Auth\{
 use Phpolar\Storage\NotFound;
 use EricFortmeyer\ActivityLog\UserInterface\Contexts\{NotFoundContext, TimeEntriesContext};
 use EricFortmeyer\ActivityLog\Services\{TimeEntryService, RemarksForMonthService};
-use EricFortmeyer\ActivityLog\{MonthFilters, RemarksForMonth};
+use EricFortmeyer\ActivityLog\{MonthFilters, RemarksForMonth, TimeEntry};
 use EricFortmeyer\ActivityLog\Utils\Hasher;
-use SensitiveParameter;
 
 /**
  * Class DeleteTimeEntry
@@ -49,8 +48,10 @@ final class DeleteTimeEntry extends AbstractTenantBasedRequestProcessor
             );
         }
 
+
         $month = $monthFilters->getMonth();
         $year = $monthFilters->getYear();
+        TimeEntry::setUninitializedValues(timeEntry: $deletedEntry, month: $month, year: $year);
 
         $timeEntries = $this->timeEntryService->getAllByMonth(
             month: $month,

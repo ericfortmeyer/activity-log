@@ -45,10 +45,7 @@ final class GetTimeEntries extends AbstractTenantBasedRequestProcessor
         #[Model] TimeEntry $timeEntry = new TimeEntry(),
         #[Model] MonthFilters $monthFilters = new MonthFilters(),
     ): string {
-        if (
-            $monthFilters->isValid() === false
-            || (isset($timeEntry->id) && $timeEntry->isValid() === false)
-        ) {
+        if ($monthFilters->isValid() === false) {
             return (string) $this->templateEngine->apply(
                 "400",
                 new HtmlSafeContext(
@@ -56,9 +53,10 @@ final class GetTimeEntries extends AbstractTenantBasedRequestProcessor
                 )
             );
         }
-        $timeEntry->tenantId ??= $this->user->nickname;
+        $timeEntry->tenantId ??= $this->getTenantId();
         $month = $monthFilters->getMonth();
         $year = $monthFilters->getYear();
+        TimeEntry::setUninitializedValues(timeEntry: $timeEntry, month: $month, year: $year);
         $timeEntries = $this->timeEntryService->getAllByMonth(
             month: $month,
             year: $year,

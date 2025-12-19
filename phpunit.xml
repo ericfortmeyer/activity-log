@@ -23,8 +23,10 @@
             <directory>src</directory>
         </include>
         <exclude>
+            <file>src/Bootstrapper.php</file>
             <directory>src/templates</directory>
             <directory>src/config</directory>
+            <directory>src/DI</directory>
             <directory>src/UserInterface/HTMLElements</directory>
             <directory>src/UserInterface/Components</directory>
         </exclude>

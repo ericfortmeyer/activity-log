@@ -25,7 +25,7 @@ repos:
         exclude: (tests\/DataProviders)
       - id: php-cs
         files: \.(php)$
-        exclude: (tests|src\/config|public|phpstan\.php|tests\/unit\/DataProviders)
+        exclude: (tests|.phan|migrations|src\/config|public|phpstan\.php|tests\/unit\/DataProviders|src\/DI)
         args: ["--standard=PSR12", "--exclude=Squiz.Functions.MultiLineFunctionDeclaration,Squiz.WhiteSpace.ScopeClosingBrace", "-p"]
       - id: php-unit
       - id: php-stan

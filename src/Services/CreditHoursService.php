@@ -28,7 +28,7 @@ readonly class CreditHoursService
     public function get(string $id): CreditHours|NotFound
     {
         /**
-         * @var CreditHours|NotFound
+         * @var CreditHours|NotFound $creditHours
          */
         $creditHours = $this->storageContext->find($id)
             ->orElse(static fn() => new NotFound())

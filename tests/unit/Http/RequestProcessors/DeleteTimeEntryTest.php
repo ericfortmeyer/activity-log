@@ -18,6 +18,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Phpolar\PurePhp\TemplateEngine;
 use Phpolar\Storage\NotFound;
+use PHPUnit\Framework\MockObject\Stub;
 
 /**
  * Class DeleteTimeEntry
@@ -33,7 +34,7 @@ use Phpolar\Storage\NotFound;
 final class DeleteTimeEntryTest extends TestCase
 {
     private TimeEntryService&MockObject $timeEntryService;
-    private RemarksForMonthService&MockObject $remarksForMonthService;
+    private RemarksForMonthService&Stub $remarksForMonthService;
     private TemplateEngine $templateEngine;
     private DeleteTimeEntry $deleteTimeEntry;
 
@@ -41,7 +42,7 @@ final class DeleteTimeEntryTest extends TestCase
     {
         $hasher = $this->createStub(Hasher::class);
         $this->timeEntryService = $this->createMock(TimeEntryService::class);
-        $this->remarksForMonthService = $this->createMock(RemarksForMonthService::class);
+        $this->remarksForMonthService = $this->createStub(RemarksForMonthService::class);
         $this->remarksForMonthService
             ->method("get")
             ->willReturn(new NotFound());

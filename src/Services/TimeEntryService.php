@@ -25,10 +25,15 @@ readonly class TimeEntryService
      */
     public function delete(string $entryId): TimeEntry| NotFound
     {
-        return $this->storageContext
+        /**
+         * @var TimeEntry|NotFound $result
+         */
+        $result = $this->storageContext
             ->remove($entryId)
             ->orElse(static fn() => new NotFound())
             ->tryUnwrap();
+
+        return $result;
     }
 
     /**
@@ -39,10 +44,15 @@ readonly class TimeEntryService
      */
     public function get(string $entryId): TimeEntry|NotFound
     {
-        return $this->storageContext
+        /**
+         * @var TimeEntry|NotFound $result
+         */
+        $result = $this->storageContext
             ->find($entryId)
             ->orElse(static fn() => new NotFound())
             ->tryUnwrap();
+
+        return $result;
     }
 
     /**
@@ -53,18 +63,15 @@ readonly class TimeEntryService
     public function getAll(string $tenantId): array
     {
         return array_filter(
-            array_map(
-                TimeEntry::fromData(...),
-                $this->storageContext->findAll(),
-            ),
+            $this->storageContext->findAll(),
             TimeEntry::forTenant($tenantId),
         );
     }
 
-    public function save(TimeEntry $entry, string $tenantId): void
+    public function save(TimeEntry $entry): void
     {
         if (empty($entry->id) === true) {
-            $entry->create($tenantId);
+            $entry->create();
             $this->storageContext->save($entry->id, $entry);
             return;
         }

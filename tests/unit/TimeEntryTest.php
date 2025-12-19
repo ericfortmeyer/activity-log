@@ -75,7 +75,7 @@ final class TimeEntryTest extends TestCase
     ): void {
         $createdOn = new DateTimeImmutable("now");
 
-        $entry = TimeEntry::fromData(
+        $entry = new TimeEntry(
             compact(
                 "id",
                 "tenantId",

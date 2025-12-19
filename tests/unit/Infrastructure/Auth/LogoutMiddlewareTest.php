@@ -34,10 +34,7 @@ final class LogoutMiddlewareTest extends TestCase
     private UriInterface&Stub $uriStub;
     private ServerRequestInterface&Stub $requestStub;
     private ResponseInterface $responseStub;
-    private Auth0Adapter&MockObject $auth0Adapter;
-    private LoggerInterface&MockObject $logger;
     private ResponseFactoryInterface $responseFactory;
-    private RequestHandlerInterface&MockObject $requestHandler;
 
     protected function setUp(): void
     {
@@ -45,9 +42,6 @@ final class LogoutMiddlewareTest extends TestCase
         $this->uriStub = $this->createStub(UriInterface::class);
         $this->requestStub = $this->createStub(ServerRequestInterface::class);
         $this->responseStub = $this->createStub(ResponseInterface::class);
-        $this->logger = $this->createMock(LoggerInterface::class);
-        $this->auth0Adapter = $this->createMock(Auth0Adapter::class);
-        $this->requestHandler = $this->createMock(RequestHandlerInterface::class);
         $this->responseFactory = new Psr17Factory();
     }
 
@@ -61,16 +55,20 @@ final class LogoutMiddlewareTest extends TestCase
         string $requestPath,
         string $logoutPath,
     ) {
+        $logger = $this->createStub(LoggerInterface::class);
+        $auth0Adapter = $this->createStub(Auth0Adapter::class);
+        $requestHandler = $this->createMock(RequestHandlerInterface::class);
+
         $this->requestStub->method("getUri")->willReturn($this->uriStub);
         $this->uriStub->method("getPath")->willReturn($requestPath);
-        $this->requestHandler
+        $requestHandler
             ->expects($this->once())
             ->method("handle")
             ->willReturn($this->responseStub);
 
         $middleware = new LogoutMiddleware(
-            auth: $this->auth0Adapter,
-            log: $this->logger,
+            auth: $auth0Adapter,
+            log: $logger,
             appConfig: new AppConfig(
                 [
                     "appName" => "",
@@ -83,7 +81,7 @@ final class LogoutMiddlewareTest extends TestCase
             responseFactory: $this->responseFactory,
         );
 
-        $result = $middleware->process($this->requestStub, $this->requestHandler);
+        $result = $middleware->process($this->requestStub, $requestHandler);
 
         $this->assertEquals(
             $this->responseStub,
@@ -107,27 +105,30 @@ final class LogoutMiddlewareTest extends TestCase
         string $expectedLogoutUrl,
         string $hostname,
     ) {
+        $logger = $this->createStub(LoggerInterface::class);
+        $auth0Adapter = $this->createMock(Auth0Adapter::class);
+        $requestHandler = $this->createMock(RequestHandlerInterface::class);
         $this->requestStub->method("getUri")->willReturn($this->uriStub);
         $this->uriStub
             ->method("getPath")->willReturn($requestPath);
         $this->uriStub->method("getScheme")->willReturn("https");
         $this->uriStub->method("getHost")->willReturn($hostname);
 
-        $this->requestHandler
+        $requestHandler
             ->expects($this->never())
             ->method("handle");
-        $this->auth0Adapter
+        $auth0Adapter
             ->expects($this->once())
             ->method("clear");
-        $this->auth0Adapter
+        $auth0Adapter
             ->expects($this->once())
             ->method("logout")
             ->with($expectedLogoutUrl)
             ->willReturn($expectedLogoutUrl);
 
         $middleware = new LogoutMiddleware(
-            auth: $this->auth0Adapter,
-            log: $this->logger,
+            auth: $auth0Adapter,
+            log: $logger,
             appConfig: new AppConfig([
                 "appName" => "",
                 "callbackPath" => "",
@@ -137,7 +138,7 @@ final class LogoutMiddlewareTest extends TestCase
             responseFactory: $this->responseFactory,
         );
 
-        $result = $middleware->process($this->requestStub, $this->requestHandler);
+        $result = $middleware->process($this->requestStub, $requestHandler);
 
         $this->assertSame(
             $expectedLogoutUrl,
@@ -169,27 +170,31 @@ final class LogoutMiddlewareTest extends TestCase
         string $hostname,
         string $exceptionMessage,
     ) {
+        $logger = $this->createMock(LoggerInterface::class);
+        $auth0Adapter = $this->createMock(Auth0Adapter::class);
+        $requestHandler = $this->createMock(RequestHandlerInterface::class);
+
         $this->requestStub->method("getUri")->willReturn($this->uriStub);
         $this->uriStub
             ->method("getPath")->willReturn($requestPath);
         $this->uriStub->method("getScheme")->willReturn("https");
         $this->uriStub->method("getHost")->willReturn($hostname);
 
-        $this->requestHandler
+        $requestHandler
             ->expects($this->never())
             ->method("handle");
-        $this->auth0Adapter
+        $auth0Adapter
             ->expects($this->once())
             ->method("logout")
             ->willThrowException(new ConfigurationException($exceptionMessage));
-        $this->logger
+        $logger
             ->expects($this->once())
             ->method("critical")
             ->with($exceptionMessage);
 
         $middleware = new LogoutMiddleware(
-            auth: $this->auth0Adapter,
-            log: $this->logger,
+            auth: $auth0Adapter,
+            log: $logger,
             appConfig: new AppConfig([
                 "appName" => "",
                 "callbackPath" => "",
@@ -199,7 +204,7 @@ final class LogoutMiddlewareTest extends TestCase
             responseFactory: $this->responseFactory,
         );
 
-        $result = $middleware->process($this->requestStub, $this->requestHandler);
+        $result = $middleware->process($this->requestStub, $requestHandler);
 
         $this->assertSame(
             $loginPath,

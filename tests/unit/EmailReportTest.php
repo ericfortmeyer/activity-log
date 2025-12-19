@@ -15,18 +15,14 @@ use PHPUnit\Framework\TestCase;
 final class EmailReportTest extends TestCase
 {
     #[Test]
-    #[TestDox("Shall know if it's properties have valid values: [\$mailTo, \$month, \$year]")]
+    #[TestDox("Shall know if it's properties have valid values: [\$mailTo]")]
     #[DataProviderExternal(EmailReportDataProvider::class, "validData")]
     public function asijofd(
         string $mailTo,
-        int $month,
-        int $year,
     ) {
         $emailReport = new EmailReport(
             compact(
                 "mailTo",
-                "month",
-                "year",
             )
         );
 
@@ -34,18 +30,14 @@ final class EmailReportTest extends TestCase
     }
 
     #[Test]
-    #[TestDox("Shall know if it's properties have invalid values: [\$mailTo, \$month, \$year]")]
+    #[TestDox("Shall know if it's properties have invalid values: [\$mailTo]")]
     #[DataProviderExternal(EmailReportDataProvider::class, "invalidData")]
     public function asijodasfd(
         string $mailTo,
-        int $month,
-        int $year,
     ) {
         $emailReport = new EmailReport(
             compact(
                 "mailTo",
-                "month",
-                "year",
             )
         );
 

@@ -35,7 +35,7 @@ final class GetTimeEntry extends AbstractRestrictedAccessRequestProcessor
 
         return (string) $this->templateEngine->apply(
             "entry",
-            new HtmlSafeContext(new TimeEntryContext(timeEntry: $timeEntry, user: $this->user))
+            new HtmlSafeContext(new TimeEntryContext(timeEntry: $timeEntry))
         );
     }
 }

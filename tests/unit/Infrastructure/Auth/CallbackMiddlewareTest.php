@@ -16,7 +16,6 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\Attributes\UsesClass;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseFactoryInterface;
@@ -34,10 +33,7 @@ final class CallbackMiddlewareTest extends TestCase
     private UriInterface&Stub $uriStub;
     private ServerRequestInterface&Stub $requestStub;
     private ResponseInterface $responseStub;
-    private Auth0Adapter&MockObject $auth0Adapter;
-    private LoggerInterface&MockObject $logger;
     private ResponseFactoryInterface $responseFactory;
-    private RequestHandlerInterface&MockObject $requestHandler;
 
     protected function setUp(): void
     {
@@ -45,9 +41,6 @@ final class CallbackMiddlewareTest extends TestCase
         $this->uriStub = $this->createStub(UriInterface::class);
         $this->requestStub = $this->createStub(ServerRequestInterface::class);
         $this->responseStub = $this->createStub(ResponseInterface::class);
-        $this->logger = $this->createMock(LoggerInterface::class);
-        $this->auth0Adapter = $this->createMock(Auth0Adapter::class);
-        $this->requestHandler = $this->createMock(RequestHandlerInterface::class);
         $this->responseFactory = new Psr17Factory();
     }
 
@@ -61,23 +54,27 @@ final class CallbackMiddlewareTest extends TestCase
         string $requestPath,
         string $callbackPath,
     ) {
+        $logger = $this->createStub(LoggerInterface::class);
+        $auth0Adapter = $this->createStub(Auth0Adapter::class);
+        $requestHandler = $this->createMock(RequestHandlerInterface::class);
+
         $this->requestStub->method("getUri")->willReturn($this->uriStub);
         $this->uriStub->method("getPath")->willReturn($requestPath);
-        $this->requestHandler
+        $requestHandler
             ->expects($this->once())
             ->method("handle")
             ->willReturn($this->responseStub);
 
         $callbackMiddleware = new CallbackMiddleware(
-            auth: $this->auth0Adapter,
-            log: $this->logger,
+            auth: $auth0Adapter,
+            log: $logger,
             appConfig: new AppConfig(
                 ["appName" => "", "callbackPath" => $callbackPath, "loginPath" => "", "logoutPath" => ""]
             ),
             responseFactory: $this->responseFactory,
         );
 
-        $result = $callbackMiddleware->process($this->requestStub, $this->requestHandler);
+        $result = $callbackMiddleware->process($this->requestStub, $requestHandler);
 
         $this->assertEquals(
             $this->responseStub,
@@ -101,30 +98,34 @@ final class CallbackMiddlewareTest extends TestCase
         string $expectedReturnUrl,
         string $hostname,
     ) {
+        $logger = $this->createStub(LoggerInterface::class);
+        $auth0Adapter = $this->createMock(Auth0Adapter::class);
+        $requestHandler = $this->createMock(RequestHandlerInterface::class);
+
         $this->requestStub->method("getUri")->willReturn($this->uriStub);
         $this->uriStub
             ->method("getPath")->willReturn($requestPath);
         $this->uriStub->method("getScheme")->willReturn("https");
         $this->uriStub->method("getHost")->willReturn($hostname);
 
-        $this->requestHandler
+        $requestHandler
             ->expects($this->never())
             ->method("handle");
-        $this->auth0Adapter
+        $auth0Adapter
             ->expects($this->once())
             ->method("exchange")
             ->with($expectedCallbackUrl);
 
         $callbackMiddleware = new CallbackMiddleware(
-            auth: $this->auth0Adapter,
-            log: $this->logger,
+            auth: $auth0Adapter,
+            log: $logger,
             appConfig: new AppConfig(
                 ["appName" => "", "callbackPath" => $callbackPath, "loginPath" => "", "logoutPath" => ""]
             ),
             responseFactory: $this->responseFactory,
         );
 
-        $result = $callbackMiddleware->process($this->requestStub, $this->requestHandler);
+        $result = $callbackMiddleware->process($this->requestStub, $requestHandler);
 
         $this->assertSame(
             $expectedReturnUrl,
@@ -156,34 +157,38 @@ final class CallbackMiddlewareTest extends TestCase
         string $hostname,
         string $exceptionMessage,
     ) {
+        $logger = $this->createMock(LoggerInterface::class);
+        $auth0Adapter = $this->createMock(Auth0Adapter::class);
+        $requestHandler = $this->createMock(RequestHandlerInterface::class);
+
         $this->requestStub->method("getUri")->willReturn($this->uriStub);
         $this->uriStub
             ->method("getPath")->willReturn($requestPath);
         $this->uriStub->method("getScheme")->willReturn("https");
         $this->uriStub->method("getHost")->willReturn($hostname);
 
-        $this->requestHandler
+        $requestHandler
             ->expects($this->never())
             ->method("handle");
-        $this->auth0Adapter
+        $auth0Adapter
             ->expects($this->once())
             ->method("exchange")
             ->willThrowException(new StateException($exceptionMessage));
-        $this->logger
+        $logger
             ->expects($this->once())
             ->method("critical")
             ->with($exceptionMessage);
 
         $callbackMiddleware = new CallbackMiddleware(
-            auth: $this->auth0Adapter,
-            log: $this->logger,
+            auth: $auth0Adapter,
+            log: $logger,
             appConfig: new AppConfig(
                 ["appName" => "", "callbackPath" => $callbackPath, "loginPath" => "", "logoutPath" => $logoutPath]
             ),
             responseFactory: $this->responseFactory,
         );
 
-        $result = $callbackMiddleware->process($this->requestStub, $this->requestHandler);
+        $result = $callbackMiddleware->process($this->requestStub, $requestHandler);
 
         $this->assertSame(
             $logoutPath,

@@ -54,8 +54,8 @@ final class SaveCreditHours extends AbstractTenantBasedRequestProcessor
         );
 
         $timeEntries = $this->timeEntryService->getAllByMonth(
-            month: $creditHours->month ?? TimeEntry::getDefaultValue("month"),
-            year: $creditHours->year ?? TimeEntry::getDefaultValue("year"),
+            month: $creditHours->month,
+            year: $creditHours->year,
             tenantId: $this->getTenantId(),
         );
         $currentEntry = new TimeEntry();

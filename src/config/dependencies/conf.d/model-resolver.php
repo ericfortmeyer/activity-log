@@ -1,20 +1,28 @@
 <?php
 
+/**
+ * @phan-file-suppress PhanUnreferencedClosure
+ */
+
 declare(strict_types=1);
 
 namespace EricFortmeyer\ActivityLog;
 
+use EricFortmeyer\ActivityLog\DI\ServiceProvider;
 use Phpolar\Model\ParsedBodyResolver;
 use Phpolar\ModelResolver\ModelResolverInterface;
 use Psr\Container\ContainerInterface;
-use Psr\Http\Message\ServerRequestInterface;
 
 return [
     ModelResolverInterface::class => static function (ContainerInterface $container) {
+        $parsedBody = new ServiceProvider($container)->serverRequest->getParsedBody();
+
         return new ParsedBodyResolver(
             array_merge(
-                $container->get(ServerRequestInterface::class)->getQueryParams(),
-                $container->get(ServerRequestInterface::class)->getParsedBody() ?? []
+                new ServiceProvider($container)->serverRequest->getQueryParams(),
+                (\is_object($parsedBody)
+                    ? \get_object_vars($parsedBody)
+                    : (\is_array($parsedBody) ? $parsedBody : [])),
             )
         );
     }

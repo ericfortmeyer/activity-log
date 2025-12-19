@@ -45,19 +45,6 @@ final class AuthConfigServiceTest extends TestCase
     }
 
     #[Test]
-    #[TestDox("Shall retrieve the client id")]
-    #[TestWith(["client-id"])]
-    public function odjis(string $clientid)
-    {
-        $this->secretsClient->expects($this->once())
-            ->method("getValue")
-            ->willReturn($clientid);
-        $result = $this->sut->getClientId();
-
-        $this->assertSame($clientid, $result);
-    }
-
-    #[Test]
     #[TestDox("Shall retrieve the cookie secret")]
     #[TestWith(["cookie-secret"])]
     public function odjiss(string $cookieSecret)

@@ -26,7 +26,6 @@ use Psr\Http\Message\{
     ResponseFactoryInterface,
     StreamFactoryInterface
 };
-use Stringable;
 
 use const Phpolar\CsrfProtection\{
     REQUEST_ID_KEY,
@@ -38,6 +37,9 @@ const CSRF_TOKEN_TTL = TOKEN_DEFAULT_TTL;
 const REQUEST_ID = REQUEST_ID_KEY;
 const MAX_STORED_TOKEN_COUNT = TOKEN_MAX;
 
+/**
+ * @phan-file-suppress PhanUnreferencedClosure
+ */
 return [
     "csrf_token" =>
     /**
@@ -55,7 +57,7 @@ return [
     ),
     ResponseFilterStrategyInterface::class => static function (ContainerInterface $container) {
         /**
-         * @var Stringable $token
+         * @var \Stringable $token
          */
         $token = $container->get("csrf_token");
         return new ResponseFilterPatternStrategy(

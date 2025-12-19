@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace EricFortmeyer\ActivityLog;
 
 use Phpolar\Model\{
+    EntityName,
     Hidden,
     PrimaryKey
 };
@@ -13,8 +14,15 @@ use Phpolar\Validators\{
     Min
 };
 
+/**
+ * @phan-file-suppress PhanReadOnlyPublicProperty
+ */
+#[EntityName("credit-hours")]
 final class CreditHours extends TenantData
 {
+    /**
+     * @suppress PhanUnreferencedPublicProperty
+     */
     #[Hidden]
     #[PrimaryKey]
     public string $id;
