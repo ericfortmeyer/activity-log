@@ -9,7 +9,12 @@ use Phpolar\{
     Validators\MaxLength,
     Validators\Min
 };
+use Phpolar\Model\EntityName;
 
+/**
+ * @phan-file-suppress PhanReadOnlyPublicProperty
+ */
+#[EntityName("remarks")]
 final class RemarksForMonth extends TenantData
 {
     #[PrimaryKey]
@@ -38,13 +43,5 @@ final class RemarksForMonth extends TenantData
     public static function getIdFromMonth(int $year, int $month, string $tenantId): string
     {
         return sprintf("%s-%d-%02d", $tenantId, $year, $month);
-    }
-
-    /**
-     * @param array<string|int,string|int>|object $data
-     */
-    public static function fromData(array | object $data): self
-    {
-        return new self($data);
     }
 }

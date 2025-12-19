@@ -2,6 +2,12 @@
 
 This file documents changes to the Activity Log application.
 
+## 0.6.0 (2025-12-04)
+
+### Feat
+
+- use new read only feature (#37)
+
 ## 0.5.0 (2025-11-28)
 
 ### Feat

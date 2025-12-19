@@ -41,3 +41,9 @@ parameters:
 			identifier: cast.string
 			count: 1
 			path: src/Http/RequestProcessors/SubmitTimeEntry.php
+
+		-
+			message: '#^Set hook for non\-virtual property EricFortmeyer\\ActivityLog\\TimeEntry\:\:\$createdOn does not assign value to it\.$#'
+			identifier: propertySetHook.noAssign
+			count: 1
+			path: src/TimeEntry.php

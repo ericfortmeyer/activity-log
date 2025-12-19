@@ -21,9 +21,12 @@ use Phpolar\PurePhp\{
     TemplateEngine
 };
 
-use const EricFortmeyer\ActivityLog\config\DiTokens\BOOTSTRAPPER;
+use const EricFortmeyer\ActivityLog\DI\Tokens\BOOTSTRAPPER;
 
 ini_set("display_errors", true);
+ini_set("session.name", "activity-log-app");
+// ini_set("session.cache_limiter", "private_no_expire");
+
 chdir("../");
 
 require "vendor/autoload.php";

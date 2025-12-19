@@ -15,11 +15,11 @@ use EricFortmeyer\ActivityLog\UserInterface\Contexts\TimeEntryContext;
 use EricFortmeyer\ActivityLog\Utils\Hasher;
 use Phpolar\Phpolar\Auth\User;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Phpolar\PurePhp\TemplateEngine;
 use Phpolar\Storage\NotFound;
 use PHPUnit\Framework\Attributes\DataProviderExternal;
+use PHPUnit\Framework\MockObject\Stub;
 
 #[CoversClass(SubmitTimeEntry::class)]
 #[CoversClass(TimeEntry::class)]
@@ -29,32 +29,16 @@ use PHPUnit\Framework\Attributes\DataProviderExternal;
 #[CoversClass(TimeEntriesContext::class)]
 final class SubmitTimeEntryTest extends TestCase
 {
-    private TimeEntryService&MockObject $timeEntryService;
     private TemplateEngine $templateEngine;
-    private SubmitTimeEntry $submitTimeEntry;
-    private RemarksForMonthService&MockObject $remarksForMonthService;
+    private RemarksForMonthService&Stub $remarksForMonthService;
 
     protected function setUp(): void
     {
-        $hasher = $this->createStub(Hasher::class);
-        $this->timeEntryService = $this->createMock(TimeEntryService::class);
-        $this->remarksForMonthService = $this->createMock(RemarksForMonthService::class);
+        $this->templateEngine = new TemplateEngine();
+        $this->remarksForMonthService = $this->createStub(RemarksForMonthService::class);
         $this->remarksForMonthService
             ->method("get")
             ->willReturn(new NotFound());
-        $this->templateEngine = new TemplateEngine();
-        $this->submitTimeEntry = new SubmitTimeEntry(
-            timeEntryService: $this->timeEntryService,
-            remarksForMonthService: $this->remarksForMonthService,
-            templateEngine: $this->templateEngine,
-            hasher: $hasher,
-        );
-        $this->submitTimeEntry->user = new User(
-            name: "FAKE_NAME",
-            nickname: "FAKE_NICKNAME",
-            email: "FAKE@FAKE.FAKE",
-            avatarUrl: "https://FAKE.FAKE/FAKE.png",
-        );
     }
 
     #[DataProviderExternal(TimeEntryDataProvider::class, 'validTimeEntryData')]
@@ -78,12 +62,25 @@ final class SubmitTimeEntryTest extends TestCase
                 "minutes",
             )
         );
-
-        $this->timeEntryService->expects($this->once())
+        $hasher = $this->createStub(Hasher::class);
+        $timeEntryService = $this->createMock(TimeEntryService::class);
+        $submitTimeEntry = new SubmitTimeEntry(
+            timeEntryService: $timeEntryService,
+            remarksForMonthService: $this->remarksForMonthService,
+            templateEngine: $this->templateEngine,
+            hasher: $hasher,
+        );
+        $submitTimeEntry->user = new User(
+            name: "FAKE_NAME",
+            nickname: "FAKE_NICKNAME",
+            email: "FAKE@FAKE.FAKE",
+            avatarUrl: "https://FAKE.FAKE/FAKE.png",
+        );
+        $timeEntryService->expects($this->once())
             ->method("save")
             ->with($this->isInstanceOf(TimeEntry::class));
 
-        $response = $this->submitTimeEntry->process($entry);
+        $response = $submitTimeEntry->process($entry);
         $this->assertStringContainsString("Activity", $response);
     }
 
@@ -111,10 +108,24 @@ final class SubmitTimeEntryTest extends TestCase
             )
         );
 
-        $this->timeEntryService->expects($this->never())
+        $hasher = $this->createStub(Hasher::class);
+        $timeEntryService = $this->createMock(TimeEntryService::class);
+        $submitTimeEntry = new SubmitTimeEntry(
+            timeEntryService: $timeEntryService,
+            remarksForMonthService: $this->remarksForMonthService,
+            templateEngine: $this->templateEngine,
+            hasher: $hasher,
+        );
+        $submitTimeEntry->user = new User(
+            name: "FAKE_NAME",
+            nickname: "FAKE_NICKNAME",
+            email: "FAKE@FAKE.FAKE",
+            avatarUrl: "https://FAKE.FAKE/FAKE.png",
+        );
+        $timeEntryService->expects($this->never())
             ->method("save");
 
-        $response = $this->submitTimeEntry->process($entry);
+        $response = $submitTimeEntry->process($entry);
         $this->assertStringContainsString("Activity", $response);
         $this->assertFalse($entry->isValid());
     }
@@ -142,7 +153,22 @@ final class SubmitTimeEntryTest extends TestCase
             )
         );
 
-        $response = $this->submitTimeEntry->process($entry);
+        $hasher = $this->createStub(Hasher::class);
+        $timeEntryService = $this->createStub(TimeEntryService::class);
+        $submitTimeEntry = new SubmitTimeEntry(
+            timeEntryService: $timeEntryService,
+            remarksForMonthService: $this->remarksForMonthService,
+            templateEngine: $this->templateEngine,
+            hasher: $hasher,
+        );
+        $submitTimeEntry->user = new User(
+            name: "FAKE_NAME",
+            nickname: "FAKE_NICKNAME",
+            email: "FAKE@FAKE.FAKE",
+            avatarUrl: "https://FAKE.FAKE/FAKE.png",
+        );
+
+        $response = $submitTimeEntry->process($entry);
         $this->assertStringContainsString("Activity", $response);
     }
 }

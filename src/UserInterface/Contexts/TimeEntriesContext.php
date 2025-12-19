@@ -61,15 +61,6 @@ final class TimeEntriesContext extends AbstractContext
         );
     }
 
-    public function getMinutesRemainder(): int
-    {
-        return array_reduce(
-            $this->timeEntries,
-            static fn(int $acc, TimeEntry $entry): int => $acc + $entry->minutes,
-            0
-        ) % 60;
-    }
-
     private function getHoursFromTotalMinutes(): int
     {
         return (int) floor(array_reduce(
@@ -101,15 +92,15 @@ final class TimeEntriesContext extends AbstractContext
 
     public function getPreviousMonthFilter(): string
     {
-        $month = (($this->getMonth()) - 1) % 12;
-        $year = ($this->getYear()) - ($month < 1 ? 1 : 0);
+        $month = $this->getMonth() === 1 ? 12 : ($this->getMonth() - 1) % 12;
+        $year = $this->getYear() - ($month === 12 ? 1 : 0);
         return "filterMonth={$month}&filterYear={$year}";
     }
 
     public function getNextMonthFilter(): string
     {
-        $month = (($this->getMonth()) + 1) % 12;
-        $year = $this->getYear() + ($this->getMonth() + 1 > 12 ? 1 : 0);
+        $month = $this->getMonth() === 11 ? 12 : ($this->getMonth() + 1) % 12;
+        $year = $this->getYear() + ($month === 1 ? 1 : 0);
         return "filterMonth={$month}&filterYear={$year}";
     }
 
@@ -118,11 +109,17 @@ final class TimeEntriesContext extends AbstractContext
         return $this->remarks->remarks;
     }
 
+    /**
+     * @suppress PhanCoalescingNeverNull
+     */
     public function getRemarksMonth(): int
     {
         return $this->remarks->month ?? $this->getMonth();
     }
 
+    /**
+     * @suppress PhanCoalescingNeverNull
+     */
     public function getRemarksYear(): int
     {
         return $this->remarks->year ?? $this->getYear();
@@ -155,12 +152,12 @@ final class TimeEntriesContext extends AbstractContext
 
     public function getMonthFilter(): int
     {
-        return $this->filters->filterMonth;
+        return $this->filters->filterMonth ?? 0;
     }
 
     public function getYearFilter(): int
     {
-        return $this->filters->filterYear;
+        return $this->filters->filterYear ?? 0;
     }
 
     public function getMonthQuery(): string
@@ -174,7 +171,7 @@ final class TimeEntriesContext extends AbstractContext
             "%s/%s",
             $this->deleteUrl,
             $this->hasFilter()
-                ? sprintf("%s?%s", $entry->getPrimaryKey(), $this->getMonthQuery())
+                ? sprintf("%s?%s", (string) $entry->getPrimaryKey(), $this->getMonthQuery())
                 : (string) $entry->getPrimaryKey()
         );
     }

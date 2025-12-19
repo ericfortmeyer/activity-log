@@ -16,6 +16,8 @@ use PhpContrib\Authenticator\AuthenticatorInterface;
 use Exception;
 
 /**
+ * @phan-file-suppress PhanUnusedPublicFinalMethodParameter
+ * @phan-file-suppress PhanUnusedPublicMethodParameter
  * @codeCoverageIgnore
  */
 readonly class Auth0Adapter implements Auth0Interface, AuthenticatorInterface

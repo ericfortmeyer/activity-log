@@ -11,8 +11,6 @@ final readonly class EmailReportDataProvider
         return [
             [
                 "mailTo" => "fake@fake.com",
-                "month" =>  12,
-                "year" => 2025
             ]
         ];
     }
@@ -20,9 +18,7 @@ final readonly class EmailReportDataProvider
     public static function invalidData(): array
     {
         return [
-            "invalidEmail" => ["mailTo" => "not a valid email", "month" => 12, "year" => 2025],
-            "invalidYear" => ["mailTo" => "fake@fake.com", "month" => 12, "year" => 0],
-            "invalidMonth" => ["mailTo" => "fake@fake.com", "month" => 13, "year" => 2025],
+            "invalidEmail" => ["mailTo" => "not a valid email"],
         ];
     }
 }

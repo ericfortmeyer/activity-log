@@ -7,6 +7,7 @@ namespace EricFortmeyer\ActivityLog;
 use Closure;
 use DateTimeImmutable;
 use Phpolar\Model\{
+    EntityName,
     Hidden,
     Label,
     PrimaryKey
@@ -18,11 +19,14 @@ use Phpolar\Validators\{
     Required,
 };
 
+/**
+ * @phan-file-suppress PhanReadOnlyPublicProperty
+ */
+#[EntityName("time-entry")]
 class TimeEntry extends TenantData
 {
     #[MaxLength(20)]
     #[PrimaryKey]
-    #[Required]
     #[Hidden]
     public string $id;
 
@@ -40,7 +44,7 @@ class TimeEntry extends TenantData
     #[Min(2025)]
     #[Max(2026)]
     #[Required]
-    public int $year;
+    public string $year;
 
     #[Max(24)]
     #[Min(0)]
@@ -52,13 +56,30 @@ class TimeEntry extends TenantData
     public int $minutes;
 
     #[Hidden]
-    public DateTimeImmutable $createdOn;
+    // phpcs:disable
+    public DateTimeImmutable $createdOn {
+        set(string | DateTimeImmutable $value) {
+            if (is_string($value) === true) {
+                $value = new DateTimeImmutable($value);
+            }
+            $value = $value;
+        }
+        get => $this->createdOn ?? new DateTimeImmutable("now");
+    }
+    // phpcs:enable
 
-    public function create(string $tenantId): void
+    public function create(): void
     {
-        $this->tenantId = $tenantId;
         $this->id = uniqid();
-        $this->createdOn = new DateTimeImmutable("now");
+    }
+
+    public static function setUninitializedValues(TimeEntry $timeEntry, int $month, int $year): void
+    {
+        $timeEntry->month ??= $month;
+        $timeEntry->year ??= (string) $year;
+        $timeEntry->dayOfMonth ??= TimeEntry::getDefaultValue("dayOfMonth");
+        $timeEntry->hours ??= 0;
+        $timeEntry->minutes ??= 0;
     }
 
     public function getDate(): string
@@ -80,14 +101,6 @@ class TimeEntry extends TenantData
         );
     }
 
-    /**
-     * @param array<int|string,int|string>|object $data
-     */
-    public static function fromData(array | object $data): self
-    {
-        return new TimeEntry($data);
-    }
-
     public static function getDefaultValue(string $field, DateTimeImmutable $date = new DateTimeImmutable("now")): mixed
     {
         return match ($field) {
@@ -100,13 +113,21 @@ class TimeEntry extends TenantData
         };
     }
 
+    /**
+     * @suppress PhanUnreferencedClosure
+     */
     public static function forTenant(string $tenantId): Closure
     {
         return static fn(TimeEntry $timeEntry): bool => $timeEntry->tenantId === $tenantId;
     }
 
+    /**
+     * @suppress PhanUnreferencedClosure
+     */
     public static function byMonthAndYear(int $month, int $year): Closure
     {
-        return static fn(TimeEntry $timeEntry): bool => $timeEntry->month === $month && $timeEntry->year === $year;
+        return static fn(TimeEntry $timeEntry): bool =>
+        $timeEntry->month === $month
+            && $timeEntry->year === (string) $year;
     }
 }

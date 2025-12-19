@@ -13,6 +13,7 @@
   "require": {
     "php": ">=8.4",
     "ext-pdo": "*",
+    "ext-pdo_mysql": "*",
     "auth0/auth0-php": "^8.17",
     "guzzlehttp/guzzle": "^7.10",
     "guzzlehttp/psr7": "^2.8",
@@ -22,9 +23,10 @@
     "nyholm/psr7-server": "~1.1.0",
     "phpolar/csrf-protection": "^3.0",
     "phpolar/csrf-response-filter": "^1.0",
-    "phpolar/csv-file-storage": "^3.1",
     "phpolar/model": "^2.0",
     "phpolar/model-resolver": "^1.0",
+    "phpolar/mysql-migrations": "^1.0",
+    "phpolar/mysql-storage": "^1.0",
     "phpolar/phpolar": "^8.0",
     "phpolar/pure-php": "^2.0 || ^3.0",
     "phpolar/sqlite-storage": "^1.0",
@@ -40,60 +42,68 @@
   },
   "autoload": {
     "psr-4": {
-      "EricFortmeyer\\ActivityLog\\": "src/",
-      "EricFortmeyer\\ActivityLog\\UnitTests\\": "tests/unit/"
+      "EricFortmeyer\\ActivityLog\\": "src/"
     },
     "files": [
-      "src/config/DiTokens.php",
-      "src/config/FileNames.php",
-      "src/UserInterface/HTMLElements/head.php",
+      "src/DI/Tokens.php",
+      "src/UserInterface/Components/formInput.php",
       "src/UserInterface/Components/timeEntriesNav.php",
-      "src/UserInterface/Components/formInput.php"
+      "src/UserInterface/HTMLElements/head.php"
     ]
   },
+  "autoload-dev": {
+    "psr-4": {
+      "EricFortmeyer\\ActivityLog\\UnitTests\\DataProviders\\": "tests/unit/DataProviders/"
+    }
+  },
   "require-dev": {
+    "phan/phan": "~6.0.0-beta",
     "php-coveralls/php-coveralls": "^2.7.0",
     "phpstan/phpstan": "^2.1",
     "phpunit/phpunit": "^12.0.9",
     "squizlabs/php_codesniffer": "^4"
   },
   "scripts": {
-    "test": [
-      "phpunit --color=always"
+    "analyze:dead-code": "@analyze:strict --color-scheme=light --config-file=.phan/config_deadcode.php",
+    "analyze:strict": [
+      "@putenv XDEBUG_MODE=off",
+      "phan --no-progress-bar --strict-type-checking --analyze-twice --color --output-mode=text --color-scheme=light"
     ],
-    "phpstan": "XDEBUG_MODE=off phpstan analyze",
     "analyze": "@phpstan --memory-limit=256M",
-    "cs": "phpcs --exclude=Squiz.Functions.MultiLineFunctionDeclaration,Squiz.WhiteSpace.ScopeClosingBrace --ignore='*DataProviders*' --standard=PSR12",
-    "cbf": "phpcbf --exclude=Squiz.Functions.MultiLineFunctionDeclaration,Squiz.WhiteSpace.ScopeClosingBrace --standard=PSR12",
-    "lint": "@cs ./src ./tests",
-    "lint-fix": "@cbf ./src ./tests",
-    "start:test": [
-      "Composer\\Config::disableProcessTimeout",
-      "watch -n 5 -cx composer exec @test"
-    ],
+    "cbf": "phpcbf --exclude=Squiz.Functions.MultiLineFunctionDeclaration,Squiz.WhiteSpace.ScopeClosingBrace --ignore='*DataProviders*,*ServiceProvider*'",
     "ci:analyze": "@phpstan --no-progress ./src",
-    "ci:lint": [
-      "@cs -q --no-colors ./src ./tests"
-    ],
-    "ci:test": [
-      "@test --configuration=phpunit.ci.xml"
-    ],
-    "ci:test-build": [
-      "@test --configuration=phpunit.ci-build.xml"
-    ],
     "ci:generate-coverage-badge": [
       "@test --configuration=phpunit.coverage.xml",
       "php-coveralls"
     ],
-    "link-css-framework": [
-      "ln -s -f ../../../vendor/picocss/pico/css/pico.min.css public/resources/css/"
+    "ci:lint": "@cs -q --no-colors ./src ./tests",
+    "ci:test-build": "@test --configuration=phpunit.ci-build.xml",
+    "ci:test": "@test --configuration=phpunit.ci.xml",
+    "cs": "phpcs --exclude=Squiz.Functions.MultiLineFunctionDeclaration,Squiz.WhiteSpace.ScopeClosingBrace --ignore='*DataProviders*,*ServiceProvider*'",
+    "link-css-framework": "ln -s -f ../../../vendor/picocss/pico/css/pico.min.css public/resources/css/",
+    "lint-fix": "@cbf ./src ./tests",
+    "lint": "@cs ./src ./tests",
+    "migration:revert": "mysqlmi revert",
+    "migration:run": "mysqlmi run",
+    "phpstan": [
+      "@putenv XDEBUG_MODE=off",
+      "phpstan analyze"
     ],
     "post-install-cmd": [
       "@link-css-framework"
     ],
-    "post-update-cmd": [
-      "@link-css-framework"
+    "test:coverage:html": [
+      "@putenv XDEBUG_MODE=coverage",
+      "@test --coverage-html build/coverage"
     ],
-    "test:coverage": "XDEBUG_MODE=coverage composer exec \"@test --coverage-text\""
+    "test:coverage": [
+      "@putenv XDEBUG_MODE=coverage",
+      "@test --coverage-text"
+    ],
+    "test:start": [
+      "Composer\\Config::disableProcessTimeout",
+      "watch -n 5 -cx composer exec @test"
+    ],
+    "test": "phpunit --color=always"
   }
 }

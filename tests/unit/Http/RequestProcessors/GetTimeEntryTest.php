@@ -44,7 +44,7 @@ final class GetTimeEntryTest extends TestCase
         $entry = new TimeEntry();
         $entry->id = $entryId;
         $entry->dayOfMonth = 1;
-        $entry->year = 2025;
+        $entry->year = "2025";
         $entry->hours = 8;
         $entry->minutes = 30;
         $entry->createdOn = new \DateTimeImmutable();

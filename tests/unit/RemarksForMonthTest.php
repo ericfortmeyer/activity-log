@@ -49,7 +49,7 @@ final class RemarksForMonthTest extends TestCase
         int $year,
         string $remarks,
     ) {
-        $sut = RemarksForMonth::fromData(
+        $sut = new RemarksForMonth(
             compact(
                 "id",
                 "tenantId",

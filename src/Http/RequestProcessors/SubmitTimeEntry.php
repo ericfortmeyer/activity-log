@@ -40,7 +40,7 @@ final class SubmitTimeEntry extends AbstractTenantBasedRequestProcessor
         #[Model] MonthFilters $monthFilters = new MonthFilters()
     ): string {
         if ($entry->isValid()) {
-            $this->timeEntryService->save($entry, $this->getTenantId());
+            $this->timeEntryService->save($entry);
         }
         $entry->isPosted();
 

@@ -1,15 +1,18 @@
 <?php
 
+/**
+ * @phan-file-suppress PhanUnreferencedClosure
+ */
+
 declare(strict_types=1);
 
 namespace EricFortmeyer\ActivityLog\Utils;
 
+use EricFortmeyer\ActivityLog\DI\ServiceProvider;
 use Psr\Container\ContainerInterface;
-
-use const EricFortmeyer\ActivityLog\config\DiTokens\HASH_KEY;
 
 return [
     Hasher::class => static fn(ContainerInterface $container) => new Hasher(
-        hashingKey: $container->get(HASH_KEY)
-    )
+        hashingKey: new ServiceProvider($container)->secretsClient->getValue("hash-key"),
+    ),
 ];

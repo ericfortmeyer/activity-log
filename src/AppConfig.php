@@ -5,8 +5,14 @@ namespace EricFortmeyer\ActivityLog;
 use Phpolar\Model\AbstractModel;
 use Phpolar\Model\PrimaryKey;
 
+/**
+ * @phan-file-suppress PhanReadOnlyPublicProperty
+ */
 final class AppConfig extends AbstractModel
 {
+    /**
+     * @suppress PhanUnreferencedPublicProperty
+     */
     #[PrimaryKey]
     public string $id;
 

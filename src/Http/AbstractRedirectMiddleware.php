@@ -19,7 +19,7 @@ abstract readonly class AbstractRedirectMiddleware implements MiddlewareInterfac
     {
         return $this->responseFactory
             ->createResponse(
-                HttpResponseCodeEnum::TemporaryRedirect->value,
+                (int) HttpResponseCodeEnum::TemporaryRedirect->value,
                 HttpResponseCodeEnum::TemporaryRedirect->getLabel()
             )->withHeader("Location", $location);
     }

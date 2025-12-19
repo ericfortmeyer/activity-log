@@ -1,7 +1,6 @@
-/vendor/
+**/vendor
 /.idea/
 /.phpunit.cache/
 /build/
-server/setenv.conf
 /server/
 /scripts/

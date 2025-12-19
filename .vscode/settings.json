@@ -73,5 +73,10 @@
         "zlib",
         "apcu"
     ],
-    "intelephense.environment.phpVersion": "8.4.*"
+    "intelephense.environment.phpVersion": "8.4.*",
+    "intelephense.completion.propertyCase": "camel",
+    "intelephense.completion.suggestRelativeToPartialUseDeclaration": 2,
+    "[json]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    }
 }

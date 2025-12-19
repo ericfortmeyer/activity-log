@@ -101,7 +101,7 @@ use function EricFortmeyer\ActivityLog\UserInterface\HTMLElements\head;
                                 name: "month",
                                 label: $view->currentEntry->getLabel('month'),
                                 type: $view->currentEntry->getInputType('month'),
-                                value: $view->currentEntry->month ?? TimeEntry::getDefaultValue('month'),
+                                value: $view->currentEntry->month,
                                 placeholder: 'Month',
                                 errorMessage: $view->currentEntry->getFieldErrorMessage('month', stringToAppend: ' ⚠'),
                                 isInvalid: $view->currentEntry->hasError('month')
@@ -111,7 +111,7 @@ use function EricFortmeyer\ActivityLog\UserInterface\HTMLElements\head;
                                 name: "dayOfMonth",
                                 label: $view->currentEntry->getLabel('dayOfMonth'),
                                 type: $view->currentEntry->getInputType('dayOfMonth'),
-                                value: $view->currentEntry->dayOfMonth ?? TimeEntry::getDefaultValue('dayOfMonth'),
+                                value: $view->currentEntry->dayOfMonth,
                                 placeholder: 'Day of Month',
                                 errorMessage: $view->currentEntry->getFieldErrorMessage('dayOfMonth', stringToAppend: ' ⚠'),
                                 isInvalid: $view->currentEntry->hasError('dayOfMonth')
@@ -121,7 +121,7 @@ use function EricFortmeyer\ActivityLog\UserInterface\HTMLElements\head;
                                 name: "year",
                                 label: $view->currentEntry->getLabel('year'),
                                 type: $view->currentEntry->getInputType('year'),
-                                value: $view->currentEntry->year ?? TimeEntry::getDefaultValue('year'),
+                                value: $view->currentEntry->year,
                                 placeholder: 'Year',
                                 errorMessage: $view->currentEntry->getFieldErrorMessage('year', stringToAppend: ' ⚠'),
                                 isInvalid: $view->currentEntry->hasError('year')
@@ -133,7 +133,7 @@ use function EricFortmeyer\ActivityLog\UserInterface\HTMLElements\head;
                                 name: "hours",
                                 label: $view->currentEntry->getLabel('hours'),
                                 type: $view->currentEntry->getInputType('hours'),
-                                value: $view->currentEntry->hours ?? TimeEntry::getDefaultValue('hours'),
+                                value: $view->currentEntry->hours,
                                 placeholder: 'Hours',
                                 errorMessage: $view->currentEntry->getFieldErrorMessage('hours', stringToAppend: ' ⚠'),
                                 isInvalid: $view->currentEntry->hasError('hours')
@@ -143,13 +143,14 @@ use function EricFortmeyer\ActivityLog\UserInterface\HTMLElements\head;
                                 name: "minutes",
                                 label: $view->currentEntry->getLabel('minutes'),
                                 type: $view->currentEntry->getInputType('minutes'),
-                                value: $view->currentEntry->minutes ?? TimeEntry::getDefaultValue('minutes'),
+                                value: $view->currentEntry->minutes,
                                 placeholder: 'Minutes',
                                 errorMessage: $view->currentEntry->getFieldErrorMessage('minutes', stringToAppend: ' ⚠'),
                                 isInvalid: $view->currentEntry->hasError('minutes')
                             )
                             ?>
                         </div>
+                        <input type="hidden" id="filterYear" name="filterYear" value="<?= $view->getYearFilter() ?>" />
                         <?php foreach ($view->currentEntry as $field => $value): ?>
                             <?php $inputType = $view->currentEntry->getInputType($field); ?>
                             <?php if ($inputType === InputTypes::Hidden): ?>

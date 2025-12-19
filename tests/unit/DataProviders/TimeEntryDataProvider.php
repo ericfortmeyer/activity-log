@@ -6,6 +6,78 @@ namespace EricFortmeyer\ActivityLog\UnitTests\DataProviders;
 
 final readonly class TimeEntryDataProvider
 {
+    public static function setForTotals(): array
+    {
+        return [
+            [
+                [
+                    [
+                        "id" => str_repeat("a", 20),
+                        "tenantId" => str_repeat("a", 100),
+                        "dayOfMonth" => 31,
+                        "year" => 2025,
+                        "month" => 12,
+                        "hours" => 5,
+                        "minutes" => 0
+                    ],
+                    [
+                        "id" => str_repeat("a", 20),
+                        "tenantId" => str_repeat("a", 100),
+                        "dayOfMonth" => 31,
+                        "year" => 2025,
+                        "month" => 12,
+                        "hours" => 5,
+                        "minutes" => 0
+                    ],
+                    [
+                        "id" => str_repeat("a", 20),
+                        "tenantId" => str_repeat("a", 100),
+                        "dayOfMonth" => 31,
+                        "year" => 2025,
+                        "month" => 12,
+                        "hours" => 5,
+                        "minutes" => 0,
+                    ],
+
+                ],
+                15
+            ],
+            [
+                [
+                    [
+                        "id" => str_repeat("a", 20),
+                        "tenantId" => str_repeat("a", 100),
+                        "dayOfMonth" => 31,
+                        "year" => 2025,
+                        "month" => 12,
+                        "hours" => 5,
+                        "minutes" => 0
+                    ],
+                    [
+                        "id" => str_repeat("a", 20),
+                        "tenantId" => str_repeat("a", 100),
+                        "dayOfMonth" => 31,
+                        "year" => 2025,
+                        "month" => 12,
+                        "hours" => 5,
+                        "minutes" => 30
+                    ],
+                    [
+                        "id" => str_repeat("a", 20),
+                        "tenantId" => str_repeat("a", 100),
+                        "dayOfMonth" => 31,
+                        "year" => 2025,
+                        "month" => 12,
+                        "hours" => 5,
+                        "minutes" => 30,
+                    ],
+
+                ],
+                16
+            ],
+        ];
+    }
+
     public static function validTimeEntryData(): array
     {
         return [

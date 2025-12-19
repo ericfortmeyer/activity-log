@@ -17,14 +17,14 @@ class AuthConfigService
         return $this->secretsClient->getValue("client-secret");
     }
 
-    public function getClientId(): string
-    {
-        return $this->secretsClient->getValue("client-id");
-    }
-
     public function getCookieSecret(): string
     {
         return $this->secretsClient->getValue("cookie-secret");
+    }
+
+    public function getClientId(): string
+    {
+        return $this->secretsClient->getValue("client-id");
     }
 
     public function getDomain(): string

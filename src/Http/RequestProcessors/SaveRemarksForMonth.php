@@ -54,8 +54,8 @@ final class SaveRemarksForMonth extends AbstractTenantBasedRequestProcessor
         );
 
         $timeEntries = $this->timeEntryService->getAllByMonth(
-            month: $remarks->month ?? TimeEntry::getDefaultValue("month"),
-            year: $remarks->year ?? TimeEntry::getDefaultValue("year"),
+            month: $remarks->month,
+            year: $remarks->year,
             tenantId: $this->getTenantId(),
         );
         $currentEntry = new TimeEntry();
