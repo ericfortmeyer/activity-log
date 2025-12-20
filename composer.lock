@@ -1783,16 +1783,16 @@
         },
         {
             "name": "phpolar/phpolar",
-            "version": "8.2.5",
+            "version": "8.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpolar/phpolar.git",
-                "reference": "e16e11b768f2ebee322e6300cfa77da6196db6c7"
+                "reference": "df0597a02cba5af4902303d47e44617294b3877b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpolar/phpolar/zipball/e16e11b768f2ebee322e6300cfa77da6196db6c7",
-                "reference": "e16e11b768f2ebee322e6300cfa77da6196db6c7",
+                "url": "https://api.github.com/repos/phpolar/phpolar/zipball/df0597a02cba5af4902303d47e44617294b3877b",
+                "reference": "df0597a02cba5af4902303d47e44617294b3877b",
                 "shasum": ""
             },
             "require": {
@@ -1849,9 +1849,9 @@
             "description": "A PHP framework for minimalists",
             "support": {
                 "issues": "https://github.com/phpolar/phpolar/issues",
-                "source": "https://github.com/phpolar/phpolar/tree/8.2.5"
+                "source": "https://github.com/phpolar/phpolar/tree/8.3.0"
             },
-            "time": "2025-12-15T01:20:06+00:00"
+            "time": "2025-12-20T03:54:26+00:00"
         },
         {
             "name": "phpolar/property-injector-contract",
