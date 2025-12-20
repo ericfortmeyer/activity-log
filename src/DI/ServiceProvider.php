@@ -16,6 +16,7 @@ use EricFortmeyer\ActivityLog\Services\AppConfigService;
 use EricFortmeyer\ActivityLog\Services\CreditHoursService;
 use EricFortmeyer\ActivityLog\Services\DataExportService;
 use EricFortmeyer\ActivityLog\Services\RemarksForMonthService;
+use EricFortmeyer\ActivityLog\Services\TenantService;
 use EricFortmeyer\ActivityLog\Services\TimeEntryService;
 use EricFortmeyer\ActivityLog\TimeEntry;
 use EricFortmeyer\ActivityLog\Utils\Hasher;
@@ -206,6 +207,15 @@ final class ServiceProvider
             return $dataExportService instanceof DataExportService === false
                 ? throw new MissingDependencyException(DataExportService::class)
                 : $dataExportService;
+        }
+    }
+
+    public TenantService $tenantService {
+        get {
+            $service = $this->container->get(TenantService::class);
+            return $service instanceof TenantService === false
+                ? throw new MissingDependencyException(TenantService::class)
+                : $service;
         }
     }
 

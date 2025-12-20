@@ -6,7 +6,6 @@ use GuzzleHttp\Client as HttpClient;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\RequestOptions;
 use Pdo\Mysql;
-use Pdo\Sqlite;
 
 const ACTIVITY_LOG_APP_PASSWD_KEY = "activity_log_app_db_password";
 const APP_DB = "activity_log";
