@@ -27,7 +27,7 @@
     "phpolar/model-resolver": "^1.0",
     "phpolar/mysql-migrations": "^1.0",
     "phpolar/mysql-storage": "^1.0",
-    "phpolar/phpolar": "dev-add-exception-handling-middleware",
+    "phpolar/phpolar": "^8.0",
     "phpolar/pure-php": "^2.0 || ^3.0",
     "phpolar/sqlite-storage": "^1.0",
     "phpolar/validators": "^1.2",

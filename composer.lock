@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2b88a124d802697713b31668219f20cd",
+    "content-hash": "199e6227c80895376b7f07d2b2617612",
     "packages": [
         {
             "name": "auth0/auth0-php",
@@ -1783,16 +1783,16 @@
         },
         {
             "name": "phpolar/phpolar",
-            "version": "dev-add-exception-handling-middleware",
+            "version": "8.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpolar/phpolar.git",
-                "reference": "b8b2b1e5c0064bc5c3a67c4b05f39bbcee4ee82a"
+                "reference": "df0597a02cba5af4902303d47e44617294b3877b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpolar/phpolar/zipball/b8b2b1e5c0064bc5c3a67c4b05f39bbcee4ee82a",
-                "reference": "b8b2b1e5c0064bc5c3a67c4b05f39bbcee4ee82a",
+                "url": "https://api.github.com/repos/phpolar/phpolar/zipball/df0597a02cba5af4902303d47e44617294b3877b",
+                "reference": "df0597a02cba5af4902303d47e44617294b3877b",
                 "shasum": ""
             },
             "require": {
@@ -1849,9 +1849,9 @@
             "description": "A PHP framework for minimalists",
             "support": {
                 "issues": "https://github.com/phpolar/phpolar/issues",
-                "source": "https://github.com/phpolar/phpolar/tree/add-exception-handling-middleware"
+                "source": "https://github.com/phpolar/phpolar/tree/8.3.0"
             },
-            "time": "2025-12-19T22:04:43+00:00"
+            "time": "2025-12-20T03:54:26+00:00"
         },
         {
             "name": "phpolar/property-injector-contract",
@@ -7135,8 +7135,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "phan/phan": 10,
-        "phpolar/phpolar": 20
+        "phan/phan": 10
     },
     "prefer-stable": false,
     "prefer-lowest": false,
