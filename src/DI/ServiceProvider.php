@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace EricFortmeyer\ActivityLog\DI;
 
 use EricFortmeyer\ActivityLog\AppConfig;
+use EricFortmeyer\ActivityLog\Bootstrapper;
 use EricFortmeyer\ActivityLog\Clients\SecretsClient;
 use EricFortmeyer\ActivityLog\EmailConfig;
 use EricFortmeyer\ActivityLog\Infrastructure\Auth\Auth0Adapter;
@@ -21,6 +22,7 @@ use EricFortmeyer\ActivityLog\Utils\Hasher;
 use Nyholm\Psr7Server\ServerRequestCreatorInterface;
 use Pdo\Mysql;
 use Phpolar\HttpRequestProcessor\RequestProcessorInterface;
+use Phpolar\Phpolar\ExceptionHandlerInterface;
 use Phpolar\PurePhp\TemplateEngine;
 use Phpolar\SqliteStorage\SqliteReadOnlyStorage;
 use Phpolar\Storage\StorageContext;
@@ -35,8 +37,10 @@ use SQLite3;
 use const EricFortmeyer\ActivityLog\DI\Tokens\APP_CONFIG_DB_CONNECTION;
 use const EricFortmeyer\ActivityLog\DI\Tokens\APP_CONFIG_STORAGE;
 use const EricFortmeyer\ActivityLog\DI\Tokens\APP_DB_CONNECTION;
+use const EricFortmeyer\ActivityLog\DI\Tokens\BOOTSTRAPPER;
 use const EricFortmeyer\ActivityLog\DI\Tokens\CALLBACK_MIDDLEWARE;
 use const EricFortmeyer\ActivityLog\DI\Tokens\CREDIT_HOURS_STORAGE;
+use const EricFortmeyer\ActivityLog\DI\Tokens\EXCEPTION_LOGGER;
 use const EricFortmeyer\ActivityLog\DI\Tokens\LOGIN_MIDDLEWARE;
 use const EricFortmeyer\ActivityLog\DI\Tokens\LOGOUT_MIDDLEWARE;
 use const EricFortmeyer\ActivityLog\DI\Tokens\REMARKS_STORAGE as TokensREMARKS_STORAGE;
@@ -56,6 +60,15 @@ final class ServiceProvider
             return $appConfig instanceof AppConfig === false
                 ? throw new MissingDependencyException(AppConfig::class)
                 : $appConfig;
+        }
+    }
+
+    public Bootstrapper $bootstrapper {
+        get {
+            $strapper = $this->container->get(BOOTSTRAPPER);
+            return $strapper instanceof Bootstrapper === false
+                ? throw new MissingDependencyException(BOOTSTRAPPER)
+                : $strapper;
         }
     }
 
@@ -151,6 +164,15 @@ final class ServiceProvider
         }
     }
 
+    public LoggerInterface $exceptionLogger {
+        get {
+            $logger = $this->container->get(EXCEPTION_LOGGER);
+            return $logger instanceof LoggerInterface === false
+                ? throw new MissingDependencyException(EXCEPTION_LOGGER)
+                : $logger;
+        }
+    }
+
     public TimeEntryService $timeEntryService {
         get {
             $timeEntryService = $this->container->get(TimeEntryService::class);
@@ -224,6 +246,15 @@ final class ServiceProvider
             return $responseFactory instanceof ResponseFactoryInterface === false
                 ? throw new MissingDependencyException(ResponseFactoryInterface::class)
                 : $responseFactory;
+        }
+    }
+
+    public ExceptionHandlerInterface $exceptionHandler {
+        get {
+            $handler = $this->container->get(ExceptionHandlerInterface::class);
+            return $handler instanceof ExceptionHandlerInterface === false
+                ? throw new MissingDependencyException(ExceptionHandlerInterface::class)
+                : $handler;
         }
     }
 

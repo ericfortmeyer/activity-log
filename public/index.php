@@ -3,29 +3,13 @@
 declare(strict_types=1);
 
 /**
- *
- * An application using the PHPolar Microframework
  * ==========================================================
+ * The starting point for execution of the
+ * Activity Log application
  *
- * See `src/config/dependencies/conf.d/`.
+ * This application uses the PHPolar Microframework
+ * ==========================================================
  */
-
-use EricFortmeyer\ActivityLog\Bootstrapper;
-use EricFortmeyer\ActivityLog\UserInterface\Contexts\ServerErrorContext;
-use Monolog\Formatter\LineFormatter;
-use Monolog\Handler\SyslogHandler;
-use Monolog\Logger;
-use Phpolar\Phpolar\DependencyInjection\ContainerLoader;
-use Phpolar\PurePhp\{
-    HtmlSafeContext,
-    TemplateEngine
-};
-
-use const EricFortmeyer\ActivityLog\DI\Tokens\BOOTSTRAPPER;
-
-ini_set("display_errors", true);
-ini_set("session.name", "activity-log-app");
-// ini_set("session.cache_limiter", "private_no_expire");
 
 chdir("../");
 
@@ -36,40 +20,22 @@ require "vendor/autoload.php";
  * Set up dependency injection
  * ==========================================================
  *
+ * See `src/config/dependencies/conf.d/`.
  * Use any PSR-11 container you like.
  * Just `composer require <the-container-implementation>`.
  * Then, return an instance of the PSR-11 container
  * implementation in the factory function below.
  */
 $dependencyMap = new \Pimple\Container();
-$psr11Container = new \Pimple\Psr11\Container($dependencyMap);
-
-set_exception_handler(static function (Throwable $e) {
-    $log = new Logger("Activity Log");
-    $syslog = new SyslogHandler("Activity Log");
-    $formatter = new LineFormatter("%channel%.%level_name%: %message% %context% %extra%");
-    $syslog->setFormatter($formatter);
-    $log->pushHandler($syslog);
-    $log->alert("Exception", ["exception" => $e->getMessage(), "stacktrace" => $e->getTrace()]);
-
-    http_response_code(500);
-    echo new TemplateEngine()->apply(
-        "500",
-        new HtmlSafeContext(
-            new ServerErrorContext(
-                message: "An error occurred. We are investigating."
-            )
-        )
-    );
-});
-
-new ContainerLoader()->load($psr11Container, $dependencyMap);
+$container = new \Pimple\Psr11\Container($dependencyMap);
 
 /**
- * @var Bootstrapper
+ * Wire up dependency graph
  */
-$bootstrapper = $psr11Container->get(BOOTSTRAPPER);
+new Phpolar\Phpolar\DependencyInjection\ContainerLoader()->load($container, $dependencyMap);
+
 /**
  * Start the application
  */
+$bootstrapper = new EricFortmeyer\ActivityLog\DI\ServiceProvider($container)->bootstrapper;
 $bootstrapper();

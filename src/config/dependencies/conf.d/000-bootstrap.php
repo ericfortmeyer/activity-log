@@ -20,5 +20,6 @@ return [
         callbackMiddleware: new ServiceProvider($container)->callbackMiddleware,
         loginMiddleware: new ServiceProvider($container)->loginMiddleware,
         logoutMiddleware: new ServiceProvider($container)->logoutMiddleware,
+        exceptionHandler: new ServiceProvider($container)->exceptionHandler,
     ),
 ];
