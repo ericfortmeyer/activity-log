@@ -2,6 +2,12 @@
 
 This file documents changes to the Activity Log application.
 
+## 0.8.0 (2025-12-20)
+
+### Feat
+
+- create tenant if not exists (#59)
+
 ## 0.7.0 (2025-12-19)
 
 ### Feat
