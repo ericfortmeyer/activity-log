@@ -13,6 +13,7 @@ use Psr\Container\ContainerInterface;
 
 return [
     GetTimeEntries::class => static fn(ContainerInterface $container) => new GetTimeEntries(
+        tenantService: new ServiceProvider($container)->tenantService,
         timeEntryService: new ServiceProvider($container)->timeEntryService,
         remarksForMonthService: new ServiceProvider($container)->remarksForMonthService,
         creditHoursService: new ServiceProvider($container)->creditHoursService,

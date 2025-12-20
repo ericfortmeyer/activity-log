@@ -9,6 +9,7 @@ use EricFortmeyer\ActivityLog\MonthFilters;
 use EricFortmeyer\ActivityLog\RemarksForMonth;
 use EricFortmeyer\ActivityLog\Services\CreditHoursService;
 use EricFortmeyer\ActivityLog\Services\RemarksForMonthService;
+use EricFortmeyer\ActivityLog\Services\TenantService;
 use EricFortmeyer\ActivityLog\Services\TimeEntryService;
 use EricFortmeyer\ActivityLog\TimeEntry;
 use EricFortmeyer\ActivityLog\Utils\Hasher;
@@ -40,6 +41,7 @@ final class GetTimeEntriesTest extends TestCase
         $this->creditHoursService = $this->createMock(CreditHoursService::class);
         $this->templateEngine = new TemplateEngine();
         $this->getTimeEntries = new GetTimeEntries(
+            tenantService: $this->createStub(TenantService::class),
             timeEntryService: $this->timeEntryService,
             remarksForMonthService: $this->remarksForMonthService,
             creditHoursService: $this->creditHoursService,

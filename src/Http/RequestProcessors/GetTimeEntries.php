@@ -13,8 +13,8 @@ use Phpolar\{
     PurePhp\HtmlSafeContext,
     Storage\NotFound
 };
-use EricFortmeyer\ActivityLog\{RemarksForMonth, MonthFilters, CreditHours, TimeEntry};
-use EricFortmeyer\ActivityLog\Services\{RemarksForMonthService, CreditHoursService, TimeEntryService};
+use EricFortmeyer\ActivityLog\{RemarksForMonth, MonthFilters, CreditHours, Tenant, TimeEntry};
+use EricFortmeyer\ActivityLog\Services\{RemarksForMonthService, CreditHoursService, TenantService, TimeEntryService};
 use EricFortmeyer\ActivityLog\UserInterface\Contexts\{TimeEntriesContext, BadRequestContext};
 use EricFortmeyer\ActivityLog\Utils\Hasher;
 
@@ -26,6 +26,7 @@ use EricFortmeyer\ActivityLog\Utils\Hasher;
 final class GetTimeEntries extends AbstractTenantBasedRequestProcessor
 {
     public function __construct(
+        private readonly TenantService $tenantService,
         private readonly TimeEntryService $timeEntryService,
         private readonly RemarksForMonthService $remarksForMonthService,
         private readonly CreditHoursService $creditHoursService,
@@ -53,6 +54,9 @@ final class GetTimeEntries extends AbstractTenantBasedRequestProcessor
                 )
             );
         }
+
+        $this->initTenantIfNotExists();
+
         $timeEntry->tenantId ??= $this->getTenantId();
         $month = $monthFilters->getMonth();
         $year = $monthFilters->getYear();
@@ -132,5 +136,19 @@ final class GetTimeEntries extends AbstractTenantBasedRequestProcessor
             default =>
             new TimeEntriesContext(user: $this->user)
         };
+    }
+
+
+    private function initTenantIfNotExists(): void
+    {
+        $tenantId = $this->getTenantId();
+
+        if ($this->tenantService->exists($tenantId) === true) {
+            return;
+        }
+
+        $this->tenantService->save(
+            new Tenant(["id" => $tenantId])
+        );
     }
 }

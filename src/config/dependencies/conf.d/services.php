@@ -14,6 +14,10 @@ use EricFortmeyer\ActivityLog\EmailConfig;
 use Psr\Container\ContainerInterface;
 
 return [
+    TenantService::class => static fn(ContainerInterface $container)
+    => new TenantService(
+        connection: new ServiceProvider($container)->appDataConnection,
+    ),
     TimeEntryService::class => static fn(ContainerInterface $container)
     => new TimeEntryService(new ServiceProvider($container)->timeEntryStorage),
     RemarksForMonthService::class => static fn(ContainerInterface $container)
