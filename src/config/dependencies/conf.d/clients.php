@@ -29,7 +29,6 @@ return [
         secretServiceLoginPath: new ValueProvider()->secretsServiceLoginPath,
         secretsUser: new ValueProvider()->secretsUser,
         secretsCacheEnabled: new ValueProvider()->secretsCacheEnabled,
-        tokenTtl: new ValueProvider()->secretsTokenTtl,
         valueTtl: new ValueProvider()->secretsValueTtl,
     ),
 ];
