@@ -12,16 +12,19 @@ use const EricFortmeyer\ActivityLog\DI\Tokens\ACTIVITY_STORE_USER;
 use const EricFortmeyer\ActivityLog\DI\Tokens\APP_CONFIG_DB_FILENAME;
 use const EricFortmeyer\ActivityLog\DI\Tokens\APP_CONFIG_TABLE_NAME;
 use const EricFortmeyer\ActivityLog\DI\Tokens\DATA_DIR;
-use const EricFortmeyer\ActivityLog\DI\Tokens\LOGIN_PASSWD_FILENAME;
 use const EricFortmeyer\ActivityLog\DI\Tokens\SECRETS_APP_KEY;
 use const EricFortmeyer\ActivityLog\DI\Tokens\SECRETS_APP_PATH;
 use const EricFortmeyer\ActivityLog\DI\Tokens\SECRETS_DIR;
-use const EricFortmeyer\ActivityLog\DI\Tokens\SECRETS_LOGIN_KEY;
 use const EricFortmeyer\ActivityLog\DI\Tokens\SECRETS_LOGIN_PATH;
 use const EricFortmeyer\ActivityLog\DI\Tokens\SECRETS_SERVICE_HOST;
 use const EricFortmeyer\ActivityLog\DI\Tokens\SECRETS_SERVICE_PORT;
+use const EricFortmeyer\ActivityLog\DI\Tokens\SECRETS_SERVICE_TLS_HOST;
+use const EricFortmeyer\ActivityLog\DI\Tokens\SECRETS_SERVICE_TLS_PORT;
 use const EricFortmeyer\ActivityLog\DI\Tokens\SECRETS_TOKEN_TTL;
+use const EricFortmeyer\ActivityLog\DI\Tokens\SECRETS_USER;
 use const EricFortmeyer\ActivityLog\DI\Tokens\SECRETS_VALUE_TTL;
+use const EricFortmeyer\ActivityLog\DI\Tokens\SSL_CERT;
+use const EricFortmeyer\ActivityLog\DI\Tokens\SSL_KEY;
 
 /**
  * @phan-file-suppress PhanUnreferencedUseConstant
@@ -62,25 +65,15 @@ final class ValueProvider
         get => $this->getVarFromEnv(ACTIVITY_LOG_APP_PASSWD_KEY);
     }
 
-    public string $loginPasswdFilename {
-        get => join(\DIRECTORY_SEPARATOR, [
-            $this->secretsDir,
-            $this->getVarFromEnv(LOGIN_PASSWD_FILENAME),
-        ]);
+    public string $secretsUser {
+        get => $this->getVarFromEnv(SECRETS_USER);
     }
 
-    /**
-     * @suppress PhanUnreferencedPrivateProperty
-     */
-    private string $secretsDir {
-        get => $this->getVarFromEnv(SECRETS_DIR);
-    }
-
-    public string $secretsBaseUri {
+    public string $secretsTlsBaseUri {
         get => \sprintf(
             "%s:%s/v1/",
-            $this->getVarFromEnv(SECRETS_SERVICE_HOST),
-            $this->getVarFromEnv(SECRETS_SERVICE_PORT),
+            $this->getVarFromEnv(SECRETS_SERVICE_TLS_HOST),
+            $this->getVarFromEnv(SECRETS_SERVICE_TLS_PORT),
         );
     }
 
@@ -102,14 +95,7 @@ final class ValueProvider
     }
 
     public string $secretsServiceLoginPath {
-        get =>
-        join(
-            "/",
-            [
-                $this->getVarFromEnv(SECRETS_LOGIN_PATH),
-                $this->getVarFromEnv(SECRETS_LOGIN_KEY),
-            ]
-        );
+        get => $this->getVarFromEnv(SECRETS_LOGIN_PATH);
     }
 
     public int $secretsTokenTtl {
@@ -119,6 +105,15 @@ final class ValueProvider
     public int $secretsValueTtl {
         get => $this->getNumericVarFromEnv(SECRETS_VALUE_TTL);
     }
+
+    public string $sslKey {
+        get => $this->getVarFromEnv(SSL_KEY);
+    }
+
+    public string $sslCert {
+        get => $this->getVarFromEnv(SSL_CERT);
+    }
+
     // phpcs:enable
 
     /**

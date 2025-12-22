@@ -29,18 +29,17 @@ final class RemarksForMonth extends TenantData
     #[Min(2023)]
     #[Max(2026)]
     #[Hidden]
-    public int $year;
+    public string $year;
 
-    #[MaxLength(2100)]
+    #[MaxLength(0x1000)]
     public string $remarks = "";
 
     public function create(string $tenantId): void
     {
-        $this->tenantId = $tenantId;
         $this->id = self::getIdFromMonth($this->year, $this->month, $tenantId);
     }
 
-    public static function getIdFromMonth(int $year, int $month, string $tenantId): string
+    public static function getIdFromMonth(string $year, int $month, string $tenantId): string
     {
         return sprintf("%s-%d-%02d", $tenantId, $year, $month);
     }

@@ -9,7 +9,7 @@ final readonly class RemarksForMonthDataProvider
     public static function validData(): array
     {
         return [
-            [str_repeat("a", 20), str_repeat("a", 100), 12, 2025, str_repeat("a", 100)]
+            [str_repeat("a", 20), str_repeat("a", 100), 12, "2025", str_repeat("a", 100)]
         ];
     }
 

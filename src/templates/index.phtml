@@ -36,15 +36,13 @@ use function EricFortmeyer\ActivityLog\UserInterface\HTMLElements\head;
                     </ul>
                     <ul>
                         <li>
-                            <a href="#" style="float: right;" id="profile-dialog-open-button">
-                                <span style="box-sizing: border-box;">
-                                    <img
-                                        src="<?= $view->user->picture  ?>"
-                                        alt="Avatar of <?= $view->user->name ?>"
-                                        width="32"
-                                        height="32"
-                                        style="border-radius: 50%;" />
-                                </span>
+                            <a href="#" id="profile-dialog-open-button">
+                                <img
+                                    src="<?= $view->user->picture  ?>"
+                                    alt="Avatar of <?= $view->user->name ?>"
+                                    width="32"
+                                    height="32"
+                                    data-style="avatar">
                             </a>
                         </li>
                     </ul>
@@ -79,7 +77,7 @@ use function EricFortmeyer\ActivityLog\UserInterface\HTMLElements\head;
                                 <header>
                                     <h3>
                                         Activity on <?= $entry->getDate() ?>
-                                        <form data-style="delete-button" method="POST" action="<?= $view->getEntryDeleteUrl($entry) ?>" style="display: inline;">
+                                        <form data-style="delete-button" method="POST" action="<?= $view->getEntryDeleteUrl($entry) ?>">
                                             <button type="submit" class="danger">X</button>
                                         </form>
                                     </h3>
@@ -99,54 +97,54 @@ use function EricFortmeyer\ActivityLog\UserInterface\HTMLElements\head;
                         <div class="grid">
                             <?= formInput(
                                 name: "month",
-                                label: $view->currentEntry->getLabel('month'),
-                                type: $view->currentEntry->getInputType('month'),
+                                label: $view->currentEntry->getLabel("month"),
+                                type: $view->currentEntry->getInputType("month"),
                                 value: $view->currentEntry->month,
-                                placeholder: 'Month',
-                                errorMessage: $view->currentEntry->getFieldErrorMessage('month', stringToAppend: ' ⚠'),
-                                isInvalid: $view->currentEntry->hasError('month')
+                                placeholder: "Month",
+                                errorMessage: $view->currentEntry->getFieldErrorMessage("month", stringToAppend: " ⚠"),
+                                isInvalid: $view->currentEntry->hasError("month")
                             )
                             ?>
                             <?= formInput(
                                 name: "dayOfMonth",
-                                label: $view->currentEntry->getLabel('dayOfMonth'),
-                                type: $view->currentEntry->getInputType('dayOfMonth'),
+                                label: $view->currentEntry->getLabel("dayOfMonth"),
+                                type: $view->currentEntry->getInputType("dayOfMonth"),
                                 value: $view->currentEntry->dayOfMonth,
-                                placeholder: 'Day of Month',
-                                errorMessage: $view->currentEntry->getFieldErrorMessage('dayOfMonth', stringToAppend: ' ⚠'),
-                                isInvalid: $view->currentEntry->hasError('dayOfMonth')
+                                placeholder: "Day of Month",
+                                errorMessage: $view->currentEntry->getFieldErrorMessage("dayOfMonth", stringToAppend: " ⚠"),
+                                isInvalid: $view->currentEntry->hasError("dayOfMonth")
                             )
                             ?>
                             <?= formInput(
                                 name: "year",
-                                label: $view->currentEntry->getLabel('year'),
-                                type: $view->currentEntry->getInputType('year'),
+                                label: $view->currentEntry->getLabel("year"),
+                                type: $view->currentEntry->getInputType("year"),
                                 value: $view->currentEntry->year,
-                                placeholder: 'Year',
-                                errorMessage: $view->currentEntry->getFieldErrorMessage('year', stringToAppend: ' ⚠'),
-                                isInvalid: $view->currentEntry->hasError('year')
+                                placeholder: "Year",
+                                errorMessage: $view->currentEntry->getFieldErrorMessage("year", stringToAppend: " ⚠"),
+                                isInvalid: $view->currentEntry->hasError("year")
                             )
                             ?>
                         </div>
                         <div class="grid">
                             <?= formInput(
                                 name: "hours",
-                                label: $view->currentEntry->getLabel('hours'),
-                                type: $view->currentEntry->getInputType('hours'),
+                                label: $view->currentEntry->getLabel("hours"),
+                                type: $view->currentEntry->getInputType("hours"),
                                 value: $view->currentEntry->hours,
-                                placeholder: 'Hours',
-                                errorMessage: $view->currentEntry->getFieldErrorMessage('hours', stringToAppend: ' ⚠'),
-                                isInvalid: $view->currentEntry->hasError('hours')
+                                placeholder: "Hours",
+                                errorMessage: $view->currentEntry->getHoursErrorMessage(),
+                                isInvalid: $view->currentEntry->hasHoursError()
                             )
                             ?>
                             <?= formInput(
                                 name: "minutes",
-                                label: $view->currentEntry->getLabel('minutes'),
-                                type: $view->currentEntry->getInputType('minutes'),
+                                label: $view->currentEntry->getLabel("minutes"),
+                                type: $view->currentEntry->getInputType("minutes"),
                                 value: $view->currentEntry->minutes,
-                                placeholder: 'Minutes',
-                                errorMessage: $view->currentEntry->getFieldErrorMessage('minutes', stringToAppend: ' ⚠'),
-                                isInvalid: $view->currentEntry->hasError('minutes')
+                                placeholder: "Minutes",
+                                errorMessage: $view->currentEntry->getFieldErrorMessage("minutes", stringToAppend: " ⚠"),
+                                isInvalid: $view->currentEntry->hasError("minutes")
                             )
                             ?>
                         </div>
@@ -182,9 +180,16 @@ use function EricFortmeyer\ActivityLog\UserInterface\HTMLElements\head;
                     <?php if ($view->isEditingRemarks()): ?>
                         <input type="hidden" id="remarks-id" name="id" value="<?= $view->getRemarksId() ?>" />
                     <?php endif ?>
+                    <input type="hidden" id="remarks-tenant-id" name="tenantId" value="<?= $view->tenantId ?>" />
                     <input type="hidden" id="remarks-month" name="month" value="<?= $view->getRemarksMonth() ?>" />
                     <input type="hidden" id="remarks-year" name="year" value="<?= $view->getRemarksYear() ?>" />
-                    <textarea id="remarks" name="remarks" rows="6" cols="50" placeholder="Add remarks here..."><?= $view->getRemarksForCurrentMonth() ?></textarea>
+                    <textarea
+                        id="remarks"
+                        name="remarks"
+                        rows="6"
+                        cols="50"
+                        maxlength="<?= 0x1000 ?>"
+                        placeholder="Add remarks here..."><?= $view->getRemarksForCurrentMonth() ?></textarea>
                     <button type="submit">Save</button>
                 </form>
             </article>
@@ -205,7 +210,12 @@ use function EricFortmeyer\ActivityLog\UserInterface\HTMLElements\head;
                 <?php endif ?>
                 <form method="get" action="#">
                     <label for="report-remarks">Remarks</label>
-                    <textarea readonly id="report-remarks" name="remarks" rows="6" cols="50"><?= $view->getRemarksForCurrentMonth() ?></textarea>
+                    <textarea
+                        readonly
+                        id="report-remarks"
+                        name="remarks"
+                        rows="6"
+                        cols="50"><?= $view->getRemarksForCurrentMonth() ?></textarea>
                 </form>
             </article>
         </dialog>
@@ -221,6 +231,7 @@ use function EricFortmeyer\ActivityLog\UserInterface\HTMLElements\head;
                 <form method="post" action="/credit-hours">
                     <label for="credit-hours">Hours</label>
                     <input type="number" id="credit-hours" name="hours" min="0" value="<?= $view->getCreditHours() ?>" />
+                    <input type="hidden" id="remarks-tenant-id" name="tenantId" value="<?= $view->tenantId ?>" />
                     <input type="hidden" id="credit-hours-month" name="month" value="<?= $view->getRemarksMonth() ?>" />
                     <input type="hidden" id="credit-hours-year" name="year" value="<?= $view->getRemarksYear() ?>" />
                     <button type="submit">Save</button>

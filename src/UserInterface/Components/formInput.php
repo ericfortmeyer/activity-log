@@ -3,6 +3,7 @@
 namespace EricFortmeyer\ActivityLog\UserInterface\Components;
 
 use Phpolar\Model\InputTypes;
+use Symfony\Component\Console\Input\Input;
 
 /**
  * @codeCoverageIgnore
@@ -19,7 +20,7 @@ function formInput(
     bool $required = false
 ): string {
     $requiredAttr = $required ? "required" : "";
-    $placeholder = $isInvalid ? $errorMessage : $placeholder;
+    $placeholder = $isInvalid && $type !== InputTypes::Number ? $errorMessage : $placeholder;
     $type = $type->asString();
     $min = $type === InputTypes::Number->asString() ? "min=\"0\"" : "";
     $max = sprintf(
@@ -32,6 +33,9 @@ function formInput(
             default => PHP_INT_MAX,
         },
     );
+    $numberErrorMessage = $isInvalid && $name === "hours" ? <<<HTML
+    <span style="color: var(--pico-del-color);">{$errorMessage}</span>
+    HTML : "";
 
     return $type === InputTypes::Number->asString() ? <<<HTML
     <div class="form-group">
@@ -47,6 +51,7 @@ function formInput(
             {$selectValAttr}
             placeholder="{$placeholder}"
         />
+        {$numberErrorMessage}
     </div>
     HTML : <<<HTML
     <div class="form-group">

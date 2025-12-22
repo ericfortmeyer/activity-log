@@ -23,12 +23,13 @@ final class RemarksForMonthTest extends TestCase
         string $id,
         string $tenantId,
         int $month,
-        int $year,
+        string $year,
         string $remarks,
     ) {
         $sut = new RemarksForMonth(
             compact(
                 "id",
+                "tenantId",
                 "year",
                 "month",
             )
@@ -46,7 +47,7 @@ final class RemarksForMonthTest extends TestCase
         string $id,
         string $tenantId,
         int $month,
-        int $year,
+        string $year,
         string $remarks,
     ) {
         $sut = new RemarksForMonth(
@@ -71,13 +72,13 @@ final class RemarksForMonthTest extends TestCase
     #[TestWith([
         "FAKE_TENANT_ID-2025-01",
         "FAKE_TENANT_ID",
-        2025,
+        "2025",
         1
     ])]
     public function ijoadfs(
         string $expectedResult,
         string $tenantId,
-        int $year,
+        string $year,
         int $month,
     ) {
         $result = RemarksForMonth::getIdFromMonth(

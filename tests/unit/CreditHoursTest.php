@@ -28,6 +28,7 @@ final class CreditHoursTest extends TestCase
         $sut = new CreditHours(
             compact(
                 "id",
+                "tenantId",
                 "year",
                 "month",
             )
@@ -43,13 +44,13 @@ final class CreditHoursTest extends TestCase
     #[TestWith([
         "FAKE_TENANT_ID-2025-01",
         "FAKE_TENANT_ID",
-        2025,
+        "2025",
         1
     ])]
     public function ijoadfs(
         string $expectedResult,
         string $tenantId,
-        int $year,
+        string $year,
         int $month,
     ) {
         $result = CreditHours::getIdFromMonth(

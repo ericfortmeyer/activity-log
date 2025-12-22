@@ -221,15 +221,15 @@ final class TimeEntryTest extends TestCase
     }
 
     #[Test]
-    #[TestWith([10, 2025, 10, 2025, true])]
-    #[TestWith([10, 2025, 10, 2026, false])]
-    #[TestWith([10, 2025, 1, 2025, false])]
+    #[TestWith([10, "2025", 10, "2025", true])]
+    #[TestWith([10, "2025", 10, "2026", false])]
+    #[TestWith([10, "2025", 1,  "2025", false])]
     #[TestDox("Shall support filtering of instances by month and year")]
     public function foadisjx(
         int $month,
-        int $year,
+        string $year,
         int $testMonth,
-        int $testYear,
+        string $testYear,
         bool $expectedResult,
     ): void {
         $entry = new TimeEntry(compact("month", "year"));

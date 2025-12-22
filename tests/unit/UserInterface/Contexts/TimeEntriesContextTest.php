@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace EricFortmeyer\ActivityLog\UserInterface\Contexts;
 
+use DateTimeImmutable;
 use EricFortmeyer\ActivityLog\CreditHours;
 use EricFortmeyer\ActivityLog\MonthFilters;
 use EricFortmeyer\ActivityLog\RemarksForMonth;
@@ -26,6 +27,7 @@ final class TimeEntriesContextTest extends TestCase
     {
         $sut = new TimeEntriesContext(
             user: new User("", "", "", ""),
+            tenantId: "",
             timeEntries: []
         );
 
@@ -38,6 +40,7 @@ final class TimeEntriesContextTest extends TestCase
     {
         $sut = new TimeEntriesContext(
             user: new User("", "", "", ""),
+            tenantId: "",
             timeEntries: [new TimeEntry()]
         );
 
@@ -51,6 +54,7 @@ final class TimeEntriesContextTest extends TestCase
         $creditHours = new CreditHours($creditHoursData);
         $sut = new TimeEntriesContext(
             user: new User("", "", "", ""),
+            tenantId: "",
             timeEntries: [],
             creditHours: $creditHours,
         );
@@ -66,6 +70,7 @@ final class TimeEntriesContextTest extends TestCase
         $creditHours = new CreditHours($creditHoursData);
         $sut = new TimeEntriesContext(
             user: new User("", "", "", ""),
+            tenantId: "",
             timeEntries: [new TimeEntry()],
             creditHours: $creditHours,
         );
@@ -81,6 +86,7 @@ final class TimeEntriesContextTest extends TestCase
         $creditHours = new CreditHours($creditHoursData);
         $sut = new TimeEntriesContext(
             user: new User("", "", "", ""),
+            tenantId: "",
             timeEntries: [new TimeEntry()],
             creditHours: $creditHours,
         );
@@ -95,6 +101,7 @@ final class TimeEntriesContextTest extends TestCase
     {
         $sut = new TimeEntriesContext(
             user: new User("", "", "", ""),
+            tenantId: "",
             timeEntries: array_map(
                 static fn(array $timeEntryData) => new TimeEntry($timeEntryData),
                 $timeEntriesData,
@@ -110,6 +117,7 @@ final class TimeEntriesContextTest extends TestCase
     {
         $sut = new TimeEntriesContext(
             user: new User("", "", "", ""),
+            tenantId: "",
             timeEntries: [],
         );
 
@@ -126,6 +134,7 @@ final class TimeEntriesContextTest extends TestCase
     {
         $sut = new TimeEntriesContext(
             user: new User("", "", "", ""),
+            tenantId: "",
             timeEntries: [],
         );
 
@@ -142,6 +151,7 @@ final class TimeEntriesContextTest extends TestCase
     {
         $sut = new TimeEntriesContext(
             user: new User("", "", "", ""),
+            tenantId: "",
             timeEntries: [],
             remarks: new RemarksForMonth($remarksData),
         );
@@ -156,6 +166,7 @@ final class TimeEntriesContextTest extends TestCase
     {
         $sut = new TimeEntriesContext(
             user: new User("", "", "", ""),
+            tenantId: "",
             timeEntries: [],
             remarks: new RemarksForMonth($remarksData),
         );
@@ -170,6 +181,7 @@ final class TimeEntriesContextTest extends TestCase
     {
         $sut = new TimeEntriesContext(
             user: new User("", "", "", ""),
+            tenantId: "",
             timeEntries: [],
             remarks: new RemarksForMonth($remarksData),
         );
@@ -184,6 +196,7 @@ final class TimeEntriesContextTest extends TestCase
     {
         $sut = new TimeEntriesContext(
             user: new User("", "", "", ""),
+            tenantId: "",
             timeEntries: [],
             filters: new MonthFilters($filters),
         );
@@ -193,24 +206,26 @@ final class TimeEntriesContextTest extends TestCase
 
     #[Test]
     #[TestDox("Shall get month filter default")]
-    #[TestWith(["expectedMonthFilterDefault" => 0])]
-    public function cangetmonthfilterdefault(int $expectedMonthFilterDefault)
+    public function cangetmonthfilterdefault()
     {
         $sut = new TimeEntriesContext(
             user: new User("", "", "", ""),
+            tenantId: "",
             timeEntries: [],
         );
+        $expectedMonthFilterDefault = new DateTimeImmutable("now")->format("m");
 
-        $this->assertSame($expectedMonthFilterDefault, $sut->getMonthFilter());
+        $this->assertSame((int) $expectedMonthFilterDefault, $sut->getMonthFilter());
     }
 
     #[Test]
     #[TestDox("Shall get year filter")]
-    #[TestWith(["filters" => ["filterYear" => 1], "expectedYearFilter" => 1])]
-    public function cangetyearfilter(array $filters, int $expectedYearFilter)
+    #[TestWith(["filters" => ["filterYear" => 1], "expectedYearFilter" => "1"])]
+    public function cangetyearfilter(array $filters, string $expectedYearFilter)
     {
         $sut = new TimeEntriesContext(
             user: new User("", "", "", ""),
+            tenantId: "",
             timeEntries: [],
             filters: new MonthFilters($filters),
         );
@@ -220,11 +235,12 @@ final class TimeEntriesContextTest extends TestCase
 
     #[Test]
     #[TestDox("Shall get year filter default")]
-    #[TestWith(["expectedYearFilterDefault" => 0])]
-    public function cangetyearfilterdefault(int $expectedYearFilterDefault)
+    #[TestWith(["expectedYearFilterDefault" => "2025"])]
+    public function cangetyearfilterdefault(string $expectedYearFilterDefault)
     {
         $sut = new TimeEntriesContext(
             user: new User("", "", "", ""),
+            tenantId: "",
             timeEntries: [],
         );
 
@@ -241,6 +257,7 @@ final class TimeEntriesContextTest extends TestCase
     {
         $sut = new TimeEntriesContext(
             user: new User("", "", "", ""),
+            tenantId: "",
             timeEntries: [],
             filters: new MonthFilters($filters),
         );
@@ -265,6 +282,7 @@ final class TimeEntriesContextTest extends TestCase
         $timeEntry = new TimeEntry($timeEntryData);
         $sut = new TimeEntriesContext(
             user: new User("", "", "", ""),
+            tenantId: "",
             timeEntries: [],
             filters: new MonthFilters($filters),
             deleteUrl: $deleteUrl,

@@ -18,7 +18,7 @@ final class MonthFilters extends AbstractModel
 {
     #[Max(2100)]
     #[Min(2010)]
-    public int|null $filterYear = null;
+    public string|null $filterYear = null;
 
     #[Max(12)]
     #[Min(1)]
@@ -38,8 +38,8 @@ final class MonthFilters extends AbstractModel
         return $this->filterMonth ?? (int) new DateTimeImmutable("now")->format("m");
     }
 
-    public function getYear(): int
+    public function getYear(): string
     {
-        return $this->filterYear ?? (int) new DateTimeImmutable("now")->format("Y");
+        return $this->filterYear ?? new DateTimeImmutable("now")->format("Y");
     }
 }

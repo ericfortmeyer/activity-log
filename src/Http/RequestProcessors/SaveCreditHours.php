@@ -59,12 +59,18 @@ final class SaveCreditHours extends AbstractTenantBasedRequestProcessor
             tenantId: $this->getTenantId(),
         );
         $currentEntry = new TimeEntry();
+        TimeEntry::setUninitializedValues(
+            $currentEntry,
+            $creditHours->month,
+            $creditHours->year,
+        );
         return (string) $this->templateEngine->apply(
             "index",
             new HtmlSafeContext(
                 $remarks instanceof NotFound
                     ? new TimeEntriesContext(
                         timeEntries: $timeEntries,
+                        tenantId: $this->getTenantId(),
                         currentEntry: $currentEntry,
                         filters: $monthFilters,
                         creditHours: $creditHours,
@@ -72,6 +78,7 @@ final class SaveCreditHours extends AbstractTenantBasedRequestProcessor
                     )
                     : new TimeEntriesContext(
                         timeEntries: $timeEntries,
+                        tenantId: $this->getTenantId(),
                         currentEntry: $currentEntry,
                         filters: $monthFilters,
                         remarks: $remarks,

@@ -22,16 +22,15 @@ readonly class SecretsClient
     private const AUTH_CLIENT_TOKEN_CACHE_KEY = "auth_client_token";
 
     public function __construct(
-        private ClientInterface $client,
+        private ClientInterface $tlsClient,
         private LoggerInterface $logger,
         #[SensitiveParameter]
         private string $secretServiceAppPath,
         #[SensitiveParameter]
         private string $secretServiceLoginPath,
         #[SensitiveParameter]
-        private string $loginPasswdFilename,
+        private string $secretsUser,
         private bool $secretsCacheEnabled,
-        private int $tokenTtl,
         private int $valueTtl,
     ) {}
 
@@ -52,7 +51,7 @@ readonly class SecretsClient
         if (\apcu_exists(self::AUTH_CLIENT_TOKEN_CACHE_KEY)) {
             $authClientToken = \apcu_fetch(self::AUTH_CLIENT_TOKEN_CACHE_KEY);
             if ($authClientToken !== false) {
-                $valueResponse = $this->client->sendRequest(
+                $valueResponse = $this->tlsClient->sendRequest(
                     new Request(
                         method: "GET",
                         uri: $this->secretServiceAppPath,
@@ -103,24 +102,21 @@ readonly class SecretsClient
 
         // The client token was not cached so let's fetch it.
 
-        $password = file_get_contents($this->loginPasswdFilename);
-        if ($password === false) {
-            $errors = error_get_last();
-            $this->logger->critical("File read error", $errors !== null ?  $errors : []);
-            // we can't login to the secret store, abort
+        $json = json_encode([
+            "name" => $this->secretsUser,
+        ]);
+
+
+        if ($json === false) {
+            $this->logger->critical("JSON encoding failed");
             return "";
         }
 
-        $json = json_encode([
-            "password" => trim($password),
-            "token_type" => "service",
-            "token_ttl" => "1h",
-        ]);
-        $authClientTokenResponse = $this->client->sendRequest(
+        $authClientTokenResponse = $this->tlsClient->sendRequest(
             new Request(
                 method: "POST",
                 uri: $this->secretServiceLoginPath,
-                body: $json !== false ? $json : null,
+                body: $json,
             )
         );
 
@@ -143,13 +139,13 @@ readonly class SecretsClient
             $authClientToken = $jsonResponse["auth"]["client_token"];
 
             // cache the client token
-            \apcu_store(
-                self::AUTH_CLIENT_TOKEN_CACHE_KEY,
-                $authClientToken,
-                $this->tokenTtl,
-            );
+            // \apcu_store(
+            //     self::AUTH_CLIENT_TOKEN_CACHE_KEY,
+            //     $authClientToken,
+            //     $this->tokenTtl,
+            // );
 
-            $valueResponse = $this->client->sendRequest(
+            $valueResponse = $this->tlsClient->sendRequest(
                 new Request(
                     method: "GET",
                     uri: $this->secretServiceAppPath,

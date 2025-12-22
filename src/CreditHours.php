@@ -39,7 +39,7 @@ final class CreditHours extends TenantData
     #[Hidden]
     #[Min(1900)]
     #[Max(3000)]
-    public int $year;
+    public string $year;
 
 
     public function create(string $tenantId): void
@@ -48,7 +48,7 @@ final class CreditHours extends TenantData
         $this->id = self::getIdFromMonth($this->year, $this->month, $tenantId);
     }
 
-    public static function getIdFromMonth(int $year, int $month, string $tenantId): string
+    public static function getIdFromMonth(string $year, int $month, string $tenantId): string
     {
         return sprintf("%s-%d-%02d", $tenantId, $year, $month);
     }

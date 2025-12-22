@@ -15,7 +15,7 @@ final readonly class Migration1764657837743CreateCreditHoursTable implements Mig
         return $connection
             ->exec(
                 <<<SQL
-                CREATE TABLE IF NOT EXISTS`credit-hours`
+                CREATE TABLE IF NOT EXISTS `credit-hours`
                 (
                     `id` VARCHAR(100) NOT NULL PRIMARY KEY,
                     `tenantId` VARCHAR(100) NOT NULL,

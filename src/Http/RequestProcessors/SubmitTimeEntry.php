@@ -63,12 +63,14 @@ final class SubmitTimeEntry extends AbstractTenantBasedRequestProcessor
                 $remarks instanceof NotFound
                     ? new TimeEntriesContext(
                         timeEntries: $timeEntries,
+                        tenantId: $this->getTenantId(),
                         currentEntry: $entry,
                         filters: $monthFilters,
                         user: $this->user
                     )
                     : new TimeEntriesContext(
                         timeEntries: $timeEntries,
+                        tenantId: $this->getTenantId(),
                         currentEntry: $entry,
                         filters: $monthFilters,
                         remarks: $remarks,

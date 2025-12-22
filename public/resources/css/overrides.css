@@ -3,6 +3,14 @@
     background-color: var(--pico-del-color);
 }
 
+[data-style=avatar] {
+    border-radius: 50%;
+}
+
+#profile-dialog-open-button {
+    float: right;
+}
+
 form[data-style=delete-button] {
     display: inline;
     margin: 0;

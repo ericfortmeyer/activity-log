@@ -19,7 +19,7 @@ function timeEntriesNav(TimeEntriesContext $view): string
         </ul>
         <ul>
             <li class="{$view->getCurrentMonthButtonClass()}">
-                <a href="/" data-tooltip="Current Month" role="button"> &#x00B7; </a>
+                <a href="/" data-tooltip="Current Month" role="button">&#x00B7;</a>
             </li>
             <li class="{$view->getNextMonthButtonClass()}">
                 <a href="/?{$view->getNextMonthFilter()}" data-tooltip="Next" role="button">&#x23F5;</a>
