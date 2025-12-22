@@ -2,6 +2,12 @@
 
 This file documents changes to the Activity Log application.
 
+## 0.8.2 (2025-12-21)
+
+### Fix
+
+- increase avatar size (#61)
+
 ## 0.8.1 (2025-12-21)
 
 ### Fix
