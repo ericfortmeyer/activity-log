@@ -81,7 +81,7 @@ readonly class TimeEntryService
     /**
      * @return TimeEntry[]
      */
-    public function getAllByMonth(int $month, int $year, string $tenantId): array
+    public function getAllByMonth(int $month, string $year, string $tenantId): array
     {
         return array_filter(
             $this->getAll($tenantId),

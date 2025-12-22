@@ -104,6 +104,7 @@ final class GetTimeEntries extends AbstractTenantBasedRequestProcessor
             $remarks instanceof NotFound && $creditHours instanceof NotFound =>
             new TimeEntriesContext(
                 timeEntries: $timeEntries,
+                tenantId: $this->getTenantId(),
                 currentEntry: $timeEntry,
                 filters: $monthFilters,
                 user: $this->user
@@ -111,6 +112,7 @@ final class GetTimeEntries extends AbstractTenantBasedRequestProcessor
             $creditHours instanceof CreditHours && $remarks instanceof RemarksForMonth =>
             new TimeEntriesContext(
                 timeEntries: $timeEntries,
+                tenantId: $this->getTenantId(),
                 currentEntry: $timeEntry,
                 filters: $monthFilters,
                 remarks: $remarks,
@@ -120,6 +122,7 @@ final class GetTimeEntries extends AbstractTenantBasedRequestProcessor
             $creditHours instanceof CreditHours && $remarks instanceof NotFound =>
             new TimeEntriesContext(
                 timeEntries: $timeEntries,
+                tenantId: $this->getTenantId(),
                 currentEntry: $timeEntry,
                 filters: $monthFilters,
                 creditHours: $creditHours,
@@ -128,13 +131,14 @@ final class GetTimeEntries extends AbstractTenantBasedRequestProcessor
             $remarks instanceof RemarksForMonth && $creditHours instanceof NotFound =>
             new TimeEntriesContext(
                 timeEntries: $timeEntries,
+                tenantId: $this->getTenantId(),
                 currentEntry: $timeEntry,
                 filters: $monthFilters,
                 remarks: $remarks,
                 user: $this->user
             ),
             default =>
-            new TimeEntriesContext(user: $this->user)
+            new TimeEntriesContext(user: $this->user, tenantId: $this->getTenantId())
         };
     }
 

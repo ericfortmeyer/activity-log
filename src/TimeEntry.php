@@ -51,8 +51,8 @@ class TimeEntry extends TenantData
     #[Required]
     public int $hours;
 
-    #[Min(0)]
     #[Max(59)]
+    #[Min(0)]
     public int $minutes;
 
     #[Hidden]
@@ -73,10 +73,10 @@ class TimeEntry extends TenantData
         $this->id = uniqid();
     }
 
-    public static function setUninitializedValues(TimeEntry $timeEntry, int $month, int $year): void
+    public static function setUninitializedValues(TimeEntry $timeEntry, int $month, string $year): void
     {
         $timeEntry->month ??= $month;
-        $timeEntry->year ??= (string) $year;
+        $timeEntry->year ??= $year;
         $timeEntry->dayOfMonth ??= TimeEntry::getDefaultValue("dayOfMonth");
         $timeEntry->hours ??= 0;
         $timeEntry->minutes ??= 0;
@@ -99,6 +99,25 @@ class TimeEntry extends TenantData
             $this->hours,
             $this->minutes,
         );
+    }
+
+    public function isValid(): bool
+    {
+        return parent::isValid() && ($this->minutes === 0 && $this->hours === 0) === false;
+    }
+
+    public function hasHoursError(): bool
+    {
+        return $this->shouldValidate === true
+            && ($this->minutes === 0 && $this->hours === 0)
+            || $this->hasError("hours");
+    }
+
+    public function getHoursErrorMessage(): string
+    {
+        return ($this->minutes === 0 && $this->hours === 0)
+            ? "Either minutes or hours should be entered. ⚠"
+            : $this->getFieldErrorMessage("hours", " ⚠");
     }
 
     public static function getDefaultValue(string $field, DateTimeImmutable $date = new DateTimeImmutable("now")): mixed
@@ -124,10 +143,10 @@ class TimeEntry extends TenantData
     /**
      * @suppress PhanUnreferencedClosure
      */
-    public static function byMonthAndYear(int $month, int $year): Closure
+    public static function byMonthAndYear(int $month, string $year): Closure
     {
         return static fn(TimeEntry $timeEntry): bool =>
         $timeEntry->month === $month
-            && $timeEntry->year === (string) $year;
+            && $timeEntry->year === $year;
     }
 }

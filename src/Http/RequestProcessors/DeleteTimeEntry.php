@@ -70,12 +70,14 @@ final class DeleteTimeEntry extends AbstractTenantBasedRequestProcessor
                 $remarks instanceof NotFound
                     ? new TimeEntriesContext(
                         timeEntries: $timeEntries,
+                        tenantId: $this->getTenantId(),
                         currentEntry: $deletedEntry,
                         filters: $monthFilters,
                         user: $this->user
                     )
                     : new TimeEntriesContext(
                         timeEntries: $timeEntries,
+                        tenantId: $this->getTenantId(),
                         currentEntry: $deletedEntry,
                         filters: $monthFilters,
                         remarks: $remarks,

@@ -25,7 +25,7 @@ const SECRETS_SERVICE_PORT = "8200";
 
 
 if (getenv("ENVIRONMENT") === "DEVELOPMENT") {
-    return new PDO("sqlite::memory");
+    return new PDO("sqlite::memory:");
 }
 
 // Login

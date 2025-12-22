@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace EricFortmeyer\ActivityLog\Services;
 
-use EricFortmeyer\ActivityLog\CreditHours;
 use EricFortmeyer\ActivityLog\RemarksForMonth;
 use EricFortmeyer\ActivityLog\UnitTests\DataProviders\RemarksForMonthDataProvider;
 use Phpolar\Storage\NotFound;
@@ -70,8 +69,8 @@ final class RemarksForMonthServiceTest extends TestCase
     public function ewioqpj(
         string $tenantId,
         string $id,
-        int $year,
         int $month,
+        string $year,
         string $remarks
     ): void {
         $entry = new RemarksForMonth(compact(

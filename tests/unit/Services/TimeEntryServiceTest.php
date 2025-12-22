@@ -165,33 +165,33 @@ final class TimeEntryServiceTest extends TestCase
     #[TestWith([
         "tenantId" => "REQUESTED_TENANT",
         "requestedMonth" => 12,
-        "requestedYear" => 2025,
+        "requestedYear" => "2025",
         "expectedCount" => 1,
         "entries" => [
-            ["tenantId" => "REQUESTED_TENANT", "id" => "1", "month" => 12, "year" => 2025],
-            ["tenantId" => "REQUESTED_TENANT", "id" => "2", "month" => 12, "year" => 2021],
-            ["tenantId" => "REQUESTED_TENANT", "id" => "3", "month" => 12, "year" => 2022],
-            ["tenantId" => "REQUESTED_TENANT", "id" => "4", "month" => 2, "year" => 2025],
-            ["tenantId" => "REQUESTED_TENANT", "id" => "5", "month" => 1, "year" => 2025],
+            ["tenantId" => "REQUESTED_TENANT", "id" => "1", "month" => 12, "year" => "2025"],
+            ["tenantId" => "REQUESTED_TENANT", "id" => "2", "month" => 12, "year" => "2021"],
+            ["tenantId" => "REQUESTED_TENANT", "id" => "3", "month" => 12, "year" => "2022"],
+            ["tenantId" => "REQUESTED_TENANT", "id" => "4", "month" => 2, "year" =>  "2025"],
+            ["tenantId" => "REQUESTED_TENANT", "id" => "5", "month" => 1, "year" =>  "2025"],
         ],
     ])]
     #[TestWith([
         "tenantId" => "REQUESTED_TENANT",
         "requestedMonth" => 12,
-        "requestedYear" => 2025,
+        "requestedYear" => "2025",
         "expectedCount" => 3,
         "entries" => [
-            ["tenantId" => "REQUESTED_TENANT", "id" => "1", "month" => 12, "year" => 2025],
-            ["tenantId" => "REQUESTED_TENANT", "id" => "2", "month" => 12, "year" => 2025],
-            ["tenantId" => "REQUESTED_TENANT", "id" => "3", "month" => 12, "year" => 2025],
-            ["tenantId" => "REQUESTED_TENANT", "id" => "4", "month" => 12, "year" => 2026],
-            ["tenantId" => "REQUESTED_TENANT", "id" => "5", "month" => 1, "year" => 2025],
+            ["tenantId" => "REQUESTED_TENANT", "id" => "1", "month" => 12, "year" => "2025"],
+            ["tenantId" => "REQUESTED_TENANT", "id" => "2", "month" => 12, "year" => "2025"],
+            ["tenantId" => "REQUESTED_TENANT", "id" => "3", "month" => 12, "year" => "2025"],
+            ["tenantId" => "REQUESTED_TENANT", "id" => "4", "month" => 12, "year" => "2026"],
+            ["tenantId" => "REQUESTED_TENANT", "id" => "5", "month" => 1, "year" =>  "2025"],
         ],
     ])]
     public function adksp(
         string $tenantId,
         int $requestedMonth,
-        int $requestedYear,
+        string $requestedYear,
         int $expectedCount,
         array $entries,
     ): void {

@@ -153,12 +153,14 @@ final class EmailReportForMonth extends AbstractTenantBasedRequestProcessor
             $remarks instanceof NotFound && $creditHours instanceof NotFound =>
             new TimeEntriesContext(
                 timeEntries: $timeEntries,
+                tenantId: $this->getTenantId(),
                 filters: $monthFilters,
                 user: $this->user
             ),
             $creditHours instanceof CreditHours && $remarks instanceof NotFound =>
             new TimeEntriesContext(
                 timeEntries: $timeEntries,
+                tenantId: $this->getTenantId(),
                 filters: $monthFilters,
                 creditHours: $creditHours,
                 user: $this->user
@@ -166,6 +168,7 @@ final class EmailReportForMonth extends AbstractTenantBasedRequestProcessor
             $creditHours instanceof CreditHours && $remarks instanceof RemarksForMonth =>
             new TimeEntriesContext(
                 timeEntries: $timeEntries,
+                tenantId: $this->getTenantId(),
                 filters: $monthFilters,
                 remarks: $remarks,
                 creditHours: $creditHours,
@@ -174,12 +177,16 @@ final class EmailReportForMonth extends AbstractTenantBasedRequestProcessor
             $remarks instanceof RemarksForMonth && $creditHours instanceof NotFound =>
             new TimeEntriesContext(
                 timeEntries: $timeEntries,
+                tenantId: $this->getTenantId(),
                 filters: $monthFilters,
                 remarks: $remarks,
                 user: $this->user
             ),
             default =>
-            new TimeEntriesContext(user: $this->user)
+            new TimeEntriesContext(
+                user: $this->user,
+                tenantId: $this->getTenantId(),
+            )
         };
     }
 }

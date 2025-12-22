@@ -17,7 +17,7 @@ readonly class CreditHoursService
 
     public function save(CreditHours $creditHours, string $tenantId): void
     {
-        if (empty($creditHours->id)) {
+        if (empty($creditHours->id) === true) {
             $creditHours->create($tenantId);
             $this->storageContext->save($creditHours->id, $creditHours);
             return;

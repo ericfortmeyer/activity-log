@@ -23,6 +23,7 @@ final class TimeEntriesContext extends AbstractContext
      */
     public function __construct(
         public User $user,
+        public string $tenantId,
         public array $timeEntries = [],
         public TimeEntry $currentEntry = new TimeEntry(),
         public MonthFilters $filters = new MonthFilters(),
@@ -93,14 +94,14 @@ final class TimeEntriesContext extends AbstractContext
     public function getPreviousMonthFilter(): string
     {
         $month = $this->getMonth() === 1 ? 12 : ($this->getMonth() - 1) % 12;
-        $year = $this->getYear() - ($month === 12 ? 1 : 0);
+        $year = (int) $this->getYear() - ($month === 12 ? 1 : 0);
         return "filterMonth={$month}&filterYear={$year}";
     }
 
     public function getNextMonthFilter(): string
     {
         $month = $this->getMonth() === 11 ? 12 : ($this->getMonth() + 1) % 12;
-        $year = $this->getYear() + ($month === 1 ? 1 : 0);
+        $year = (int) $this->getYear() + ($month === 1 ? 1 : 0);
         return "filterMonth={$month}&filterYear={$year}";
     }
 
@@ -120,7 +121,7 @@ final class TimeEntriesContext extends AbstractContext
     /**
      * @suppress PhanCoalescingNeverNull
      */
-    public function getRemarksYear(): int
+    public function getRemarksYear(): string
     {
         return $this->remarks->year ?? $this->getYear();
     }
@@ -152,12 +153,12 @@ final class TimeEntriesContext extends AbstractContext
 
     public function getMonthFilter(): int
     {
-        return $this->filters->filterMonth ?? 0;
+        return $this->filters->filterMonth ?? (int)new DateTimeImmutable("now")->format("m");
     }
 
-    public function getYearFilter(): int
+    public function getYearFilter(): string
     {
-        return $this->filters->filterYear ?? 0;
+        return $this->filters->filterYear ?? new DateTimeImmutable("now")->format("Y");
     }
 
     public function getMonthQuery(): string
@@ -205,7 +206,7 @@ final class TimeEntriesContext extends AbstractContext
         $year = $this->getYear();
         return $month === TimeEntry::getDefaultValue("month")
             && $year === TimeEntry::getDefaultValue("year")
-            || $year === 0
+            || $year === "0"
             || $month === 0;
     }
 
@@ -214,7 +215,7 @@ final class TimeEntriesContext extends AbstractContext
         return $this->filters->getMonth();
     }
 
-    public function getYear(): int
+    public function getYear(): string
     {
         return $this->filters->getYear();
     }
@@ -223,7 +224,7 @@ final class TimeEntriesContext extends AbstractContext
     {
         $date = new DateTimeImmutable("now");
         $currentMonth = (int)$date->format("m");
-        $currentYear = (int)$date->format("Y");
+        $currentYear = $date->format("Y");
         $filterMonth = $this->getMonth();
         $filterYear = $this->getYear();
         return ($filterMonth >= $currentMonth && $filterYear >= $currentYear) === false;
@@ -233,7 +234,7 @@ final class TimeEntriesContext extends AbstractContext
     {
         $date = new DateTimeImmutable("now");
         $currentMonth = (int)$date->format("m");
-        $currentYear = (int)$date->format("Y");
+        $currentYear = $date->format("Y");
         $filterMonth = $this->getMonth();
         $filterYear = $this->getYear();
         return ($filterMonth < $currentMonth - 1 && $filterYear <= $currentYear);

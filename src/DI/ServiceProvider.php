@@ -46,6 +46,7 @@ use const EricFortmeyer\ActivityLog\DI\Tokens\LOGIN_MIDDLEWARE;
 use const EricFortmeyer\ActivityLog\DI\Tokens\LOGOUT_MIDDLEWARE;
 use const EricFortmeyer\ActivityLog\DI\Tokens\REMARKS_STORAGE as TokensREMARKS_STORAGE;
 use const EricFortmeyer\ActivityLog\DI\Tokens\SECRETS_CLIENT;
+use const EricFortmeyer\ActivityLog\DI\Tokens\SECRETS_TLS_CLIENT;
 use const EricFortmeyer\ActivityLog\DI\Tokens\TIME_ENTRY_STORAGE;
 
 /**
@@ -291,6 +292,15 @@ final class ServiceProvider
             $secretsClientDep = $this->container->get(SECRETS_CLIENT);
             return $secretsClientDep instanceof ClientInterface === false
                 ? throw new MissingDependencyException(SECRETS_CLIENT)
+                : $secretsClientDep;
+        }
+    }
+
+    public ClientInterface $secretsTlsClientDep {
+        get {
+            $secretsClientDep = $this->container->get(SECRETS_TLS_CLIENT);
+            return $secretsClientDep instanceof ClientInterface === false
+                ? throw new MissingDependencyException(SECRETS_TLS_CLIENT)
                 : $secretsClientDep;
         }
     }

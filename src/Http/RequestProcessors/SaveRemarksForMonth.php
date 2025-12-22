@@ -59,12 +59,18 @@ final class SaveRemarksForMonth extends AbstractTenantBasedRequestProcessor
             tenantId: $this->getTenantId(),
         );
         $currentEntry = new TimeEntry();
+        TimeEntry::setUninitializedValues(
+            $currentEntry,
+            $remarks->month,
+            $remarks->year,
+        );
         return (string) $this->templateEngine->apply(
             "index",
             new HtmlSafeContext(
                 $creditHours instanceof NotFound
                     ? new TimeEntriesContext(
                         timeEntries: $timeEntries,
+                        tenantId: $this->getTenantId(),
                         currentEntry: $currentEntry,
                         filters: $monthFilters,
                         remarks: $remarks,
@@ -72,6 +78,7 @@ final class SaveRemarksForMonth extends AbstractTenantBasedRequestProcessor
                     )
                     : new TimeEntriesContext(
                         timeEntries: $timeEntries,
+                        tenantId: $this->getTenantId(),
                         currentEntry: $currentEntry,
                         filters: $monthFilters,
                         remarks: $remarks,
