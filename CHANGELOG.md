@@ -2,6 +2,12 @@
 
 This file documents changes to the Activity Log application.
 
+## 0.8.1 (2025-12-21)
+
+### Fix
+
+- add tenant id to all post requests (#60)
+
 ## 0.8.0 (2025-12-20)
 
 ### Feat
