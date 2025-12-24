@@ -9,12 +9,16 @@ use Phpolar\Phpolar\Auth\{
 };
 use Phpolar\{
     Model\Model,
-    PurePhp\TemplateEngine,
-    PurePhp\HtmlSafeContext,
     Storage\NotFound
 };
 use EricFortmeyer\ActivityLog\{RemarksForMonth, MonthFilters, CreditHours, Tenant, TimeEntry};
-use EricFortmeyer\ActivityLog\Services\{RemarksForMonthService, CreditHoursService, TenantService, TimeEntryService};
+use EricFortmeyer\ActivityLog\Services\{
+    RemarksForMonthService,
+    CreditHoursService,
+    TemplateBinder,
+    TenantService,
+    TimeEntryService
+};
 use EricFortmeyer\ActivityLog\UserInterface\Contexts\{TimeEntriesContext, BadRequestContext};
 use EricFortmeyer\ActivityLog\Utils\Hasher;
 
@@ -30,7 +34,7 @@ final class GetTimeEntries extends AbstractTenantBasedRequestProcessor
         private readonly TimeEntryService $timeEntryService,
         private readonly RemarksForMonthService $remarksForMonthService,
         private readonly CreditHoursService $creditHoursService,
-        private readonly TemplateEngine $templateEngine,
+        private readonly TemplateBinder $templateEngine,
         readonly Hasher $hasher,
     ) {
         parent::__construct($hasher);
@@ -47,11 +51,9 @@ final class GetTimeEntries extends AbstractTenantBasedRequestProcessor
         #[Model] MonthFilters $monthFilters = new MonthFilters(),
     ): string {
         if ($monthFilters->isValid() === false) {
-            return (string) $this->templateEngine->apply(
+            return $this->templateEngine->apply(
                 "400",
-                new HtmlSafeContext(
-                    new BadRequestContext(message: "Something is wrong with the request.")
-                )
+                new BadRequestContext(message: "Something is wrong with the request.")
             );
         }
 
@@ -76,72 +78,50 @@ final class GetTimeEntries extends AbstractTenantBasedRequestProcessor
             year: $year,
             tenantId: $this->getTenantId(),
         ));
-        return (string) $this->templateEngine->apply(
+        return $this->templateEngine->apply(
             "index",
-            new HtmlSafeContext(
-                $this->getContext(
+            match (true) {
+                $remarks instanceof NotFound && $creditHours instanceof NotFound =>
+                new TimeEntriesContext(
                     timeEntries: $timeEntries,
-                    timeEntry: $timeEntry,
-                    monthFilters: $monthFilters,
+                    tenantId: $this->getTenantId(),
+                    currentEntry: $timeEntry,
+                    filters: $monthFilters,
+                    user: $this->user
+                ),
+                $creditHours instanceof CreditHours && $remarks instanceof RemarksForMonth =>
+                new TimeEntriesContext(
+                    timeEntries: $timeEntries,
+                    tenantId: $this->getTenantId(),
+                    currentEntry: $timeEntry,
+                    filters: $monthFilters,
                     remarks: $remarks,
                     creditHours: $creditHours,
-                )
-            ),
+                    user: $this->user
+                ),
+                $creditHours instanceof CreditHours && $remarks instanceof NotFound =>
+                new TimeEntriesContext(
+                    timeEntries: $timeEntries,
+                    tenantId: $this->getTenantId(),
+                    currentEntry: $timeEntry,
+                    filters: $monthFilters,
+                    creditHours: $creditHours,
+                    user: $this->user,
+                ),
+                $remarks instanceof RemarksForMonth && $creditHours instanceof NotFound =>
+                new TimeEntriesContext(
+                    timeEntries: $timeEntries,
+                    tenantId: $this->getTenantId(),
+                    currentEntry: $timeEntry,
+                    filters: $monthFilters,
+                    remarks: $remarks,
+                    user: $this->user
+                ),
+                default =>
+                new TimeEntriesContext(user: $this->user, tenantId: $this->getTenantId())
+            }
         );
     }
-
-    /**
-     * @param TimeEntry[] $timeEntries
-     */
-    private function getContext(
-        array $timeEntries,
-        TimeEntry $timeEntry,
-        MonthFilters $monthFilters,
-        RemarksForMonth| NotFound $remarks,
-        CreditHours|NotFound $creditHours,
-    ): TimeEntriesContext {
-        return match (true) {
-            $remarks instanceof NotFound && $creditHours instanceof NotFound =>
-            new TimeEntriesContext(
-                timeEntries: $timeEntries,
-                tenantId: $this->getTenantId(),
-                currentEntry: $timeEntry,
-                filters: $monthFilters,
-                user: $this->user
-            ),
-            $creditHours instanceof CreditHours && $remarks instanceof RemarksForMonth =>
-            new TimeEntriesContext(
-                timeEntries: $timeEntries,
-                tenantId: $this->getTenantId(),
-                currentEntry: $timeEntry,
-                filters: $monthFilters,
-                remarks: $remarks,
-                creditHours: $creditHours,
-                user: $this->user
-            ),
-            $creditHours instanceof CreditHours && $remarks instanceof NotFound =>
-            new TimeEntriesContext(
-                timeEntries: $timeEntries,
-                tenantId: $this->getTenantId(),
-                currentEntry: $timeEntry,
-                filters: $monthFilters,
-                creditHours: $creditHours,
-                user: $this->user,
-            ),
-            $remarks instanceof RemarksForMonth && $creditHours instanceof NotFound =>
-            new TimeEntriesContext(
-                timeEntries: $timeEntries,
-                tenantId: $this->getTenantId(),
-                currentEntry: $timeEntry,
-                filters: $monthFilters,
-                remarks: $remarks,
-                user: $this->user
-            ),
-            default =>
-            new TimeEntriesContext(user: $this->user, tenantId: $this->getTenantId())
-        };
-    }
-
 
     private function initTenantIfNotExists(): void
     {

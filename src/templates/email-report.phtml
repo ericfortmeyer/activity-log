@@ -1,0 +1,23 @@
+<?php
+
+declare(strict_types=1);
+
+use EricFortmeyer\ActivityLog\UserInterface\Contexts\EmailReportContext;
+
+(function (EmailReportContext $view) {
+?>
+<p>
+    <strong>Total:</strong> <?= $view->getTotalHours() ?> <?= $view->getHoursText() ?>
+</p>
+<?php if ($view->shouldShowCreditHours()): ?>
+    <p>
+        <strong>Credit:</strong> <?= $view->getCreditHours() ?> <?= $view->getCreditHoursText() ?>
+    </p>
+<?php endif ?>
+<?php if ($view->hasRemarks()): ?>
+    <p>
+        <strong>Remarks:</strong> <?= $view->getRemarksForCurrentMonth() ?>
+    </p>
+<?php endif ?>
+<?php
+})($this);

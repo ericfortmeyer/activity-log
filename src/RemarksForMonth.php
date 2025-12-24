@@ -11,9 +11,6 @@ use Phpolar\{
 };
 use Phpolar\Model\EntityName;
 
-/**
- * @phan-file-suppress PhanReadOnlyPublicProperty
- */
 #[EntityName("remarks")]
 final class RemarksForMonth extends TenantData
 {

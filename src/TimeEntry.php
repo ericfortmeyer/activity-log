@@ -19,9 +19,6 @@ use Phpolar\Validators\{
     Required,
 };
 
-/**
- * @phan-file-suppress PhanReadOnlyPublicProperty
- */
 #[EntityName("time-entry")]
 class TimeEntry extends TenantData
 {
@@ -58,14 +55,16 @@ class TimeEntry extends TenantData
     #[Hidden]
     // phpcs:disable
     public DateTimeImmutable $createdOn {
-        set(string | DateTimeImmutable $value) {
-            if (is_string($value) === true) {
-                $value = new DateTimeImmutable($value);
-            }
-            $value = $value;
+        set(string|DateTimeImmutable $value) {
+            $this->createdOnVal  = match(true) {
+                $value instanceof DateTimeImmutable => $value,
+                default => new DateTimeImmutable($value),
+            };
         }
-        get => $this->createdOn ?? new DateTimeImmutable("now");
+        get => $this->createdOnVal ?? new DateTimeImmutable("now");
     }
+
+    private DateTimeImmutable $createdOnVal;
     // phpcs:enable
 
     public function create(): void

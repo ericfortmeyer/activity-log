@@ -64,10 +64,10 @@
     "squizlabs/php_codesniffer": "^4"
   },
   "scripts": {
-    "analyze:dead-code": "@analyze:strict --color-scheme=light --config-file=.phan/config_deadcode.php",
+    "analyze:dead-code": "@analyze:strict --config-file=.phan/config_deadcode.php",
     "analyze:strict": [
       "@putenv XDEBUG_MODE=off",
-      "phan --no-progress-bar --strict-type-checking --analyze-twice --color --output-mode=text --color-scheme=light"
+      "phan --no-progress-bar --strict-type-checking --analyze-twice --color --output-mode=text --color-scheme=light --load-baseline=.phan/baseline.php"
     ],
     "analyze": "@phpstan --memory-limit=256M",
     "cbf": "phpcbf --exclude=Squiz.Functions.MultiLineFunctionDeclaration,Squiz.WhiteSpace.ScopeClosingBrace --ignore='*DataProviders*,*ServiceProvider*'",

@@ -7,6 +7,7 @@ namespace EricFortmeyer\ActivityLog\Http\RequestProcessors;
 use EricFortmeyer\ActivityLog\MonthFilters;
 use EricFortmeyer\ActivityLog\RemarksForMonth;
 use EricFortmeyer\ActivityLog\Services\RemarksForMonthService;
+use EricFortmeyer\ActivityLog\Services\TemplateBinder;
 use EricFortmeyer\ActivityLog\Services\TimeEntryService;
 use EricFortmeyer\ActivityLog\TimeEntry;
 use EricFortmeyer\ActivityLog\Utils\Hasher;
@@ -26,7 +27,7 @@ final class DeleteTimeEntryTest extends TestCase
 {
     private TimeEntryService&MockObject $timeEntryService;
     private RemarksForMonthService&Stub $remarksForMonthService;
-    private TemplateEngine $templateEngine;
+    private TemplateBinder $templateEngine;
     private DeleteTimeEntry $deleteTimeEntry;
 
     protected function setUp(): void
@@ -37,7 +38,7 @@ final class DeleteTimeEntryTest extends TestCase
         $this->remarksForMonthService
             ->method("get")
             ->willReturn(new NotFound());
-        $this->templateEngine = new TemplateEngine();
+        $this->templateEngine = new TemplateBinder(new TemplateEngine());
         $this->deleteTimeEntry = new DeleteTimeEntry(
             timeEntryService: $this->timeEntryService,
             remarksForMonthService: $this->remarksForMonthService,

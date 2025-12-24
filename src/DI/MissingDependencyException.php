@@ -7,7 +7,6 @@ namespace EricFortmeyer\ActivityLog\DI;
 use RuntimeException;
 
 /**
- * @suppress PhanUnreferencedClass
  * @codeCoverageIgnore
  */
 final class MissingDependencyException extends RuntimeException

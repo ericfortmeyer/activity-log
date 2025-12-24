@@ -5,22 +5,48 @@ declare(strict_types=1);
 namespace EricFortmeyer\ActivityLog\Services;
 
 use DateTimeImmutable;
+use EricFortmeyer\ActivityLog\TimeEntry;
+use Phpolar\Storage\StorageContext;
 
-readonly class DataExportService
+class DataExportService
 {
-    public function __construct(private string $sourceFileName) {}
+    /**
+     * @param StorageContext<TimeEntry> $storageContext
+     * @param resource $csv
+     */
+    public function __construct(
+        private readonly StorageContext $storageContext,
+        private $csv,
+    ) {}
 
-    public function export(): string
+    public function __destruct()
     {
-        $fileName = join(
-            "",
-            [
-                "export",
-                new DateTimeImmutable()->format(DATE_ATOM),
-                ".csv",
-            ]
-        );
-        header(sprintf("Content-Disposition: attachment; filename=%s;", $fileName));
-        return (string) file_get_contents($this->sourceFileName);
+        fclose($this->csv);
+    }
+
+    public function export(): string|false
+    {
+        $timeEntries = $this->storageContext->findAll();
+
+        foreach ($timeEntries as $timeEntry) {
+            fputcsv(
+                $this->csv,
+                array_map(
+                    $this->convertToString(...),
+                    get_object_vars($timeEntry),
+                ),
+            );
+        }
+        rewind($this->csv);
+        return stream_get_contents($this->csv);
+    }
+
+    private function convertToString(int|string|DateTimeImmutable $prop): string
+    {
+        return match (true) {
+            $prop instanceof DateTimeImmutable => $prop->format(DATE_ATOM),
+            is_int($prop) => (string) $prop,
+            default => $prop,
+        };
     }
 }

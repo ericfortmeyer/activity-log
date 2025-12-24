@@ -9,6 +9,7 @@ use EricFortmeyer\ActivityLog\MonthFilters;
 use EricFortmeyer\ActivityLog\RemarksForMonth;
 use EricFortmeyer\ActivityLog\Services\CreditHoursService;
 use EricFortmeyer\ActivityLog\Services\RemarksForMonthService;
+use EricFortmeyer\ActivityLog\Services\TemplateBinder;
 use EricFortmeyer\ActivityLog\Services\TenantService;
 use EricFortmeyer\ActivityLog\Services\TimeEntryService;
 use EricFortmeyer\ActivityLog\TimeEntry;
@@ -30,7 +31,7 @@ final class GetTimeEntriesTest extends TestCase
     private TimeEntryService&MockObject $timeEntryService;
     private RemarksForMonthService&MockObject $remarksForMonthService;
     private CreditHoursService&MockObject $creditHoursService;
-    private TemplateEngine $templateEngine;
+    private TemplateBinder $templateEngine;
     private GetTimeEntries $getTimeEntries;
 
     protected function setUp(): void
@@ -39,7 +40,7 @@ final class GetTimeEntriesTest extends TestCase
         $this->timeEntryService = $this->createMock(TimeEntryService::class);
         $this->remarksForMonthService = $this->createMock(RemarksForMonthService::class);
         $this->creditHoursService = $this->createMock(CreditHoursService::class);
-        $this->templateEngine = new TemplateEngine();
+        $this->templateEngine = new TemplateBinder(new TemplateEngine());
         $this->getTimeEntries = new GetTimeEntries(
             tenantService: $this->createStub(TenantService::class),
             timeEntryService: $this->timeEntryService,

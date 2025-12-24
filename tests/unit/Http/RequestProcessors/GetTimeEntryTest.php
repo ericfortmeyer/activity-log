@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace EricFortmeyer\ActivityLog\Http\RequestProcessors;
 
+use EricFortmeyer\ActivityLog\Services\TemplateBinder;
 use EricFortmeyer\ActivityLog\Services\TimeEntryService;
 use EricFortmeyer\ActivityLog\TimeEntry;
 use Phpolar\Phpolar\Auth\User;
@@ -18,13 +19,13 @@ use Phpolar\Storage\NotFound;
 final class GetTimeEntryTest extends TestCase
 {
     private TimeEntryService&MockObject $timeEntryService;
-    private TemplateEngine $templateEngine;
+    private TemplateBinder $templateEngine;
     private GetTimeEntry $getTimeEntry;
 
     protected function setUp(): void
     {
         $this->timeEntryService = $this->createMock(TimeEntryService::class);
-        $this->templateEngine = new TemplateEngine();
+        $this->templateEngine = new TemplateBinder(new TemplateEngine());
         $this->getTimeEntry = new GetTimeEntry($this->timeEntryService, $this->templateEngine);
         $this->getTimeEntry->user = new User(
             name: "",

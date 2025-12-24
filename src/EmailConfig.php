@@ -10,9 +10,6 @@ final readonly class EmailConfig
      * @param array<string,string> $headers
      */
     public function __construct(
-        /**
-         * @suppress PhanReadOnlyPublicProperty
-         */
         public array $headers
     ) {}
 }
