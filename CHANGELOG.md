@@ -2,6 +2,12 @@
 
 This file documents changes to the Activity Log application.
 
+## 0.8.3 (2025-12-24)
+
+### Fix
+
+- add support for emailing reports (#62)
+
 ## 0.8.2 (2025-12-21)
 
 ### Fix
