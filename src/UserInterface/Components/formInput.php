@@ -3,7 +3,6 @@
 namespace EricFortmeyer\ActivityLog\UserInterface\Components;
 
 use Phpolar\Model\InputTypes;
-use Symfony\Component\Console\Input\Input;
 
 /**
  * @codeCoverageIgnore

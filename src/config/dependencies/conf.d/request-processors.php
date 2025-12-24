@@ -1,9 +1,5 @@
 <?php
 
-/**
- * @phan-file-suppress PhanUnreferencedClosure
- */
-
 declare(strict_types=1);
 
 namespace EricFortmeyer\ActivityLog\Http\RequestProcessors;
@@ -52,6 +48,7 @@ return [
     ),
     DownloadDataExport::class => static fn(ContainerInterface $container) => new DownloadDataExport(
         new ServiceProvider($container)->dataExportService,
+        new ServiceProvider($container)->templateEngine,
     ),
     EmailReportForMonth::class => static fn(ContainerInterface $container) => new EmailReportForMonth(
         mailConfig: new ServiceProvider($container)->emailConfig,

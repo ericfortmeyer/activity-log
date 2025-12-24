@@ -11,9 +11,6 @@ use Phpolar\{
     Validators\Min
 };
 
-/**
- * @phan-file-suppress PhanReadOnlyPublicProperty
- */
 final class MonthFilters extends AbstractModel
 {
     #[Max(2100)]

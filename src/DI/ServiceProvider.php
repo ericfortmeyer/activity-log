@@ -16,6 +16,7 @@ use EricFortmeyer\ActivityLog\Services\AppConfigService;
 use EricFortmeyer\ActivityLog\Services\CreditHoursService;
 use EricFortmeyer\ActivityLog\Services\DataExportService;
 use EricFortmeyer\ActivityLog\Services\RemarksForMonthService;
+use EricFortmeyer\ActivityLog\Services\TemplateBinder;
 use EricFortmeyer\ActivityLog\Services\TenantService;
 use EricFortmeyer\ActivityLog\Services\TimeEntryService;
 use EricFortmeyer\ActivityLog\TimeEntry;
@@ -24,7 +25,6 @@ use Nyholm\Psr7Server\ServerRequestCreatorInterface;
 use Pdo\Mysql;
 use Phpolar\HttpRequestProcessor\RequestProcessorInterface;
 use Phpolar\Phpolar\ExceptionHandlerInterface;
-use Phpolar\PurePhp\TemplateEngine;
 use Phpolar\SqliteStorage\SqliteReadOnlyStorage;
 use Phpolar\Storage\StorageContext;
 use Psr\Container\ContainerInterface;
@@ -44,14 +44,12 @@ use const EricFortmeyer\ActivityLog\DI\Tokens\CREDIT_HOURS_STORAGE;
 use const EricFortmeyer\ActivityLog\DI\Tokens\EXCEPTION_LOGGER;
 use const EricFortmeyer\ActivityLog\DI\Tokens\LOGIN_MIDDLEWARE;
 use const EricFortmeyer\ActivityLog\DI\Tokens\LOGOUT_MIDDLEWARE;
-use const EricFortmeyer\ActivityLog\DI\Tokens\REMARKS_STORAGE as TokensREMARKS_STORAGE;
+use const EricFortmeyer\ActivityLog\DI\Tokens\REMARKS_STORAGE;
 use const EricFortmeyer\ActivityLog\DI\Tokens\SECRETS_CLIENT;
 use const EricFortmeyer\ActivityLog\DI\Tokens\SECRETS_TLS_CLIENT;
 use const EricFortmeyer\ActivityLog\DI\Tokens\TIME_ENTRY_STORAGE;
 
 /**
- * @phan-file-suppress PhanUnreferencedUseConstant
- * @phan-file-suppress PhanReadOnlyPublicProperty
  * @codeCoverageIgnore
  */
 final class ServiceProvider
@@ -314,11 +312,11 @@ final class ServiceProvider
         }
     }
 
-    public TemplateEngine $templateEngine {
+    public TemplateBinder $templateEngine {
         get {
-            $templateEngine = $this->container->get(TemplateEngine::class);
-            return $templateEngine instanceof TemplateEngine === false
-                ? throw new MissingDependencyException(TemplateEngine::class)
+            $templateEngine = $this->container->get(TemplateBinder::class);
+            return $templateEngine instanceof TemplateBinder === false
+                ? throw new MissingDependencyException(TemplateBinder::class)
                 : $templateEngine;
         }
     }
@@ -346,9 +344,9 @@ final class ServiceProvider
      */
     public StorageContext $remarksStorage {
         get {
-            $remarksStorage = $this->container->get(TokensREMARKS_STORAGE);
+            $remarksStorage = $this->container->get(REMARKS_STORAGE);
             return $remarksStorage instanceof StorageContext === false
-                ? throw new MissingDependencyException(TokensREMARKS_STORAGE)
+                ? throw new MissingDependencyException(REMARKS_STORAGE)
                 : $remarksStorage;
         }
     }

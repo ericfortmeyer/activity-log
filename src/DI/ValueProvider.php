@@ -6,6 +6,7 @@ namespace EricFortmeyer\ActivityLog\DI;
 
 use const EricFortmeyer\ActivityLog\DI\Tokens\ACTIVITY_LOG_APP_PASSWD_KEY;
 use const EricFortmeyer\ActivityLog\DI\Tokens\ACTIVITY_LOG_CACHE_ENABLED;
+use const EricFortmeyer\ActivityLog\DI\Tokens\ACTIVITY_LOG_FROM_ADDRESS;
 use const EricFortmeyer\ActivityLog\DI\Tokens\ACTIVITY_STORE_DATABASE;
 use const EricFortmeyer\ActivityLog\DI\Tokens\ACTIVITY_STORE_HOST;
 use const EricFortmeyer\ActivityLog\DI\Tokens\ACTIVITY_STORE_USER;
@@ -14,10 +15,7 @@ use const EricFortmeyer\ActivityLog\DI\Tokens\APP_CONFIG_TABLE_NAME;
 use const EricFortmeyer\ActivityLog\DI\Tokens\DATA_DIR;
 use const EricFortmeyer\ActivityLog\DI\Tokens\SECRETS_APP_KEY;
 use const EricFortmeyer\ActivityLog\DI\Tokens\SECRETS_APP_PATH;
-use const EricFortmeyer\ActivityLog\DI\Tokens\SECRETS_DIR;
 use const EricFortmeyer\ActivityLog\DI\Tokens\SECRETS_LOGIN_PATH;
-use const EricFortmeyer\ActivityLog\DI\Tokens\SECRETS_SERVICE_HOST;
-use const EricFortmeyer\ActivityLog\DI\Tokens\SECRETS_SERVICE_PORT;
 use const EricFortmeyer\ActivityLog\DI\Tokens\SECRETS_SERVICE_TLS_HOST;
 use const EricFortmeyer\ActivityLog\DI\Tokens\SECRETS_SERVICE_TLS_PORT;
 use const EricFortmeyer\ActivityLog\DI\Tokens\SECRETS_TOKEN_TTL;
@@ -27,8 +25,6 @@ use const EricFortmeyer\ActivityLog\DI\Tokens\SSL_CERT;
 use const EricFortmeyer\ActivityLog\DI\Tokens\SSL_KEY;
 
 /**
- * @phan-file-suppress PhanUnreferencedUseConstant
- * @phan-file-suppress PhanReadOnlyPublicProperty
  * @codeCoverageIgnore
  */
 final class ValueProvider
@@ -63,6 +59,10 @@ final class ValueProvider
 
     public string $dbPasswdStoreKey {
         get => $this->getVarFromEnv(ACTIVITY_LOG_APP_PASSWD_KEY);
+    }
+
+    public string $fromAddress {
+        get => $this->getVarFromEnv(ACTIVITY_LOG_FROM_ADDRESS);
     }
 
     public string $secretsUser {

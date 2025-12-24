@@ -6,13 +6,12 @@ namespace EricFortmeyer\ActivityLog\Http\RequestProcessors;
 
 use Phpolar\{
     Model\Model,
-    PurePhp\TemplateEngine,
-    PurePhp\HtmlSafeContext,
     Storage\NotFound
 };
 use EricFortmeyer\ActivityLog\Services\{
     TimeEntryService,
-    RemarksForMonthService
+    RemarksForMonthService,
+    TemplateBinder
 };
 use EricFortmeyer\ActivityLog\{
     MonthFilters,
@@ -28,7 +27,7 @@ final class SubmitTimeEntry extends AbstractTenantBasedRequestProcessor
     public function __construct(
         private readonly TimeEntryService $timeEntryService,
         private readonly RemarksForMonthService $remarksForMonthService,
-        private readonly TemplateEngine $templateEngine,
+        private readonly TemplateBinder $templateEngine,
         readonly Hasher $hasher,
     ) {
         parent::__construct(hasher: $hasher);
@@ -57,26 +56,24 @@ final class SubmitTimeEntry extends AbstractTenantBasedRequestProcessor
             tenantId: $this->getTenantId(),
         ));
 
-        return (string) $this->templateEngine->apply(
+        return $this->templateEngine->apply(
             "index",
-            new HtmlSafeContext(
-                $remarks instanceof NotFound
-                    ? new TimeEntriesContext(
-                        timeEntries: $timeEntries,
-                        tenantId: $this->getTenantId(),
-                        currentEntry: $entry,
-                        filters: $monthFilters,
-                        user: $this->user
-                    )
-                    : new TimeEntriesContext(
-                        timeEntries: $timeEntries,
-                        tenantId: $this->getTenantId(),
-                        currentEntry: $entry,
-                        filters: $monthFilters,
-                        remarks: $remarks,
-                        user: $this->user
-                    )
-            ),
+            $remarks instanceof NotFound
+                ? new TimeEntriesContext(
+                    timeEntries: $timeEntries,
+                    tenantId: $this->getTenantId(),
+                    currentEntry: $entry,
+                    filters: $monthFilters,
+                    user: $this->user
+                )
+                : new TimeEntriesContext(
+                    timeEntries: $timeEntries,
+                    tenantId: $this->getTenantId(),
+                    currentEntry: $entry,
+                    filters: $monthFilters,
+                    remarks: $remarks,
+                    user: $this->user
+                )
         );
     }
 }

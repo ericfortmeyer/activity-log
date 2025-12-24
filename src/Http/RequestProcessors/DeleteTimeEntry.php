@@ -4,17 +4,13 @@ declare(strict_types=1);
 
 namespace EricFortmeyer\ActivityLog\Http\RequestProcessors;
 
-use Phpolar\PurePhp\{
-    TemplateEngine,
-    HtmlSafeContext
-};
 use Phpolar\Model\Model;
 use Phpolar\Phpolar\Auth\{
     Authorize
 };
 use Phpolar\Storage\NotFound;
 use EricFortmeyer\ActivityLog\UserInterface\Contexts\{NotFoundContext, TimeEntriesContext};
-use EricFortmeyer\ActivityLog\Services\{TimeEntryService, RemarksForMonthService};
+use EricFortmeyer\ActivityLog\Services\{TimeEntryService, RemarksForMonthService, TemplateBinder};
 use EricFortmeyer\ActivityLog\{MonthFilters, RemarksForMonth, TimeEntry};
 use EricFortmeyer\ActivityLog\Utils\Hasher;
 
@@ -28,7 +24,7 @@ final class DeleteTimeEntry extends AbstractTenantBasedRequestProcessor
     public function __construct(
         private readonly TimeEntryService $timeEntryService,
         private readonly RemarksForMonthService $remarksForMonthService,
-        private readonly TemplateEngine $templateEngine,
+        private readonly TemplateBinder $templateEngine,
         readonly Hasher $hasher,
     ) {
         parent::__construct($hasher);
@@ -42,9 +38,9 @@ final class DeleteTimeEntry extends AbstractTenantBasedRequestProcessor
         $deletedEntry = $this->timeEntryService->delete($id);
 
         if ($deletedEntry instanceof NotFound) {
-            return (string) $this->templateEngine->apply(
+            return $this->templateEngine->apply(
                 "404",
-                new HtmlSafeContext(new NotFoundContext(message: "The time entry to delete was not found."))
+                new NotFoundContext(message: "The time entry to delete was not found.")
             );
         }
 
@@ -64,26 +60,24 @@ final class DeleteTimeEntry extends AbstractTenantBasedRequestProcessor
             tenantId: $this->getTenantId(),
         ));
 
-        return (string) $this->templateEngine->apply(
+        return  $this->templateEngine->apply(
             "index",
-            new HtmlSafeContext(
-                $remarks instanceof NotFound
-                    ? new TimeEntriesContext(
-                        timeEntries: $timeEntries,
-                        tenantId: $this->getTenantId(),
-                        currentEntry: $deletedEntry,
-                        filters: $monthFilters,
-                        user: $this->user
-                    )
-                    : new TimeEntriesContext(
-                        timeEntries: $timeEntries,
-                        tenantId: $this->getTenantId(),
-                        currentEntry: $deletedEntry,
-                        filters: $monthFilters,
-                        remarks: $remarks,
-                        user: $this->user
-                    )
-            )
+            $remarks instanceof NotFound
+                ? new TimeEntriesContext(
+                    timeEntries: $timeEntries,
+                    tenantId: $this->getTenantId(),
+                    currentEntry: $deletedEntry,
+                    filters: $monthFilters,
+                    user: $this->user
+                )
+                : new TimeEntriesContext(
+                    timeEntries: $timeEntries,
+                    tenantId: $this->getTenantId(),
+                    currentEntry: $deletedEntry,
+                    filters: $monthFilters,
+                    remarks: $remarks,
+                    user: $this->user
+                )
         );
     }
 }

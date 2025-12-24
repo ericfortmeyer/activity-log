@@ -14,9 +14,6 @@ use Phpolar\Validators\{
     Min
 };
 
-/**
- * @phan-file-suppress PhanReadOnlyPublicProperty
- */
 #[EntityName("credit-hours")]
 final class CreditHours extends TenantData
 {

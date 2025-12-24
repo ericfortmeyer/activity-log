@@ -17,11 +17,14 @@ use EricFortmeyer\ActivityLog\Services\{
     TimeEntryService,
     RemarksForMonthService,
     CreditHoursService,
+    TemplateBinder,
 };
+use EricFortmeyer\ActivityLog\UserInterface\Contexts\EmailReportContext;
+use EricFortmeyer\ActivityLog\UserInterface\Contexts\ServerErrorContext;
 use EricFortmeyer\ActivityLog\Utils\Hasher;
 use Phpolar\Model\Model;
+use Phpolar\Phpolar\Auth\Authorize;
 use Phpolar\PurePhp\HtmlSafeContext;
-use Phpolar\PurePhp\TemplateEngine;
 use Phpolar\Storage\NotFound;
 
 final class EmailReportForMonth extends AbstractTenantBasedRequestProcessor
@@ -31,18 +34,19 @@ final class EmailReportForMonth extends AbstractTenantBasedRequestProcessor
         private readonly TimeEntryService $timeEntryService,
         private readonly RemarksForMonthService $remarksService,
         private readonly CreditHoursService $creditHoursService,
-        private readonly TemplateEngine $templateEngine,
+        private readonly TemplateBinder $templateEngine,
         readonly Hasher $hasher,
     ) {
         parent::__construct($hasher);
     }
 
+    #[Authorize]
     public function process(
-        #[Model] EmailReport $emailReportContext = new EmailReport(),
+        #[Model] EmailReport $emailReport = new EmailReport(),
         #[Model] MonthFilters $monthFilters = new MonthFilters(),
     ): string {
-        $month = $monthFilters->getMonth();
-        $year = $monthFilters->getYear();
+        $month = $emailReport->month;
+        $year = $emailReport->year;
         $timeEntries = $this->timeEntryService->getAllByMonth(
             month: $month,
             year: $year,
@@ -58,92 +62,67 @@ final class EmailReportForMonth extends AbstractTenantBasedRequestProcessor
             year: $year,
             tenantId: $this->getTenantId(),
         ));
-        $context = $this->getContext(
-            timeEntries: $timeEntries,
-            monthFilters: $monthFilters,
-            remarks: $remarks,
-            creditHours: $creditHours,
-        );
-        $this->emailReport($emailReportContext, $context);
-        return (string) $this->templateEngine->apply("index", new HtmlSafeContext($context));
-    }
-
-    private function emailReport(
-        EmailReport $emailReportContext,
-        TimeEntriesContext $timeEntriesContext,
-    ): void {
-        $success = mail(
-            to: $emailReportContext->mailTo,
-            subject: sprintf("Report for %s", $timeEntriesContext->getMonthTitle()),
-            message: $this->getMessage(
-                totalHours: $timeEntriesContext->getTotalHours(),
-                creditHours: $timeEntriesContext->getCreditHours(),
-                remarks: $timeEntriesContext->getRemarksForCurrentMonth(),
-                shouldShowRemarks: $timeEntriesContext->hasRemarks(),
-                shouldShowCreditHours: $timeEntriesContext->shouldShowCreditHours(),
-            ),
-            additional_headers: $this->mailConfig->headers,
+        $currentEntry = new TimeEntry();
+        TimeEntry::setUninitializedValues(
+            $currentEntry,
+            $month,
+            $year,
         );
 
-        if (!$success) {
-            $error = error_get_last();
-            if ($error !== null) {
-                echo $error["message"];
+        if ($emailReport->isValid() === true) {
+            $success = mail(
+                to: $emailReport->mailTo,
+                subject: $emailReport->getSubject($this->user),
+                message: $this->templateEngine->apply(
+                    "email-report",
+                    new EmailReportContext(
+                        emailReport: $emailReport,
+                        timeEntries: $timeEntries,
+                        currentEntry: $currentEntry,
+                        filters: $monthFilters,
+                        remarks: $remarks,
+                        creditHours: $creditHours,
+                    ),
+                ),
+                additional_headers: $this->mailConfig->headers,
+            );
+
+            if ($success === false) {
+                $error = error_get_last();
+                if ($error !== null) {
+                    ["message" => $message] = $error;
+                    return $this->templateEngine->apply(
+                        "500",
+                        new HtmlSafeContext(
+                            new ServerErrorContext(
+                                message: $message,
+                            ),
+                        ),
+                    );
+                }
             }
-        }
-    }
 
-    private function getMessage(
-        int $totalHours,
-        int $creditHours,
-        string $remarks,
-        bool $shouldShowCreditHours,
-        bool $shouldShowRemarks,
-    ): string {
-        return match (true) {
-            $shouldShowCreditHours && $shouldShowRemarks =>
-            <<<HTML
-            <p>
-                <strong>Total:</strong> {$totalHours} Hours
-            </p>
-            <p>
-                <strong>Credit:</strong> {$creditHours} Hours
-            </p>
-            <p>
-                <strong>Remarks:</strong> {$remarks}
-            </p>
-            HTML,
-            $shouldShowCreditHours =>
-            <<<HTML
-            <p>
-                <strong>Total:</strong> {$totalHours} Hours
-            </p>
-            <p>
-                <strong>Credit:</strong> {$creditHours} Hours
-            </p>
-            HTML,
-            $shouldShowRemarks =>
-            <<<HTML
-            <p>
-                <strong>Total:</strong> {$totalHours} Hours
-            </p>
-            <p>
-                <strong>Remarks:</strong> {$remarks}
-            </p>
-            HTML,
-            default =>
-            <<<HTML
-            <p>
-                <strong>Total:</strong> {$totalHours} Hours
-            </p>
-            HTML
-        };
+            $emailReport->isPosted();
+        }
+
+
+        return $this->templateEngine->apply(
+            "index",
+            $this->getContext(
+                currentEntry: $currentEntry,
+                timeEntries: $timeEntries,
+                monthFilters: $monthFilters,
+                remarks: $remarks,
+                creditHours: $creditHours,
+            )
+        );
     }
 
     /**
      * @param TimeEntry[] $timeEntries
      */
     private function getContext(
+        TimeEntry $currentEntry,
         array $timeEntries,
         MonthFilters $monthFilters,
         RemarksForMonth| NotFound $remarks,
@@ -152,6 +131,7 @@ final class EmailReportForMonth extends AbstractTenantBasedRequestProcessor
         return match (true) {
             $remarks instanceof NotFound && $creditHours instanceof NotFound =>
             new TimeEntriesContext(
+                currentEntry: $currentEntry,
                 timeEntries: $timeEntries,
                 tenantId: $this->getTenantId(),
                 filters: $monthFilters,
@@ -159,6 +139,7 @@ final class EmailReportForMonth extends AbstractTenantBasedRequestProcessor
             ),
             $creditHours instanceof CreditHours && $remarks instanceof NotFound =>
             new TimeEntriesContext(
+                currentEntry: $currentEntry,
                 timeEntries: $timeEntries,
                 tenantId: $this->getTenantId(),
                 filters: $monthFilters,
@@ -167,6 +148,7 @@ final class EmailReportForMonth extends AbstractTenantBasedRequestProcessor
             ),
             $creditHours instanceof CreditHours && $remarks instanceof RemarksForMonth =>
             new TimeEntriesContext(
+                currentEntry: $currentEntry,
                 timeEntries: $timeEntries,
                 tenantId: $this->getTenantId(),
                 filters: $monthFilters,
@@ -176,6 +158,7 @@ final class EmailReportForMonth extends AbstractTenantBasedRequestProcessor
             ),
             $remarks instanceof RemarksForMonth && $creditHours instanceof NotFound =>
             new TimeEntriesContext(
+                currentEntry: $currentEntry,
                 timeEntries: $timeEntries,
                 tenantId: $this->getTenantId(),
                 filters: $monthFilters,
@@ -184,6 +167,7 @@ final class EmailReportForMonth extends AbstractTenantBasedRequestProcessor
             ),
             default =>
             new TimeEntriesContext(
+                currentEntry: $currentEntry,
                 user: $this->user,
                 tenantId: $this->getTenantId(),
             )

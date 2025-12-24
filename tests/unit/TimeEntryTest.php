@@ -97,9 +97,7 @@ final class TimeEntryTest extends TestCase
 
     #[Test]
     #[DataProviderExternal(TimeEntryDataProvider::class, 'validTimeEntryData')]
-    #[TestDox(
-        <<<TEXT
-        Shall determine that the entry is valid: [
+    #[TestDox("Shall determine that the entry is valid: [
             id => \$id,
             tenantId => \$tenantId,
             dayOfMonth => \$dayOfMonth,
@@ -107,9 +105,7 @@ final class TimeEntryTest extends TestCase
             year => \$year,
             hours => \$hours,
             minutes => \$minutes
-           ]
-        TEXT
-    )]
+    ]")]
     public function vmzcx(
         string $id,
         string $tenantId,

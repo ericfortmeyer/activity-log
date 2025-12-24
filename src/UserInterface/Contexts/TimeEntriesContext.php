@@ -32,6 +32,7 @@ final class TimeEntriesContext extends AbstractContext
         private readonly string $addActivityFormTitle = "Add an activity",
         private readonly string $addActivityInstructions = "Select a date. Then enter the hours and minutes "
             . "for the duration of the activity.",
+        private readonly string $emailReportPlaceholder = "Enter email address to submit report",
         private readonly string $deleteUrl = "/time-entry/delete",
         private readonly string $emailUrl = "/report/send",
     ) {
@@ -91,6 +92,11 @@ final class TimeEntriesContext extends AbstractContext
         return $this->shouldShowCurrentMonthButton() ? "" : "hide-me";
     }
 
+    public function getEmailReportPlaceholder(): string
+    {
+        return $this->emailReportPlaceholder;
+    }
+
     public function getPreviousMonthFilter(): string
     {
         $month = $this->getMonth() === 1 ? 12 : ($this->getMonth() - 1) % 12;
@@ -110,17 +116,11 @@ final class TimeEntriesContext extends AbstractContext
         return $this->remarks->remarks;
     }
 
-    /**
-     * @suppress PhanCoalescingNeverNull
-     */
     public function getRemarksMonth(): int
     {
         return $this->remarks->month ?? $this->getMonth();
     }
 
-    /**
-     * @suppress PhanCoalescingNeverNull
-     */
     public function getRemarksYear(): string
     {
         return $this->remarks->year ?? $this->getYear();
@@ -144,11 +144,6 @@ final class TimeEntriesContext extends AbstractContext
     public function hasFilter(): bool
     {
         return $this->filters->hasFilter();
-    }
-
-    public function hasRemarks(): bool
-    {
-        return $this->remarks->remarks !== "";
     }
 
     public function getMonthFilter(): int

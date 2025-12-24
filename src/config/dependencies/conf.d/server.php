@@ -1,9 +1,5 @@
 <?php
 
-/**
- * @phan-file-suppress PhanUnreferencedClosure
- */
-
 declare(strict_types=1);
 
 namespace EricFortmeyer\ActivityLog\Http\RequestProcessors;

@@ -60,7 +60,7 @@ use function EricFortmeyer\ActivityLog\UserInterface\HTMLElements\head;
                             <?php if ($view->canShowReport()): ?>
                                 <button type="button" id="report-dialog-open-button">View Report</button>
                                 <form method="post" action="<?= $view->getMonthReportEmailUrl() ?>">
-                                    <input type="text" name="mailTo" required />
+                                    <input type="text" name="mailTo" placeholder="<?= $view->getEmailReportPlaceholder() ?>" required />
                                     <input type="hidden" name="month" value="<?= $view->getMonth() ?>" />
                                     <input type="hidden" name="year" value="<?= $view->getYear() ?>" />
                                     <button type="submit" data-tooltip="Email Report">&#x1F582;</button>
@@ -256,7 +256,7 @@ use function EricFortmeyer\ActivityLog\UserInterface\HTMLElements\head;
                 </header>
                 <p>This is your profile</p>
                 <footer>
-                    <a target="_blank" href="/export-data" class="secondary" role="button" data-tooltip="Export">Export</a>
+                    <a target="_blank" href="/export-data" class="secondary" role="button" data-tooltip="Export all activity entries">Export</a>
                 </footer>
             </article>
         </dialog>

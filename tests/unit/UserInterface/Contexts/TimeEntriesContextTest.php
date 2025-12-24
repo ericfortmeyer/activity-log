@@ -160,36 +160,6 @@ final class TimeEntriesContextTest extends TestCase
     }
 
     #[Test]
-    #[TestDox("Shall know if it has remarks")]
-    #[TestWith([["remarks" => "1"]])]
-    public function cangethasremarks(array $remarksData)
-    {
-        $sut = new TimeEntriesContext(
-            user: new User("", "", "", ""),
-            tenantId: "",
-            timeEntries: [],
-            remarks: new RemarksForMonth($remarksData),
-        );
-
-        $this->assertTrue($sut->hasRemarks());
-    }
-
-    #[Test]
-    #[TestDox("Shall know if it does not have remarks")]
-    #[TestWith([["remarks" => ""]])]
-    public function cangetdonthaveremarks(array $remarksData)
-    {
-        $sut = new TimeEntriesContext(
-            user: new User("", "", "", ""),
-            tenantId: "",
-            timeEntries: [],
-            remarks: new RemarksForMonth($remarksData),
-        );
-
-        $this->assertFalse($sut->hasRemarks());
-    }
-
-    #[Test]
     #[TestDox("Shall get month filter")]
     #[TestWith(["filters" => ["filterMonth" => 1], "expectedMonthFilter" => 1])]
     public function cangetmonthfilter(array $filters, int $expectedMonthFilter)

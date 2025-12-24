@@ -7,6 +7,7 @@ namespace EricFortmeyer\ActivityLog\Http\RequestProcessors;
 use EricFortmeyer\ActivityLog\MonthFilters;
 use EricFortmeyer\ActivityLog\RemarksForMonth;
 use EricFortmeyer\ActivityLog\Services\RemarksForMonthService;
+use EricFortmeyer\ActivityLog\Services\TemplateBinder;
 use EricFortmeyer\ActivityLog\Services\TimeEntryService;
 use EricFortmeyer\ActivityLog\TimeEntry;
 use EricFortmeyer\ActivityLog\UnitTests\DataProviders\TimeEntryDataProvider;
@@ -25,12 +26,12 @@ use PHPUnit\Framework\MockObject\Stub;
 #[CoversClass(RemarksForMonth::class)]
 final class SubmitTimeEntryTest extends TestCase
 {
-    private TemplateEngine $templateEngine;
+    private TemplateBinder $templateEngine;
     private RemarksForMonthService&Stub $remarksForMonthService;
 
     protected function setUp(): void
     {
-        $this->templateEngine = new TemplateEngine();
+        $this->templateEngine = new TemplateBinder(new TemplateEngine());
         $this->remarksForMonthService = $this->createStub(RemarksForMonthService::class);
         $this->remarksForMonthService
             ->method("get")

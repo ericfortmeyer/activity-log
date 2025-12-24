@@ -5,8 +5,6 @@ namespace EricFortmeyer\ActivityLog\Http\RequestProcessors;
 use Phpolar\Phpolar\Auth\Authorize;
 use Phpolar\{
     Model\Model,
-    PurePhp\HtmlSafeContext,
-    PurePhp\TemplateEngine,
     Storage\NotFound
 };
 use EricFortmeyer\ActivityLog\{
@@ -18,6 +16,7 @@ use EricFortmeyer\ActivityLog\{
 use EricFortmeyer\ActivityLog\Services\{
     RemarksForMonthService,
     CreditHoursService,
+    TemplateBinder,
     TimeEntryService
 };
 use EricFortmeyer\ActivityLog\UserInterface\Contexts\TimeEntriesContext;
@@ -29,7 +28,7 @@ final class SaveCreditHours extends AbstractTenantBasedRequestProcessor
         private readonly CreditHoursService $creditHoursService,
         private readonly RemarksForMonthService $remarksService,
         private readonly TimeEntryService $timeEntryService,
-        private readonly TemplateEngine $templateEngine,
+        private readonly TemplateBinder $templateEngine,
         readonly Hasher $hasher,
     ) {
         parent::__construct($hasher);
@@ -64,28 +63,26 @@ final class SaveCreditHours extends AbstractTenantBasedRequestProcessor
             $creditHours->month,
             $creditHours->year,
         );
-        return (string) $this->templateEngine->apply(
+        return $this->templateEngine->apply(
             "index",
-            new HtmlSafeContext(
-                $remarks instanceof NotFound
-                    ? new TimeEntriesContext(
-                        timeEntries: $timeEntries,
-                        tenantId: $this->getTenantId(),
-                        currentEntry: $currentEntry,
-                        filters: $monthFilters,
-                        creditHours: $creditHours,
-                        user: $this->user
-                    )
-                    : new TimeEntriesContext(
-                        timeEntries: $timeEntries,
-                        tenantId: $this->getTenantId(),
-                        currentEntry: $currentEntry,
-                        filters: $monthFilters,
-                        remarks: $remarks,
-                        creditHours: $creditHours,
-                        user: $this->user,
-                    )
-            )
+            $remarks instanceof NotFound
+                ? new TimeEntriesContext(
+                    timeEntries: $timeEntries,
+                    tenantId: $this->getTenantId(),
+                    currentEntry: $currentEntry,
+                    filters: $monthFilters,
+                    creditHours: $creditHours,
+                    user: $this->user
+                )
+                : new TimeEntriesContext(
+                    timeEntries: $timeEntries,
+                    tenantId: $this->getTenantId(),
+                    currentEntry: $currentEntry,
+                    filters: $monthFilters,
+                    remarks: $remarks,
+                    creditHours: $creditHours,
+                    user: $this->user,
+                )
         );
     }
 }

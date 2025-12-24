@@ -7,7 +7,6 @@ use EricFortmeyer\ActivityLog\ExceptionHandler;
 use EricFortmeyer\ActivityLog\UserInterface\Contexts\ServerErrorContext;
 use Phpolar\Phpolar\DependencyInjection\DiTokens;
 use Phpolar\Phpolar\ExceptionHandlerInterface;
-use Phpolar\PurePhp\HtmlSafeContext;
 use Psr\Container\ContainerInterface;
 
 return [
@@ -17,9 +16,10 @@ return [
     ),
     DiTokens::SERVER_ERROR_RESPONSE_CONTENT => static fn(ContainerInterface $container) =>
     new ServiceProvider($container)->templateEngine
-        ->apply("500", new HtmlSafeContext(
+        ->apply(
+            "500",
             new ServerErrorContext(
                 message: "An error occurred. We are investigating."
             )
-        )),
+        ),
 ];

@@ -10,7 +10,6 @@ use EricFortmeyer\ActivityLog\UserInterface\Contexts\AbstractContext;
  * Contains machine-readable metadata about the document.
  *
  * @codeCoverageIgnore
- * @phan-file-suppress PhanUnreferencedFunction
  */
 function head(AbstractContext $ctx, string $dialogScript = ""): string
 {
