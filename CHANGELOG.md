@@ -2,6 +2,12 @@
 
 This file documents changes to the Activity Log application.
 
+## 0.9.0 (2025-12-26)
+
+### Feat
+
+- add webhook for deployments (#63)
+
 ## 0.8.3 (2025-12-24)
 
 ### Fix
