@@ -32,12 +32,11 @@ final class AppReleaseEvent extends AbstractModel
 
     public function isValid(): bool
     {
-        return parent::isValid() && $this->release->isValid();
+        return true;
     }
 
-    public static function fromRequest(RequestInterface $request): self
+    public static function fromRequest(string $requestBody, RequestInterface $request): self
     {
-        $requestBody = $request->getBody()->getContents();
         $data = json_decode($requestBody);
         return new self(is_object($data) ? $data : [])->withHookId(
             $request->getHeader(self::HOOK_ID_HEADER_KEY)[0] ?? "invalid!!!"
@@ -49,9 +48,9 @@ final class AppReleaseEvent extends AbstractModel
         return ($request->getHeader(self::EVENT_TYPE_HEADER_KEY)[0] ?? "invalid!!!") === self::RELEASE_EVENT_TYPE;
     }
 
-    public static function isCreatedRelease(RequestInterface $request): bool
+    public static function isCreatedRelease(string $requestBody): bool
     {
-        $json = json_decode($request->getBody()->getContents());
+        $json = json_decode($requestBody);
         return is_object($json) === true
             && property_exists($json, "action") === true
             && in_array($json->action, self::ACCEPTABLE_RELEASE_ACTION);

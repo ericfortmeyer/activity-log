@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace EricFortmeyer\ActivityLog;
 
 use Phpolar\Model\AbstractModel;
-use Phpolar\Validators\Pattern;
 
 final class AppRelease extends AbstractModel
 {
-    #[Pattern("/^[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+$/")]
+    public int $id;
+
     public string $tagName;
 
     public function __construct(null|array|object $data = [])
