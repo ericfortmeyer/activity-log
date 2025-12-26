@@ -25,7 +25,6 @@ final class NotifyReleaseEventMiddleware implements MiddlewareInterface
     public function __construct(
         private string $releaseEventDestination,
         private string $releaseEventHookPath,
-        private bool $releaseEventHookRetryEnabled,
         private ResponseFactoryInterface $responseFactory,
         private AppConfigService $appVersionUpdater,
         private Hasher $verifier,
@@ -65,10 +64,6 @@ final class NotifyReleaseEventMiddleware implements MiddlewareInterface
             is_numeric($hookId) => $this->responseFactory->createResponse(
                 (int) HttpResponseCodeEnum::BadRequest->value,
                 HttpResponseCodeEnum::BadRequest->name
-            ),
-            $this->releaseEventHookRetryEnabled && apcu_exists($hookId) => $this->responseFactory->createResponse(
-                (int) HttpResponseCodeEnum::TooManyRequests->value,
-                HttpResponseCodeEnum::TooManyRequests->name
             ),
             $releaseEvent->isValid() => $this->responseFactory->createResponse(
                 (int) HttpResponseCodeEnum::BadRequest->value,
