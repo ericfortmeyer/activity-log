@@ -2,6 +2,12 @@
 
 This file documents changes to the Activity Log application.
 
+## 0.9.4 (2025-12-26)
+
+### Fix
+
+- remove validation (#67)
+
 ## 0.9.3 (2025-12-26)
 
 ### Fix
