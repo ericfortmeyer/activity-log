@@ -12,7 +12,6 @@ return [
     new NotifyReleaseEventMiddleware(
         releaseEventDestination: new ValueProvider()->releaseEventDestination,
         releaseEventHookPath: new ValueProvider()->releaseEventHookPath,
-        releaseEventHookRetryEnabled: new ValueProvider()->releaseEventHookRetryEnabled,
         responseFactory: new ServiceProvider($container)->responseFactory,
         appVersionUpdater: new ServiceProvider($container)->appConfigService,
         verifier: new ServiceProvider($container)->hasher,
