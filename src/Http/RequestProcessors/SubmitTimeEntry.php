@@ -25,6 +25,7 @@ use Phpolar\Phpolar\Auth\Authorize;
 final class SubmitTimeEntry extends AbstractTenantBasedRequestProcessor
 {
     public function __construct(
+        private readonly string $appVersion,
         private readonly TimeEntryService $timeEntryService,
         private readonly RemarksForMonthService $remarksForMonthService,
         private readonly TemplateBinder $templateEngine,
@@ -60,6 +61,7 @@ final class SubmitTimeEntry extends AbstractTenantBasedRequestProcessor
             "index",
             $remarks instanceof NotFound
                 ? new TimeEntriesContext(
+                    appVersion: $this->appVersion,
                     timeEntries: $timeEntries,
                     tenantId: $this->getTenantId(),
                     currentEntry: $entry,
@@ -67,6 +69,7 @@ final class SubmitTimeEntry extends AbstractTenantBasedRequestProcessor
                     user: $this->user
                 )
                 : new TimeEntriesContext(
+                    appVersion: $this->appVersion,
                     timeEntries: $timeEntries,
                     tenantId: $this->getTenantId(),
                     currentEntry: $entry,

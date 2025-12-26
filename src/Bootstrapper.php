@@ -21,6 +21,7 @@ final readonly class Bootstrapper
         private MiddlewareInterface $callbackMiddleware,
         private MiddlewareInterface $loginMiddleware,
         private MiddlewareInterface $logoutMiddleware,
+        private MiddlewareInterface $eventHooksMiddleware,
         private ExceptionHandlerInterface $exceptionHandler,
     ) {
         ini_set("display_errors", true);
@@ -34,6 +35,7 @@ final readonly class Bootstrapper
             // ->useCsrfMiddleware()
             ->useAuthorization()
             ->useExceptionHandler($this->exceptionHandler)
+            ->use($this->eventHooksMiddleware)
             ->use($this->callbackMiddleware)
             ->use($this->loginMiddleware)
             ->use($this->logoutMiddleware)

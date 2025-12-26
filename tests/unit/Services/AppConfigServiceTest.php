@@ -11,6 +11,7 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\TestCase;
+use SQLite3;
 
 #[CoversClass(AppConfigService::class)]
 final class AppConfigServiceTest extends TestCase
@@ -23,7 +24,10 @@ final class AppConfigServiceTest extends TestCase
         $storageStub->method("findAll")
             ->willReturn([]);
 
-        $sut = new AppConfigService($storageStub);
+        $sut = new AppConfigService(
+            $storageStub,
+            $this->createStub(SQLite3::class),
+        );
         $this->assertFalse($sut->get());
     }
 
@@ -57,7 +61,10 @@ final class AppConfigServiceTest extends TestCase
         $storageStub->method("findAll")
             ->willReturn($config);
 
-        $sut = new AppConfigService($storageStub);
+        $sut = new AppConfigService(
+            $storageStub,
+            $this->createStub(SQLite3::class),
+        );
         $result = $sut->get();
 
 

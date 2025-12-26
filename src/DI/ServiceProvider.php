@@ -8,6 +8,7 @@ use EricFortmeyer\ActivityLog\AppConfig;
 use EricFortmeyer\ActivityLog\Bootstrapper;
 use EricFortmeyer\ActivityLog\Clients\SecretsClient;
 use EricFortmeyer\ActivityLog\EmailConfig;
+use EricFortmeyer\ActivityLog\Http\NotifyReleaseEventMiddleware;
 use EricFortmeyer\ActivityLog\Infrastructure\Auth\Auth0Adapter;
 use EricFortmeyer\ActivityLog\Infrastructure\Auth\AuthConfigService;
 use EricFortmeyer\ActivityLog\RemarksForMonth;
@@ -26,6 +27,7 @@ use Pdo\Mysql;
 use Phpolar\HttpRequestProcessor\RequestProcessorInterface;
 use Phpolar\Phpolar\ExceptionHandlerInterface;
 use Phpolar\SqliteStorage\SqliteReadOnlyStorage;
+use Phpolar\SqliteStorage\SqliteStorage;
 use Phpolar\Storage\StorageContext;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Client\ClientInterface;
@@ -36,7 +38,9 @@ use Psr\Log\LoggerInterface;
 use SQLite3;
 
 use const EricFortmeyer\ActivityLog\DI\Tokens\APP_CONFIG_DB_CONNECTION;
+use const EricFortmeyer\ActivityLog\DI\Tokens\APP_CONFIG_DB_WRITE_CONNECTION;
 use const EricFortmeyer\ActivityLog\DI\Tokens\APP_CONFIG_STORAGE;
+use const EricFortmeyer\ActivityLog\DI\Tokens\APP_CONFIG_WRITE_STORAGE;
 use const EricFortmeyer\ActivityLog\DI\Tokens\APP_DB_CONNECTION;
 use const EricFortmeyer\ActivityLog\DI\Tokens\BOOTSTRAPPER;
 use const EricFortmeyer\ActivityLog\DI\Tokens\CALLBACK_MIDDLEWARE;
@@ -81,11 +85,29 @@ final class ServiceProvider
         }
     }
 
+    public SQLite3 $appConfigWriteConnection {
+        get {
+            $sQLite3Connection = $this->container->get(APP_CONFIG_DB_WRITE_CONNECTION);
+            return $sQLite3Connection instanceof SQLite3 === false
+                ? throw new MissingDependencyException(APP_CONFIG_DB_WRITE_CONNECTION)
+                : $sQLite3Connection;
+        }
+    }
+
     public SqliteReadOnlyStorage $appConfigStorage {
         get {
             $appConfigStorage = $this->container->get(APP_CONFIG_STORAGE);
             return $appConfigStorage instanceof SqliteReadOnlyStorage === false
                 ? throw new MissingDependencyException(APP_CONFIG_STORAGE)
+                : $appConfigStorage;
+        }
+    }
+
+    public SqliteStorage $appConfigWriteStorage {
+        get {
+            $appConfigStorage = $this->container->get(APP_CONFIG_WRITE_STORAGE);
+            return $appConfigStorage instanceof SqliteStorage === false
+                ? throw new MissingDependencyException(APP_CONFIG_WRITE_STORAGE)
                 : $appConfigStorage;
         }
     }
@@ -227,6 +249,15 @@ final class ServiceProvider
             return $callbackMiddleware instanceof MiddlewareInterface === false
                 ? throw new MissingDependencyException(CALLBACK_MIDDLEWARE)
                 : $callbackMiddleware;
+        }
+    }
+
+    public MiddlewareInterface $eventHooksMiddleware {
+        get {
+            $middleware = $this->container->get(NotifyReleaseEventMiddleware::class);
+            return $middleware instanceof MiddlewareInterface === false
+                ? throw new MissingDependencyException(NotifyReleaseEventMiddleware::class)
+                : $middleware;
         }
     }
 

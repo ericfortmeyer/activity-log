@@ -24,6 +24,7 @@ final class TimeEntriesContext extends AbstractContext
     public function __construct(
         public User $user,
         public string $tenantId,
+        public string $appVersion,
         public array $timeEntries = [],
         public TimeEntry $currentEntry = new TimeEntry(),
         public MonthFilters $filters = new MonthFilters(),

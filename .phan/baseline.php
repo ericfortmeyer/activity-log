@@ -9,11 +9,11 @@
  */
 return [
     // # Issue statistics:
-    // PhanReadOnlyPublicProperty : 65+ occurrences
-    // PhanUnreferencedClosure : 35+ occurrences
+    // PhanReadOnlyPublicProperty : 75+ occurrences
+    // PhanUnreferencedClosure : 40+ occurrences
+    // PhanUnreferencedUseConstant : 35+ occurrences
     // PhanUnreferencedConstant : 30+ occurrences
-    // PhanUnreferencedUseConstant : 30+ occurrences
-    // PhanUnreferencedPublicProperty : 5 occurrences
+    // PhanUnreferencedPublicProperty : 4 occurrences
     // PhanCoalescingNeverNull : 2 occurrences
     // PhanUnreferencedPublicMethod : 2 occurrences
     // PhanWriteOnlyPublicProperty : 2 occurrences
@@ -21,11 +21,11 @@ return [
     // PhanPartialTypeMismatchReturn : 1 occurrence
     // PhanUnreferencedClass : 1 occurrence
     // PhanUnreferencedPrivateProperty : 1 occurrence
+    // PhanUnreferencedUseNormal : 1 occurrence
 
     'file_suppressions' => [
         'src/AppConfig.php' => [
-            'PhanReadOnlyPublicProperty' => ['\\EricFortmeyer\\ActivityLog\\AppConfig'],
-            'PhanUnreferencedPublicProperty' => ['\\EricFortmeyer\\ActivityLog\\AppConfig']
+            'PhanReadOnlyPublicProperty' => ['\\EricFortmeyer\\ActivityLog\\AppConfig']
         ],
         'src/CreditHours.php' => [
             'PhanReadOnlyPublicProperty' => ['\\EricFortmeyer\\ActivityLog\\CreditHours']
@@ -36,7 +36,8 @@ return [
         'src/DI/ServiceProvider.php' => [
             'PhanReadOnlyPublicProperty' => ['\\EricFortmeyer\\ActivityLog\\DI\\ServiceProvider'],
             'PhanUnreferencedPublicProperty' => ['\\EricFortmeyer\\ActivityLog\\DI\\ServiceProvider'],
-            'PhanUnreferencedUseConstant' => ['src/DI/ServiceProvider.php']
+            'PhanUnreferencedUseConstant' => ['src/DI/ServiceProvider.php'],
+            'PhanUnreferencedUseNormal' => ['src/DI/ServiceProvider.php']
         ],
         'src/DI/Tokens.php' => [
             'PhanUnreferencedConstant' => ['src/DI/Tokens.php']
@@ -91,6 +92,9 @@ return [
             'PhanUnreferencedClosure' => ['\\closure']
         ],
         'src/config/dependencies/conf.d/errors.php' => [
+            'PhanUnreferencedClosure' => ['\\closure']
+        ],
+        'src/config/dependencies/conf.d/events.php' => [
             'PhanUnreferencedClosure' => ['\\closure']
         ],
         'src/config/dependencies/conf.d/model-resolver.php' => [

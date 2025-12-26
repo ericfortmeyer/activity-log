@@ -14,6 +14,7 @@ use SQLite3;
 
 use const EricFortmeyer\ActivityLog\DI\Tokens\{
     APP_CONFIG_DB_CONNECTION,
+    APP_CONFIG_DB_WRITE_CONNECTION,
     APP_CONFIG_STORAGE,
 };
 
@@ -26,7 +27,11 @@ return [
     },
     APP_CONFIG_DB_CONNECTION => new SQLite3(
         filename: new ValueProvider()->appConfigDbFilename,
-        flags: \SQLITE3_OPEN_READONLY
+        flags: \SQLITE3_OPEN_READONLY,
+    ),
+    APP_CONFIG_DB_WRITE_CONNECTION => new SQLite3(
+        filename: new ValueProvider()->appConfigDbFilename,
+        flags: \SQLITE3_OPEN_READWRITE,
     ),
     APP_CONFIG_STORAGE => static fn(ContainerInterface $container): SqliteReadOnlyStorage =>
     new SqliteReadOnlyStorage(
@@ -36,6 +41,7 @@ return [
     ),
     AppConfigService::class => static fn(ContainerInterface $container): AppConfigService =>
     new AppConfigService(
-        storage: new ServiceProvider($container)->appConfigStorage,
+        readStorage: new ServiceProvider($container)->appConfigStorage,
+        writeConnection: new ServiceProvider($container)->appConfigWriteConnection,
     ),
 ];

@@ -4,6 +4,7 @@ namespace EricFortmeyer\ActivityLog;
 
 use Phpolar\Model\AbstractModel;
 use Phpolar\Model\PrimaryKey;
+use Phpolar\Validators\Pattern;
 
 final class AppConfig extends AbstractModel
 {
@@ -17,4 +18,7 @@ final class AppConfig extends AbstractModel
     public string $loginPath;
 
     public string $logoutPath;
+
+    #[Pattern("/^\d+\.\d+\.\d+$/")]
+    public string $version;
 }

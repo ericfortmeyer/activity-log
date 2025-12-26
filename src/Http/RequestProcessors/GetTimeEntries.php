@@ -30,6 +30,7 @@ use EricFortmeyer\ActivityLog\Utils\Hasher;
 final class GetTimeEntries extends AbstractTenantBasedRequestProcessor
 {
     public function __construct(
+        private readonly string $appVersion,
         private readonly TenantService $tenantService,
         private readonly TimeEntryService $timeEntryService,
         private readonly RemarksForMonthService $remarksForMonthService,
@@ -83,6 +84,7 @@ final class GetTimeEntries extends AbstractTenantBasedRequestProcessor
             match (true) {
                 $remarks instanceof NotFound && $creditHours instanceof NotFound =>
                 new TimeEntriesContext(
+                    appVersion: $this->appVersion,
                     timeEntries: $timeEntries,
                     tenantId: $this->getTenantId(),
                     currentEntry: $timeEntry,
@@ -91,6 +93,7 @@ final class GetTimeEntries extends AbstractTenantBasedRequestProcessor
                 ),
                 $creditHours instanceof CreditHours && $remarks instanceof RemarksForMonth =>
                 new TimeEntriesContext(
+                    appVersion: $this->appVersion,
                     timeEntries: $timeEntries,
                     tenantId: $this->getTenantId(),
                     currentEntry: $timeEntry,
@@ -101,6 +104,7 @@ final class GetTimeEntries extends AbstractTenantBasedRequestProcessor
                 ),
                 $creditHours instanceof CreditHours && $remarks instanceof NotFound =>
                 new TimeEntriesContext(
+                    appVersion: $this->appVersion,
                     timeEntries: $timeEntries,
                     tenantId: $this->getTenantId(),
                     currentEntry: $timeEntry,
@@ -110,6 +114,7 @@ final class GetTimeEntries extends AbstractTenantBasedRequestProcessor
                 ),
                 $remarks instanceof RemarksForMonth && $creditHours instanceof NotFound =>
                 new TimeEntriesContext(
+                    appVersion: $this->appVersion,
                     timeEntries: $timeEntries,
                     tenantId: $this->getTenantId(),
                     currentEntry: $timeEntry,
@@ -118,7 +123,11 @@ final class GetTimeEntries extends AbstractTenantBasedRequestProcessor
                     user: $this->user
                 ),
                 default =>
-                new TimeEntriesContext(user: $this->user, tenantId: $this->getTenantId())
+                new TimeEntriesContext(
+                    appVersion: $this->appVersion,
+                    user: $this->user,
+                    tenantId: $this->getTenantId()
+                )
             }
         );
     }

@@ -12,7 +12,12 @@ use const EricFortmeyer\ActivityLog\DI\Tokens\ACTIVITY_STORE_HOST;
 use const EricFortmeyer\ActivityLog\DI\Tokens\ACTIVITY_STORE_USER;
 use const EricFortmeyer\ActivityLog\DI\Tokens\APP_CONFIG_DB_FILENAME;
 use const EricFortmeyer\ActivityLog\DI\Tokens\APP_CONFIG_TABLE_NAME;
+use const EricFortmeyer\ActivityLog\DI\Tokens\APP_HASH_KEY;
+use const EricFortmeyer\ActivityLog\DI\Tokens\APP_RELEASE_EVENT_HOOK_RETRY_ENABLED;
+use const EricFortmeyer\ActivityLog\DI\Tokens\APP_RELEASE_HOOK_KEY;
 use const EricFortmeyer\ActivityLog\DI\Tokens\DATA_DIR;
+use const EricFortmeyer\ActivityLog\DI\Tokens\RELEASE_EVENT_DESTINATION;
+use const EricFortmeyer\ActivityLog\DI\Tokens\RELEASE_EVENT_HOOK_PATH;
 use const EricFortmeyer\ActivityLog\DI\Tokens\SECRETS_APP_KEY;
 use const EricFortmeyer\ActivityLog\DI\Tokens\SECRETS_APP_PATH;
 use const EricFortmeyer\ActivityLog\DI\Tokens\SECRETS_LOGIN_PATH;
@@ -32,6 +37,14 @@ final class ValueProvider
     // phpcs:disable
     public string $appConfigTableName {
         get => $this->getVarFromEnv(APP_CONFIG_TABLE_NAME);
+    }
+
+    public string $appReleaseHookSecretKey {
+        get => $this->getVarFromEnv(APP_RELEASE_HOOK_KEY);
+    }
+
+    public string $appHashKey {
+        get => $this->getVarFromEnv(APP_HASH_KEY);
     }
 
     public string $appConfigDbFilename {
@@ -65,6 +78,21 @@ final class ValueProvider
         get => $this->getVarFromEnv(ACTIVITY_LOG_FROM_ADDRESS);
     }
 
+    public string $releaseEventHookPath {
+        get => $this->getVarFromEnv(RELEASE_EVENT_HOOK_PATH);
+    }
+
+    public bool $releaseEventHookRetryEnabled {
+        get => \in_array(
+            $this->getVarFromEnv(APP_RELEASE_EVENT_HOOK_RETRY_ENABLED),
+            [1, "1", "On"],
+        );
+    }
+
+    public string $releaseEventDestination {
+        get => $this->getVarFromEnv(RELEASE_EVENT_DESTINATION);
+    }
+
     public string $secretsUser {
         get => $this->getVarFromEnv(SECRETS_USER);
     }
@@ -80,7 +108,7 @@ final class ValueProvider
     public bool $secretsCacheEnabled {
         get => \in_array(
             $this->getVarFromEnv(ACTIVITY_LOG_CACHE_ENABLED),
-            [1, "1", "On"]
+            [1, "1", "On"],
         );
     }
 

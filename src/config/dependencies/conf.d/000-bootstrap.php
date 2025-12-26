@@ -14,6 +14,7 @@ return [
         container: $container,
         serverRequest: new ServiceProvider($container)->serverRequest,
         callbackMiddleware: new ServiceProvider($container)->callbackMiddleware,
+        eventHooksMiddleware: new ServiceProvider($container)->eventHooksMiddleware,
         loginMiddleware: new ServiceProvider($container)->loginMiddleware,
         logoutMiddleware: new ServiceProvider($container)->logoutMiddleware,
         exceptionHandler: new ServiceProvider($container)->exceptionHandler,
