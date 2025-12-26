@@ -9,7 +9,7 @@ use Phpolar\Validators\Pattern;
 
 final class AppRelease extends AbstractModel
 {
-    #[Pattern("/^\d+\.\d+\.\d+$/")]
+    #[Pattern("/^[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+$/")]
     public string $tagName;
 
     public function __construct(null|array|object $data = [])
