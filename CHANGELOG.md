@@ -2,6 +2,12 @@
 
 This file documents changes to the Activity Log application.
 
+## 0.9.2 (2025-12-26)
+
+### Fix
+
+- remove webhook retry config (#65)
+
 ## 0.9.1 (2025-12-26)
 
 ### Fix
