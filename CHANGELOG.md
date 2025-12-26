@@ -2,6 +2,12 @@
 
 This file documents changes to the Activity Log application.
 
+## 0.9.1 (2025-12-26)
+
+### Fix
+
+- rename env var key (#64)
+
 ## 0.9.0 (2025-12-26)
 
 ### Feat
