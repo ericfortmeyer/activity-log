@@ -9,6 +9,7 @@ use Psr\Container\ContainerInterface;
 
 return [
     GetTimeEntries::class => static fn(ContainerInterface $container) => new GetTimeEntries(
+        appVersion: new ServiceProvider($container)->appConfig->version,
         tenantService: new ServiceProvider($container)->tenantService,
         timeEntryService: new ServiceProvider($container)->timeEntryService,
         remarksForMonthService: new ServiceProvider($container)->remarksForMonthService,
@@ -21,18 +22,21 @@ return [
         new ServiceProvider($container)->templateEngine,
     ),
     DeleteTimeEntry::class => static fn(ContainerInterface $container) => new DeleteTimeEntry(
+        new ServiceProvider($container)->appConfig->version,
         new ServiceProvider($container)->timeEntryService,
         new ServiceProvider($container)->remarksForMonthService,
         new ServiceProvider($container)->templateEngine,
         new ServiceProvider($container)->hasher,
     ),
     SubmitTimeEntry::class => static fn(ContainerInterface $container) => new SubmitTimeEntry(
+        new ServiceProvider($container)->appConfig->version,
         new ServiceProvider($container)->timeEntryService,
         new ServiceProvider($container)->remarksForMonthService,
         new ServiceProvider($container)->templateEngine,
         new ServiceProvider($container)->hasher,
     ),
     SaveRemarksForMonth::class => static fn(ContainerInterface $container) => new SaveRemarksForMonth(
+        appVersion: new ServiceProvider($container)->appConfig->version,
         creditHoursService: new ServiceProvider($container)->creditHoursService,
         remarksService: new ServiceProvider($container)->remarksForMonthService,
         timeEntryService: new ServiceProvider($container)->timeEntryService,
@@ -40,6 +44,7 @@ return [
         hasher: new ServiceProvider($container)->hasher,
     ),
     SaveCreditHours::class => static fn(ContainerInterface $container) => new SaveCreditHours(
+        appVersion: new ServiceProvider($container)->appConfig->version,
         creditHoursService: new ServiceProvider($container)->creditHoursService,
         remarksService: new ServiceProvider($container)->remarksForMonthService,
         timeEntryService: new ServiceProvider($container)->timeEntryService,
@@ -51,6 +56,7 @@ return [
         new ServiceProvider($container)->templateEngine,
     ),
     EmailReportForMonth::class => static fn(ContainerInterface $container) => new EmailReportForMonth(
+        appVersion: new ServiceProvider($container)->appConfig->version,
         mailConfig: new ServiceProvider($container)->emailConfig,
         timeEntryService: new ServiceProvider($container)->timeEntryService,
         remarksService: new ServiceProvider($container)->remarksForMonthService,

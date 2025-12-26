@@ -26,6 +26,7 @@ final class TimeEntriesContextTest extends TestCase
     public function cannotshowreport()
     {
         $sut = new TimeEntriesContext(
+            appVersion: "",
             user: new User("", "", "", ""),
             tenantId: "",
             timeEntries: []
@@ -39,6 +40,7 @@ final class TimeEntriesContextTest extends TestCase
     public function canshow()
     {
         $sut = new TimeEntriesContext(
+            appVersion: "",
             user: new User("", "", "", ""),
             tenantId: "",
             timeEntries: [new TimeEntry()]
@@ -53,6 +55,7 @@ final class TimeEntriesContextTest extends TestCase
     {
         $creditHours = new CreditHours($creditHoursData);
         $sut = new TimeEntriesContext(
+            appVersion: "",
             user: new User("", "", "", ""),
             tenantId: "",
             timeEntries: [],
@@ -69,6 +72,7 @@ final class TimeEntriesContextTest extends TestCase
     {
         $creditHours = new CreditHours($creditHoursData);
         $sut = new TimeEntriesContext(
+            appVersion: "",
             user: new User("", "", "", ""),
             tenantId: "",
             timeEntries: [new TimeEntry()],
@@ -86,6 +90,7 @@ final class TimeEntriesContextTest extends TestCase
         $creditHours = new CreditHours($creditHoursData);
         $sut = new TimeEntriesContext(
             user: new User("", "", "", ""),
+            appVersion: "",
             tenantId: "",
             timeEntries: [new TimeEntry()],
             creditHours: $creditHours,
@@ -100,6 +105,7 @@ final class TimeEntriesContextTest extends TestCase
     public function cangettotalhours(array $timeEntriesData, int $expectedTotalHours)
     {
         $sut = new TimeEntriesContext(
+            appVersion: "",
             user: new User("", "", "", ""),
             tenantId: "",
             timeEntries: array_map(
@@ -116,6 +122,7 @@ final class TimeEntriesContextTest extends TestCase
     public function cangetinstructions()
     {
         $sut = new TimeEntriesContext(
+            appVersion: "",
             user: new User("", "", "", ""),
             tenantId: "",
             timeEntries: [],
@@ -133,6 +140,7 @@ final class TimeEntriesContextTest extends TestCase
     public function cangetformtitle()
     {
         $sut = new TimeEntriesContext(
+            appVersion: "",
             user: new User("", "", "", ""),
             tenantId: "",
             timeEntries: [],
@@ -150,6 +158,7 @@ final class TimeEntriesContextTest extends TestCase
     public function cangethasremarksid(array $remarksData, string $expectedRemarksId)
     {
         $sut = new TimeEntriesContext(
+            appVersion: "",
             user: new User("", "", "", ""),
             tenantId: "",
             timeEntries: [],
@@ -165,6 +174,7 @@ final class TimeEntriesContextTest extends TestCase
     public function cangetmonthfilter(array $filters, int $expectedMonthFilter)
     {
         $sut = new TimeEntriesContext(
+            appVersion: "",
             user: new User("", "", "", ""),
             tenantId: "",
             timeEntries: [],
@@ -179,6 +189,7 @@ final class TimeEntriesContextTest extends TestCase
     public function cangetmonthfilterdefault()
     {
         $sut = new TimeEntriesContext(
+            appVersion: "",
             user: new User("", "", "", ""),
             tenantId: "",
             timeEntries: [],
@@ -194,6 +205,7 @@ final class TimeEntriesContextTest extends TestCase
     public function cangetyearfilter(array $filters, string $expectedYearFilter)
     {
         $sut = new TimeEntriesContext(
+            appVersion: "",
             user: new User("", "", "", ""),
             tenantId: "",
             timeEntries: [],
@@ -209,6 +221,7 @@ final class TimeEntriesContextTest extends TestCase
     public function cangetyearfilterdefault(string $expectedYearFilterDefault)
     {
         $sut = new TimeEntriesContext(
+            appVersion: "",
             user: new User("", "", "", ""),
             tenantId: "",
             timeEntries: [],
@@ -226,6 +239,7 @@ final class TimeEntriesContextTest extends TestCase
     public function cangetfilterQuery(array $filters, string $expectedMonthQuery)
     {
         $sut = new TimeEntriesContext(
+            appVersion: "",
             user: new User("", "", "", ""),
             tenantId: "",
             timeEntries: [],
@@ -251,6 +265,7 @@ final class TimeEntriesContextTest extends TestCase
     ) {
         $timeEntry = new TimeEntry($timeEntryData);
         $sut = new TimeEntriesContext(
+            appVersion: "",
             user: new User("", "", "", ""),
             tenantId: "",
             timeEntries: [],

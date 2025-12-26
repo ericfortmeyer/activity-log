@@ -16,6 +16,8 @@ readonly class Hasher
     public function __construct(
         #[SensitiveParameter]
         private string $hashingKey,
+        #[SensitiveParameter]
+        private string $signingKey,
     ) {}
 
     public function hash(
@@ -33,6 +35,20 @@ readonly class Hasher
                     message: $value,
                     length: SODIUM_CRYPTO_GENERICHASH_BYTES_MIN,
                 )
+        );
+    }
+
+    public function verify(
+        string $data,
+        string $signature,
+    ): bool {
+        return hash_equals(
+            hash_hmac(
+                "sha256",
+                $data,
+                $this->signingKey,
+            ),
+            $signature,
         );
     }
 }

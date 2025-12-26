@@ -42,6 +42,7 @@ final class GetTimeEntriesTest extends TestCase
         $this->creditHoursService = $this->createMock(CreditHoursService::class);
         $this->templateEngine = new TemplateBinder(new TemplateEngine());
         $this->getTimeEntries = new GetTimeEntries(
+            appVersion: "",
             tenantService: $this->createStub(TenantService::class),
             timeEntryService: $this->timeEntryService,
             remarksForMonthService: $this->remarksForMonthService,

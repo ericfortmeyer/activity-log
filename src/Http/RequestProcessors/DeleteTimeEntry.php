@@ -22,6 +22,7 @@ use EricFortmeyer\ActivityLog\Utils\Hasher;
 final class DeleteTimeEntry extends AbstractTenantBasedRequestProcessor
 {
     public function __construct(
+        private readonly string $appVersion,
         private readonly TimeEntryService $timeEntryService,
         private readonly RemarksForMonthService $remarksForMonthService,
         private readonly TemplateBinder $templateEngine,
@@ -64,6 +65,7 @@ final class DeleteTimeEntry extends AbstractTenantBasedRequestProcessor
             "index",
             $remarks instanceof NotFound
                 ? new TimeEntriesContext(
+                    appVersion: $this->appVersion,
                     timeEntries: $timeEntries,
                     tenantId: $this->getTenantId(),
                     currentEntry: $deletedEntry,
@@ -71,6 +73,7 @@ final class DeleteTimeEntry extends AbstractTenantBasedRequestProcessor
                     user: $this->user
                 )
                 : new TimeEntriesContext(
+                    appVersion: $this->appVersion,
                     timeEntries: $timeEntries,
                     tenantId: $this->getTenantId(),
                     currentEntry: $deletedEntry,

@@ -25,6 +25,7 @@ use EricFortmeyer\ActivityLog\Utils\Hasher;
 final class SaveRemarksForMonth extends AbstractTenantBasedRequestProcessor
 {
     public function __construct(
+        private readonly string $appVersion,
         private readonly RemarksForMonthService $remarksService,
         private readonly CreditHoursService $creditHoursService,
         private readonly TimeEntryService $timeEntryService,
@@ -67,6 +68,7 @@ final class SaveRemarksForMonth extends AbstractTenantBasedRequestProcessor
             "index",
             $creditHours instanceof NotFound
                 ? new TimeEntriesContext(
+                    appVersion: $this->appVersion,
                     timeEntries: $timeEntries,
                     tenantId: $this->getTenantId(),
                     currentEntry: $currentEntry,
@@ -75,6 +77,7 @@ final class SaveRemarksForMonth extends AbstractTenantBasedRequestProcessor
                     user: $this->user,
                 )
                 : new TimeEntriesContext(
+                    appVersion: $this->appVersion,
                     timeEntries: $timeEntries,
                     tenantId: $this->getTenantId(),
                     currentEntry: $currentEntry,

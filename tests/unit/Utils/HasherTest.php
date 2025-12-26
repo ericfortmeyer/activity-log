@@ -23,7 +23,8 @@ final class HasherTest extends TestCase
         string $expectedOutput,
     ) {
         $hasher = new Hasher(
-            hashingKey: $hashingKey
+            hashingKey: $hashingKey,
+            signingKey: $hashingKey,
         );
 
         $result = $hasher->hash($input);

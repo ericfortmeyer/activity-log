@@ -40,6 +40,7 @@ final class DeleteTimeEntryTest extends TestCase
             ->willReturn(new NotFound());
         $this->templateEngine = new TemplateBinder(new TemplateEngine());
         $this->deleteTimeEntry = new DeleteTimeEntry(
+            appVersion: "",
             timeEntryService: $this->timeEntryService,
             remarksForMonthService: $this->remarksForMonthService,
             templateEngine: $this->templateEngine,

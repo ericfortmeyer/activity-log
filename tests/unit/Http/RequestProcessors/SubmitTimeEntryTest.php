@@ -62,6 +62,7 @@ final class SubmitTimeEntryTest extends TestCase
         $hasher = $this->createStub(Hasher::class);
         $timeEntryService = $this->createMock(TimeEntryService::class);
         $submitTimeEntry = new SubmitTimeEntry(
+            appVersion: "",
             timeEntryService: $timeEntryService,
             remarksForMonthService: $this->remarksForMonthService,
             templateEngine: $this->templateEngine,
@@ -108,6 +109,7 @@ final class SubmitTimeEntryTest extends TestCase
         $hasher = $this->createStub(Hasher::class);
         $timeEntryService = $this->createMock(TimeEntryService::class);
         $submitTimeEntry = new SubmitTimeEntry(
+            appVersion: "",
             timeEntryService: $timeEntryService,
             remarksForMonthService: $this->remarksForMonthService,
             templateEngine: $this->templateEngine,
@@ -153,6 +155,7 @@ final class SubmitTimeEntryTest extends TestCase
         $hasher = $this->createStub(Hasher::class);
         $timeEntryService = $this->createStub(TimeEntryService::class);
         $submitTimeEntry = new SubmitTimeEntry(
+            appVersion: "",
             timeEntryService: $timeEntryService,
             remarksForMonthService: $this->remarksForMonthService,
             templateEngine: $this->templateEngine,

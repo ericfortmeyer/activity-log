@@ -30,6 +30,7 @@ use Phpolar\Storage\NotFound;
 final class EmailReportForMonth extends AbstractTenantBasedRequestProcessor
 {
     public function __construct(
+        private readonly string $appVersion,
         private readonly EmailConfig $mailConfig,
         private readonly TimeEntryService $timeEntryService,
         private readonly RemarksForMonthService $remarksService,
@@ -131,6 +132,7 @@ final class EmailReportForMonth extends AbstractTenantBasedRequestProcessor
         return match (true) {
             $remarks instanceof NotFound && $creditHours instanceof NotFound =>
             new TimeEntriesContext(
+                appVersion: $this->appVersion,
                 currentEntry: $currentEntry,
                 timeEntries: $timeEntries,
                 tenantId: $this->getTenantId(),
@@ -139,6 +141,7 @@ final class EmailReportForMonth extends AbstractTenantBasedRequestProcessor
             ),
             $creditHours instanceof CreditHours && $remarks instanceof NotFound =>
             new TimeEntriesContext(
+                appVersion: $this->appVersion,
                 currentEntry: $currentEntry,
                 timeEntries: $timeEntries,
                 tenantId: $this->getTenantId(),
@@ -148,6 +151,7 @@ final class EmailReportForMonth extends AbstractTenantBasedRequestProcessor
             ),
             $creditHours instanceof CreditHours && $remarks instanceof RemarksForMonth =>
             new TimeEntriesContext(
+                appVersion: $this->appVersion,
                 currentEntry: $currentEntry,
                 timeEntries: $timeEntries,
                 tenantId: $this->getTenantId(),
@@ -158,6 +162,7 @@ final class EmailReportForMonth extends AbstractTenantBasedRequestProcessor
             ),
             $remarks instanceof RemarksForMonth && $creditHours instanceof NotFound =>
             new TimeEntriesContext(
+                appVersion: $this->appVersion,
                 currentEntry: $currentEntry,
                 timeEntries: $timeEntries,
                 tenantId: $this->getTenantId(),
@@ -167,6 +172,7 @@ final class EmailReportForMonth extends AbstractTenantBasedRequestProcessor
             ),
             default =>
             new TimeEntriesContext(
+                appVersion: $this->appVersion,
                 currentEntry: $currentEntry,
                 user: $this->user,
                 tenantId: $this->getTenantId(),
