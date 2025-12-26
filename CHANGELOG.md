@@ -2,6 +2,12 @@
 
 This file documents changes to the Activity Log application.
 
+## 0.9.3 (2025-12-26)
+
+### Fix
+
+- harden release webhook endpoint (#66)
+
 ## 0.9.2 (2025-12-26)
 
 ### Fix
