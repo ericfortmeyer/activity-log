@@ -2,6 +2,18 @@
 
 This file documents changes to the Activity Log application.
 
+## 0.10.0 (2025-12-26)
+
+### Feat
+
+- add support for purging account data (#82)
+- add more profile data (#81)
+
+### Fix
+
+- remove export button tooltip (#80)
+- move nav out activities container (#79)
+
 ## 0.9.4 (2025-12-26)
 
 ### Fix
