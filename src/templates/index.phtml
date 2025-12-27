@@ -239,23 +239,21 @@ use function EricFortmeyer\ActivityLog\UserInterface\HTMLElements\head;
         </dialog>
         <dialog id="profile-dialog">
             <article>
-                <header>
-                    <h2>
-                        <button type="button" id="profile-dialog-close-button" class="close" aria-label="Close" rel="prev">&times;</button>
-                        <p>Manage Profile</p>
-                    </h2>
-                    <h4><?= $view->user->name ?></h4>
-                    <nav>
-                        <ul>
-                            <li>
-                                <a href="/logout">Logout</a>
-                            </li>
-                        </ul>
-                    </nav>
-                </header>
+                <h2>
+                    <button type="button" id="profile-dialog-close-button" class="close" aria-label="Close" rel="prev">&times;</button>
+                    <p>Manage Profile</p>
+                </h2>
+                <h4><?= $view->user->name ?></h4>
+                <nav>
+                    <ul>
+                        <li>
+                            <a href="/logout">Logout</a>
+                        </li>
+                    </ul>
+                </nav>
                 <p>This is your profile</p>
                 <footer>
-                    <a target="_blank" href="/export-data" class="secondary" role="button" data-tooltip="Export all activity entries">Export</a>
+                    <a target="_blank" href="/export-data" class="secondary" role="button">Export</a>
                 </footer>
             </article>
         </dialog>
