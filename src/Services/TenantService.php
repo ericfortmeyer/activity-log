@@ -78,6 +78,23 @@ readonly class TenantService
             return;
         }
 
+        // make sure tenant id is already hashed
         $stmt->execute(["id" => $tenant->getPrimaryKey()]);
+    }
+
+    public function deleteAllData(string $tenantId): void
+    {
+        $stmt = $this->connection->prepare(
+            <<<SQL
+            DELETE FROM `tenant`
+            WHERE id=:id
+            SQL,
+        );
+
+        if ($stmt === false) {
+            return;
+        }
+
+        $stmt->execute(["id" => $tenantId]);
     }
 }

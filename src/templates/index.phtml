@@ -258,16 +258,13 @@ use function EricFortmeyer\ActivityLog\UserInterface\HTMLElements\head;
                     <li>Name: <?= $view->user->name ?></li>
                     <li>Nickname: <?= $view->user->nickname ?></li>
                     <li>Email: <?= $view->user->email ?></li>
-                    <li>Avatar: <img
-                            src="<?= $view->user->picture  ?>"
-                            alt="Avatar of <?= $view->user->name ?>"
-                            width="48"
-                            height="48"
-                            data-style="avatar">
-                    </li>
                 </ul>
                 <footer>
-                    <a target="_blank" href="/export-data" class="secondary" role="button">Export</a>
+                    <a data-style="export-button" target="_blank" href="/export-data" class="secondary" role="button">Export</a>
+                    <form data-style="delete-button" method="post" action="/delete-data">
+                        <input type="hidden" name="id" value="<?= $view->tenantId ?>" />
+                        <button type="submit" class="danger">Purge Data</button>
+                    </form>
                 </footer>
             </article>
         </dialog>

@@ -65,6 +65,10 @@ nav ul li {
     --pico-border-color: #c0392b;
 }
 
+[data-style=export-button] {
+    float: left;
+}
+
 [data-style=delete-button] button.danger:hover,
 [data-style=delete-button] button.danger:focus {
     --pico-background-color: #c0392b;
