@@ -50,24 +50,22 @@ use function EricFortmeyer\ActivityLog\UserInterface\HTMLElements\head;
             </div>
         </header>
         <main class="container">
+            <?= timeEntriesNav($view) ?>
             <div class=grid>
                 <article id="activities">
-                    <header>
-                        <h2>
-                            <?= timeEntriesNav($view) ?>
-                            <button type="button" id="remarks-dialog-open-button"><?= $view->getRemarksButtonText() ?></button>
-                            <button type="button" id="credit-hours-dialog-open-button">Credit Hours</button>
-                            <?php if ($view->canShowReport()): ?>
-                                <button type="button" id="report-dialog-open-button">View Report</button>
-                                <form method="post" action="<?= $view->getMonthReportEmailUrl() ?>">
-                                    <input type="text" name="mailTo" placeholder="<?= $view->getEmailReportPlaceholder() ?>" required />
-                                    <input type="hidden" name="month" value="<?= $view->getMonth() ?>" />
-                                    <input type="hidden" name="year" value="<?= $view->getYear() ?>" />
-                                    <button type="submit" data-tooltip="Email Report">&#x1F582;</button>
-                                </form>
-                            <?php endif ?>
-                        </h2>
-                    </header>
+                    <h2>&#x1F4C5; <?= $view->listTitle() ?></h2>
+                    <button type="button" id="remarks-dialog-open-button"><?= $view->getRemarksButtonText() ?></button>
+                    <button type="button" id="credit-hours-dialog-open-button">Credit Hours</button>
+                    <?php if ($view->canShowReport()): ?>
+                        <button type="button" id="report-dialog-open-button">View Report</button>
+                        <form method="post" action="<?= $view->getMonthReportEmailUrl() ?>">
+                            <input type="text" name="mailTo" placeholder="<?= $view->getEmailReportPlaceholder() ?>" required />
+                            <input type="hidden" name="month" value="<?= $view->getMonth() ?>" />
+                            <input type="hidden" name="year" value="<?= $view->getYear() ?>" />
+                            <button type="submit" data-tooltip="Email Report">&#x1F582;</button>
+                        </form>
+                    <?php endif ?>
+                    </h2>
                     <hr />
                     <?php if (count($view->timeEntries) === 0): ?>
                         <p>No activities recorded yet.</p>
