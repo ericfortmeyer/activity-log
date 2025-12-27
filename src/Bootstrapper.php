@@ -24,7 +24,7 @@ final readonly class Bootstrapper
         private MiddlewareInterface $eventHooksMiddleware,
         private ExceptionHandlerInterface $exceptionHandler,
     ) {
-        ini_set("display_errors", true);
+        ini_set("display_errors", false);
         ini_set("session.name", "activity-log-app");
         // ini_set("session.cache_limiter", "private_no_expire");
     }

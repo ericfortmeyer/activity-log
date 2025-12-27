@@ -77,6 +77,14 @@ return [
                 requestProcessor: new ServiceProvider($container)->downloadDataExport,
             ),
             new Target(
+                location: "/delete-data",
+                method: HttpMethod::Post,
+                representations: new Representations(
+                    [MimeType::TextHtml],
+                ),
+                requestProcessor: new ServiceProvider($container)->deleteAccountData,
+            ),
+            new Target(
                 location: "/report/send",
                 method: HttpMethod::Post,
                 representations: new Representations(

@@ -21,6 +21,11 @@ return [
         new ServiceProvider($container)->timeEntryService,
         new ServiceProvider($container)->templateEngine,
     ),
+    DeleteAllData::class => static fn(ContainerInterface $container) => new DeleteAllData(
+        tenantService: new ServiceProvider($container)->tenantService,
+        templateEngine: new ServiceProvider($container)->templateEngine,
+        hasher: new ServiceProvider($container)->hasher,
+    ),
     DeleteTimeEntry::class => static fn(ContainerInterface $container) => new DeleteTimeEntry(
         new ServiceProvider($container)->appConfig->version,
         new ServiceProvider($container)->timeEntryService,

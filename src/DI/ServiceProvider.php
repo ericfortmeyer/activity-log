@@ -490,6 +490,19 @@ final class ServiceProvider
         }
     }
 
+    public RequestProcessorInterface $deleteAccountData {
+        get {
+            $processor = $this->container->get(
+                \EricFortmeyer\ActivityLog\Http\RequestProcessors\DeleteAllData::class
+            );
+            return $processor instanceof RequestProcessorInterface === false
+                ? throw new MissingDependencyException(
+                    \EricFortmeyer\ActivityLog\Http\RequestProcessors\DeleteAllData::class
+                )
+                : $processor;
+        }
+    }
+
     public RequestProcessorInterface $emailReportForMonth {
         get {
             $emailReportForMonth = $this->container->get(
