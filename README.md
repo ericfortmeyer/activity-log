@@ -18,6 +18,24 @@
     </a>
 </p>
 
+## Table of Contents
+
+1. [Description](#description)
+1. [Documentation](#documentation)
+1. [Privacy Policy](#privacy-policy)
+
+## Description
+
+The Activity Log application provides a way to keep track of time spent on an activity. A report that contains all hours logged for the month can be emailed. You can add credit hours to the month as well as remarks (or notes).
+
+<https://activity-log.phpolar.org/>
+
 ## Documentation
 
-Documentation coming soon
+Simply navigate to the month you would like to add hours to and fill out the form. The hours will be added after you click submit.
+
+## Privacy Policy
+
+* Your data will never be sold.
+* All data is encrypted at rest. This means that even if someone were to gain access to the database, the data would not be in an understandable, readable form.
+* Your email address, username, or password are not saved in our database.
