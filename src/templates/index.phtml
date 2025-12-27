@@ -251,7 +251,21 @@ use function EricFortmeyer\ActivityLog\UserInterface\HTMLElements\head;
                         </li>
                     </ul>
                 </nav>
-                <p>This is your profile</p>
+                <p>
+                    Your profile data must be edited with your authentication provider (i.e. Google, Apple, etc).
+                </p>
+                <ul>
+                    <li>Name: <?= $view->user->name ?></li>
+                    <li>Nickname: <?= $view->user->nickname ?></li>
+                    <li>Email: <?= $view->user->email ?></li>
+                    <li>Avatar: <img
+                            src="<?= $view->user->picture  ?>"
+                            alt="Avatar of <?= $view->user->name ?>"
+                            width="48"
+                            height="48"
+                            data-style="avatar">
+                    </li>
+                </ul>
                 <footer>
                     <a target="_blank" href="/export-data" class="secondary" role="button">Export</a>
                 </footer>
