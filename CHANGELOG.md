@@ -2,6 +2,12 @@
 
 This file documents changes to the Activity Log application.
 
+## 0.10.3 (2025-12-28)
+
+### Fix
+
+- prevent navigation after saving
+
 ## 0.10.2 (2025-12-28)
 
 ### Fix
