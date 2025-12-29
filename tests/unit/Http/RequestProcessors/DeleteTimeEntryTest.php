@@ -17,6 +17,8 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Phpolar\PurePhp\TemplateEngine;
 use Phpolar\Storage\NotFound;
+use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\MockObject\Stub;
 
 #[CoversClass(DeleteTimeEntry::class)]
@@ -54,13 +56,16 @@ final class DeleteTimeEntryTest extends TestCase
         );
     }
 
-    public function testProcessDeletesTimeEntry(): void
+    #[Test]
+    #[TestDox("Shall delete a time entry")]
+    public function deletes(): void
     {
         $entryId = "12345";
         $deletedEntry = new TimeEntry();
         $deletedEntry->id = $entryId;
         $deletedEntry->dayOfMonth = 1;
         $deletedEntry->year = "2025";
+        $deletedEntry->month = 10;
         $deletedEntry->hours = 8;
         $deletedEntry->minutes = 30;
         $deletedEntry->createdOn = new \DateTimeImmutable();
@@ -75,7 +80,9 @@ final class DeleteTimeEntryTest extends TestCase
         $this->assertStringContainsString("Activity", $response);
     }
 
-    public function testProcessHandlesNotFound(): void
+    #[Test]
+    #[TestDox("Shall handle not found time entry")]
+    public function handlesNotFound(): void
     {
         $entryId = "nonexistent";
         $this->timeEntryService

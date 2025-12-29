@@ -146,7 +146,6 @@ use function EricFortmeyer\ActivityLog\UserInterface\HTMLElements\head;
                             )
                             ?>
                         </div>
-                        <input type="hidden" id="filterYear" name="filterYear" value="<?= $view->getYearFilter() ?>" />
                         <?php foreach ($view->currentEntry as $field => $value): ?>
                             <?php $inputType = $view->currentEntry->getInputType($field); ?>
                             <?php if ($inputType === InputTypes::Hidden): ?>
