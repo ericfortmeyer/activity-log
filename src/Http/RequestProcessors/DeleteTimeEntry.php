@@ -45,10 +45,12 @@ final class DeleteTimeEntry extends AbstractTenantBasedRequestProcessor
             );
         }
 
+        $newEntryForForm = new TimeEntry();
+
 
         $month = $monthFilters->getMonth();
         $year = $monthFilters->getYear();
-        TimeEntry::setUninitializedValues(timeEntry: $deletedEntry, month: $month, year: $year);
+        TimeEntry::setUninitializedValues(timeEntry: $newEntryForForm, month: $month, year: $year);
 
         $timeEntries = $this->timeEntryService->getAllByMonth(
             month: $month,
@@ -68,7 +70,7 @@ final class DeleteTimeEntry extends AbstractTenantBasedRequestProcessor
                     appVersion: $this->appVersion,
                     timeEntries: $timeEntries,
                     tenantId: $this->getTenantId(),
-                    currentEntry: $deletedEntry,
+                    currentEntry: $newEntryForForm,
                     filters: $monthFilters,
                     user: $this->user
                 )
@@ -76,7 +78,7 @@ final class DeleteTimeEntry extends AbstractTenantBasedRequestProcessor
                     appVersion: $this->appVersion,
                     timeEntries: $timeEntries,
                     tenantId: $this->getTenantId(),
-                    currentEntry: $deletedEntry,
+                    currentEntry: $newEntryForForm,
                     filters: $monthFilters,
                     remarks: $remarks,
                     user: $this->user
