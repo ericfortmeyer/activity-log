@@ -2,6 +2,12 @@
 
 This file documents changes to the Activity Log application.
 
+## 0.10.4 (2025-12-28)
+
+### Fix
+
+- improve header and close button layout
+
 ## 0.10.3 (2025-12-28)
 
 ### Fix
