@@ -181,6 +181,10 @@ use function EricFortmeyer\ActivityLog\UserInterface\HTMLElements\head;
                     <input type="hidden" id="remarks-tenant-id" name="tenantId" value="<?= $view->tenantId ?>" />
                     <input type="hidden" id="remarks-month" name="month" value="<?= $view->getRemarksMonth() ?>" />
                     <input type="hidden" id="remarks-year" name="year" value="<?= $view->getRemarksYear() ?>" />
+                    <?php if ($view->hasFilter()): ?>
+                        <input type="hidden" id="filterYear" name="filterYear" value="<?= $view->getYearFilter() ?>" />
+                        <input type="hidden" id="filterMonth" name="filterMonth" value="<?= $view->getMonthFilter() ?>" />
+                    <?php endif ?>
                     <textarea
                         id="remarks"
                         name="remarks"
@@ -232,6 +236,10 @@ use function EricFortmeyer\ActivityLog\UserInterface\HTMLElements\head;
                     <input type="hidden" id="remarks-tenant-id" name="tenantId" value="<?= $view->tenantId ?>" />
                     <input type="hidden" id="credit-hours-month" name="month" value="<?= $view->getRemarksMonth() ?>" />
                     <input type="hidden" id="credit-hours-year" name="year" value="<?= $view->getRemarksYear() ?>" />
+                    <?php if ($view->hasFilter()): ?>
+                        <input type="hidden" id="filterYear" name="filterYear" value="<?= $view->getYearFilter() ?>" />
+                        <input type="hidden" id="filterMonth" name="filterMonth" value="<?= $view->getMonthFilter() ?>" />
+                    <?php endif ?>
                     <button type="submit">Save</button>
                 </form>
             </article>
