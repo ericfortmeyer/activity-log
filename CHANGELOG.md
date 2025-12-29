@@ -2,6 +2,12 @@
 
 This file documents changes to the Activity Log application.
 
+## 0.10.2 (2025-12-28)
+
+### Fix
+
+- remove extra x in dialog close button
+
 ## 0.10.1 (2025-12-28)
 
 ### Fix
