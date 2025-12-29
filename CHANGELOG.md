@@ -2,6 +2,12 @@
 
 This file documents changes to the Activity Log application.
 
+## 0.10.1 (2025-12-28)
+
+### Fix
+
+- clear time entry form after deleting a time entry
+
 ## 0.10.0 (2025-12-26)
 
 ### Feat
