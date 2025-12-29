@@ -14,7 +14,7 @@ final class AppReleaseEvent extends AbstractModel
     private const EVENT_TYPE_HEADER_KEY = "X-GitHub-Event";
     private const HOOK_ID_HEADER_KEY = "X-GitHub-Hook-ID";
     private const RELEASE_EVENT_TYPE = "release";
-    private const ACCEPTABLE_RELEASE_ACTION = ["created"];
+    private const ACCEPTABLE_RELEASE_ACTION = ["published"];
     public readonly AppRelease $release;
 
     #[MaxLength(100)]
