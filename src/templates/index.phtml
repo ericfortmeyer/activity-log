@@ -93,58 +93,39 @@ use function EricFortmeyer\ActivityLog\UserInterface\HTMLElements\head;
                     <p><span>&#x1F4A1;</span> <?= $view->getAddActivityInstructions() ?></p>
                     <form method="POST" action="/time-entry/add">
                         <div class="grid">
+                            <?php foreach ([
+                                "month",
+                                "dayOfMonth",
+                                "year",
+                                ] as $inputName): ?>
                             <?= formInput(
-                                name: "month",
-                                label: $view->currentEntry->getLabel("month"),
-                                type: $view->currentEntry->getInputType("month"),
-                                value: $view->currentEntry->month,
-                                placeholder: "Month",
-                                errorMessage: $view->currentEntry->getFieldErrorMessage("month", stringToAppend: " ⚠"),
-                                isInvalid: $view->currentEntry->hasError("month")
+                                name: $inputName,
+                                label: $view->currentEntry->getLabel($inputName),
+                                type: $view->currentEntry->getInputType($inputName),
+                                value: $view->currentEntry->$inputName,
+                                placeholder: $view->currentEntry->getColumnName($inputName),
+                                errorMessage: $view->currentEntry->getFieldErrorMessage($inputName, stringToAppend: " ⚠"),
+                                isInvalid: $view->currentEntry->hasError($inputName)
                             )
                             ?>
-                            <?= formInput(
-                                name: "dayOfMonth",
-                                label: $view->currentEntry->getLabel("dayOfMonth"),
-                                type: $view->currentEntry->getInputType("dayOfMonth"),
-                                value: $view->currentEntry->dayOfMonth,
-                                placeholder: "Day of Month",
-                                errorMessage: $view->currentEntry->getFieldErrorMessage("dayOfMonth", stringToAppend: " ⚠"),
-                                isInvalid: $view->currentEntry->hasError("dayOfMonth")
-                            )
-                            ?>
-                            <?= formInput(
-                                name: "year",
-                                label: $view->currentEntry->getLabel("year"),
-                                type: $view->currentEntry->getInputType("year"),
-                                value: $view->currentEntry->year,
-                                placeholder: "Year",
-                                errorMessage: $view->currentEntry->getFieldErrorMessage("year", stringToAppend: " ⚠"),
-                                isInvalid: $view->currentEntry->hasError("year")
-                            )
-                            ?>
+                            <?php endforeach ?>
                         </div>
                         <div class="grid">
+                            <?php foreach ([
+                                "hours",
+                                "minutes",
+                                ] as $inputName): ?>
                             <?= formInput(
-                                name: "hours",
-                                label: $view->currentEntry->getLabel("hours"),
-                                type: $view->currentEntry->getInputType("hours"),
-                                value: $view->currentEntry->hours,
-                                placeholder: "Hours",
-                                errorMessage: $view->currentEntry->getHoursErrorMessage(),
-                                isInvalid: $view->currentEntry->hasHoursError()
+                                name: $inputName,
+                                label: $view->currentEntry->getLabel($inputName),
+                                type: $view->currentEntry->getInputType($inputName),
+                                value: $view->currentEntry->$inputName,
+                                placeholder: $view->currentEntry->getColumnName($inputName),
+                                errorMessage: $view->currentEntry->getFieldErrorMessage($inputName, stringToAppend: " ⚠"),
+                                isInvalid: $view->currentEntry->hasError($inputName)
                             )
                             ?>
-                            <?= formInput(
-                                name: "minutes",
-                                label: $view->currentEntry->getLabel("minutes"),
-                                type: $view->currentEntry->getInputType("minutes"),
-                                value: $view->currentEntry->minutes,
-                                placeholder: "Minutes",
-                                errorMessage: $view->currentEntry->getFieldErrorMessage("minutes", stringToAppend: " ⚠"),
-                                isInvalid: $view->currentEntry->hasError("minutes")
-                            )
-                            ?>
+                            <?php endforeach ?>
                         </div>
                         <?php foreach ($view->currentEntry as $field => $value): ?>
                             <?php $inputType = $view->currentEntry->getInputType($field); ?>
@@ -225,7 +206,6 @@ use function EricFortmeyer\ActivityLog\UserInterface\HTMLElements\head;
             <article>
                 <header>
                     <h2>
-
                         <button type="button" id="credit-hours-dialog-close-button" class="close" aria-label="Close" rel="prev"></button>
                         <p>Credit Hours</p>
                     </h2>
@@ -246,15 +226,15 @@ use function EricFortmeyer\ActivityLog\UserInterface\HTMLElements\head;
         </dialog>
         <dialog id="profile-dialog">
             <article>
-                <h2>
+                <header>
                     <button type="button" id="profile-dialog-close-button" class="close" aria-label="Close" rel="prev"></button>
-                    <p>Manage Profile</p>
-                </h2>
+                    <p><strong>Manage Profile</strong></p>
+                </header>
                 <h4><?= $view->user->name ?></h4>
                 <nav>
                     <ul>
                         <li>
-                            <a href="/logout">Logout</a>
+                            <a href="/logout" tabindex="0">Logout</a>
                         </li>
                     </ul>
                 </nav>
