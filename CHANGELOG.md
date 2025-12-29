@@ -2,6 +2,12 @@
 
 This file documents changes to the Activity Log application.
 
+## 0.10.5 (2025-12-29)
+
+### Fix
+
+- hide empty user information in profile
+
 ## 0.10.4 (2025-12-28)
 
 ### Fix
