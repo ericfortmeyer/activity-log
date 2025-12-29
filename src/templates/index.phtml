@@ -93,38 +93,42 @@ use function EricFortmeyer\ActivityLog\UserInterface\HTMLElements\head;
                     <p><span>&#x1F4A1;</span> <?= $view->getAddActivityInstructions() ?></p>
                     <form method="POST" action="/time-entry/add">
                         <div class="grid">
-                            <?php foreach ([
-                                "month",
-                                "dayOfMonth",
-                                "year",
-                                ] as $inputName): ?>
-                            <?= formInput(
-                                name: $inputName,
-                                label: $view->currentEntry->getLabel($inputName),
-                                type: $view->currentEntry->getInputType($inputName),
-                                value: $view->currentEntry->$inputName,
-                                placeholder: $view->currentEntry->getColumnName($inputName),
-                                errorMessage: $view->currentEntry->getFieldErrorMessage($inputName, stringToAppend: " ⚠"),
-                                isInvalid: $view->currentEntry->hasError($inputName)
-                            )
-                            ?>
+                            <?php foreach (
+                                [
+                                    "month",
+                                    "dayOfMonth",
+                                    "year",
+                                ] as $inputName
+                            ): ?>
+                                <?= formInput(
+                                    name: $inputName,
+                                    label: $view->currentEntry->getLabel($inputName),
+                                    type: $view->currentEntry->getInputType($inputName),
+                                    value: $view->currentEntry->$inputName,
+                                    placeholder: $view->currentEntry->getColumnName($inputName),
+                                    errorMessage: $view->currentEntry->getFieldErrorMessage($inputName, stringToAppend: " ⚠"),
+                                    isInvalid: $view->currentEntry->hasError($inputName)
+                                )
+                                ?>
                             <?php endforeach ?>
                         </div>
                         <div class="grid">
-                            <?php foreach ([
-                                "hours",
-                                "minutes",
-                                ] as $inputName): ?>
-                            <?= formInput(
-                                name: $inputName,
-                                label: $view->currentEntry->getLabel($inputName),
-                                type: $view->currentEntry->getInputType($inputName),
-                                value: $view->currentEntry->$inputName,
-                                placeholder: $view->currentEntry->getColumnName($inputName),
-                                errorMessage: $view->currentEntry->getFieldErrorMessage($inputName, stringToAppend: " ⚠"),
-                                isInvalid: $view->currentEntry->hasError($inputName)
-                            )
-                            ?>
+                            <?php foreach (
+                                [
+                                    "hours",
+                                    "minutes",
+                                ] as $inputName
+                            ): ?>
+                                <?= formInput(
+                                    name: $inputName,
+                                    label: $view->currentEntry->getLabel($inputName),
+                                    type: $view->currentEntry->getInputType($inputName),
+                                    value: $view->currentEntry->$inputName,
+                                    placeholder: $view->currentEntry->getColumnName($inputName),
+                                    errorMessage: $view->currentEntry->getFieldErrorMessage($inputName, stringToAppend: " ⚠"),
+                                    isInvalid: $view->currentEntry->hasError($inputName)
+                                )
+                                ?>
                             <?php endforeach ?>
                         </div>
                         <?php foreach ($view->currentEntry as $field => $value): ?>
@@ -230,7 +234,7 @@ use function EricFortmeyer\ActivityLog\UserInterface\HTMLElements\head;
                     <button type="button" id="profile-dialog-close-button" class="close" aria-label="Close" rel="prev"></button>
                     <p><strong>Manage Profile</strong></p>
                 </header>
-                <h4><?= $view->user->name ?></h4>
+                <h4><?= isset($view->user->name) ? $view->user->name : "User" ?></h4>
                 <nav>
                     <ul>
                         <li>
@@ -242,9 +246,15 @@ use function EricFortmeyer\ActivityLog\UserInterface\HTMLElements\head;
                     Your profile data must be edited with your authentication provider (i.e. Google, Apple, etc).
                 </p>
                 <ul>
-                    <li>Name: <?= $view->user->name ?></li>
-                    <li>Nickname: <?= $view->user->nickname ?></li>
-                    <li>Email: <?= $view->user->email ?></li>
+                    <?php if (isset($view->user->name)): ?>
+                        <li>Name: <?= $view->user->name ?></li>
+                    <?php endif ?>
+                    <?php if (isset($view->user->nickname)): ?>
+                        <li>Nickname: <?= $view->user->nickname ?></li>
+                    <?php endif ?>
+                    <?php if (isset($view->user->email)): ?>
+                        <li>Email: <?= $view->user->email ?></li>
+                    <?php endif ?>
                 </ul>
                 <footer>
                     <a data-style="export-button" target="_blank" href="/export-data" class="secondary" role="button">Export</a>
