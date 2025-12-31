@@ -21,6 +21,7 @@ function head(AbstractContext $ctx, string $dialogScript = ""): string
         <link rel="icon" href="/favicon.svg" type="image/svg+xml">
         <link rel="stylesheet" href="/resources/css/pico.min.css">
         <link rel="stylesheet" href="/resources/css/overrides.css">
+        <script defer src="/resources/js/minimal-theme-switcher.min.js"></script>
         {$dialogScript}
     </head>
 HTML;

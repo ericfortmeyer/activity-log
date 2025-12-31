@@ -47,6 +47,7 @@
     "files": [
       "src/DI/Tokens.php",
       "src/UserInterface/Components/formInput.php",
+      "src/UserInterface/Components/colorSchemeSwitcher.php",
       "src/UserInterface/Components/timeEntriesNav.php",
       "src/UserInterface/HTMLElements/head.php"
     ]
