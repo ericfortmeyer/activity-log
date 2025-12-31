@@ -2,6 +2,12 @@
 
 This file documents changes to the Activity Log application.
 
+## 0.11.0 (2025-12-30)
+
+### Feat
+
+- validate the release event object (#91)
+
 ## 0.10.5 (2025-12-29)
 
 ### Fix
