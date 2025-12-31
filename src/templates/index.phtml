@@ -6,6 +6,7 @@ use EricFortmeyer\ActivityLog\TimeEntry;
 use EricFortmeyer\ActivityLog\UserInterface\Contexts\TimeEntriesContext;
 use Phpolar\Model\InputTypes;
 
+use function EricFortmeyer\ActivityLog\UserInterface\Components\colorSchemeSwitcher;
 use function EricFortmeyer\ActivityLog\UserInterface\Components\formInput;
 use function EricFortmeyer\ActivityLog\UserInterface\Components\timeEntriesNav;
 use function EricFortmeyer\ActivityLog\UserInterface\HTMLElements\head;
@@ -38,11 +39,11 @@ use function EricFortmeyer\ActivityLog\UserInterface\HTMLElements\head;
                         <li>
                             <a href="#" id="profile-dialog-open-button">
                                 <img
-                                    src="<?= $view->user->picture  ?>"
-                                    alt="Avatar of <?= $view->user->name ?>"
-                                    width="48"
-                                    height="48"
-                                    data-style="avatar">
+                                src="<?= $view->user->picture  ?>"
+                                alt="Avatar of <?= $view->user->name ?>"
+                                width="48"
+                                height="48"
+                                data-style="avatar">
                             </a>
                         </li>
                     </ul>
@@ -232,15 +233,17 @@ use function EricFortmeyer\ActivityLog\UserInterface\HTMLElements\head;
             <article>
                 <header>
                     <button type="button" id="profile-dialog-close-button" class="close" aria-label="Close" rel="prev"></button>
-                    <p><strong>Manage Profile</strong></p>
+                    <p>
+                        <strong>Manage Profile</strong>
+                    </p>
                 </header>
-                <h4><?= isset($view->user->name) ? $view->user->name : "User" ?></h4>
                 <nav>
                     <ul>
                         <li>
                             <a href="/logout" tabindex="0">Logout</a>
                         </li>
                     </ul>
+                    <?= colorSchemeSwitcher() ?>
                 </nav>
                 <p>
                     Your profile data must be edited with your authentication provider (i.e. Google, Apple, etc).
