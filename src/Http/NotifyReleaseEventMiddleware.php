@@ -60,10 +60,6 @@ final class NotifyReleaseEventMiddleware implements MiddlewareInterface
                 (int) HttpResponseCodeEnum::BadRequest->value,
                 HttpResponseCodeEnum::BadRequest->name
             ),
-            AppReleaseEvent::isCreatedRelease($requestBody) => $this->responseFactory->createResponse(
-                (int) HttpResponseCodeEnum::Accepted->value,
-                HttpResponseCodeEnum::Accepted->name
-            ),
             $this->handleReleaseEvent(
                 AppReleaseEvent::fromRequest($requestBody, $request),
                 $requestBody,
