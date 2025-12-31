@@ -2,6 +2,12 @@
 
 This file documents changes to the Activity Log application.
 
+## 0.12.0 (2025-12-31)
+
+### Feat
+
+- add theme switcher (#92)
+
 ## 0.11.0 (2025-12-30)
 
 ### Feat
