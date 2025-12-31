@@ -30,11 +30,12 @@ class DataExportService
 
         foreach ($timeEntries as $timeEntry) {
             fputcsv(
-                $this->csv,
-                array_map(
+                stream: $this->csv,
+                fields: array_map(
                     $this->convertToString(...),
                     get_object_vars($timeEntry),
                 ),
+                escape: "\\",
             );
         }
         rewind($this->csv);
