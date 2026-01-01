@@ -52,19 +52,20 @@ final class NotifyReleaseEventMiddleware implements MiddlewareInterface
                 (int) HttpResponseCodeEnum::Unauthorized->value,
                 HttpResponseCodeEnum::Unauthorized->name
             ),
-            AppReleaseEvent::isReleaseEventRequest($request) => $this->responseFactory->createResponse(
+            AppReleaseEvent::isReleaseEventRequest($request) =>
+            $this->responseFactory->createResponse(
                 (int) HttpResponseCodeEnum::NotImplemented->value,
                 HttpResponseCodeEnum::NotImplemented->name
             ),
-            AppReleaseEvent::fromRequest($requestBody, $request)->isValid() => $this->responseFactory->createResponse(
+            AppReleaseEvent::fromRequest($requestBody, $request)->isValid() =>
+            $this->responseFactory->createResponse(
                 (int) HttpResponseCodeEnum::BadRequest->value,
                 HttpResponseCodeEnum::BadRequest->name
             ),
             $this->handleReleaseEvent(
                 AppReleaseEvent::fromRequest($requestBody, $request),
                 $requestBody,
-            ) =>
-            $this->responseFactory->createResponse(
+            ) => $this->responseFactory->createResponse(
                 (int) HttpResponseCodeEnum::InternalServerError->value,
                 HttpResponseCodeEnum::InternalServerError->name
             ),
