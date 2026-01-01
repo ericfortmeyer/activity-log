@@ -9,7 +9,9 @@ use Phpolar\Model\AbstractModel;
 use Phpolar\Model\Hidden;
 use Phpolar\Phpolar\Auth\User;
 use Phpolar\Validators\{
+    Max,
     MaxLength,
+    Min,
     Pattern
 };
 
@@ -19,10 +21,14 @@ final class EmailReport extends AbstractModel
     #[MaxLength(100)]
     public string $mailTo;
 
+    #[Min(2024)]
+    #[Max(2030)]
     #[Hidden]
     public string $year;
 
     #[Hidden]
+    #[Min(1)]
+    #[Max(12)]
     public int $month;
 
     public function getSubject(User $user): string
