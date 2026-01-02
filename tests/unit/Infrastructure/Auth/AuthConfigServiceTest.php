@@ -32,7 +32,7 @@ final class AuthConfigServiceTest extends TestCase
     }
 
     #[Test]
-    #[TestDox("Shall retrieve the client secrent")]
+    #[TestDox("Shall retrieve the client secret")]
     #[TestWith(["client-secret"])]
     public function odji(string $clientSecret)
     {
@@ -42,6 +42,19 @@ final class AuthConfigServiceTest extends TestCase
         $result = $this->sut->getClientSecret();
 
         $this->assertSame($clientSecret, $result);
+    }
+
+    #[Test]
+    #[TestDox("Shall retrieve the client ID")]
+    #[TestWith(["client-id"])]
+    public function odja(string $clientId)
+    {
+        $this->secretsClient->expects($this->once())
+            ->method("getValue")
+            ->willReturn($clientId);
+        $result = $this->sut->getClientId();
+
+        $this->assertSame($clientId, $result);
     }
 
     #[Test]

@@ -234,4 +234,57 @@ final class TimeEntryTest extends TestCase
         $result = $filterFn($entry);
         $this->assertSame($expectedResult, $result);
     }
+
+    #[Test]
+    #[TestDox("Shall validate hours")]
+    #[TestWith([0, 0, true])]
+    #[TestWith([0, 1, false])]
+    #[TestWith([1, 0, false])]
+    #[TestWith([0, 28, true])]
+    public function hoursError0(
+        int $minutes,
+        int $hours,
+        bool $expectedResult,
+    ) {
+        $entry = new TimeEntry(compact("minutes", "hours"));
+        $entry->isPosted();
+
+        $result = $entry->hasHoursError();
+
+        $this->assertSame($expectedResult, $result);
+    }
+
+    #[Test]
+    #[TestWith([0, 0, false])]
+    #[TestDox("Shall validate hours")]
+    public function hoursError1(
+        int $minutes,
+        int $hours,
+        bool $expectedResult,
+    ) {
+        $entry = new TimeEntry(compact("minutes", "hours"));
+
+        $result = $entry->hasHoursError();
+
+        $this->assertSame($expectedResult, $result);
+    }
+
+    #[Test]
+    #[TestDox("Shall get hours error message")]
+    #[TestWith([0, 0, "Either minutes or hours should be entered. ⚠"])]
+    #[TestWith([0, 25, "Value is greater than the maximum ⚠"])]
+    #[TestWith([1, 0, ""])]
+    public function getsHoursErrorMessage(
+        int $minutes,
+        int $hours,
+        string $expectedErrorMessage,
+    ) {
+        $entry = new TimeEntry(compact("minutes", "hours"));
+
+        $entry->isPosted();
+
+        $result = $entry->getHoursErrorMessage();
+
+        $this->assertSame($expectedErrorMessage, $result);
+    }
 }

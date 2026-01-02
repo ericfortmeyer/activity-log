@@ -8,14 +8,14 @@ use EricFortmeyer\ActivityLog\AppConfig;
 use Phpolar\Storage\StorageContext;
 use SQLite3;
 
-class AppConfigService
+readonly class AppConfigService
 {
     /**
      * @param StorageContext<array<string,string>> $readStorage
      */
     public function __construct(
-        private readonly StorageContext $readStorage,
-        private readonly SQLite3 $writeConnection,
+        private StorageContext $readStorage,
+        private SQLite3 $writeConnection,
     ) {}
 
     public function get(): AppConfig|false
