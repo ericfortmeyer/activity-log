@@ -80,6 +80,7 @@
         "editor.defaultFormatter": "vscode.json-language-features"
     },
     "conventionalCommits.scopes": [
-        "ExceptionHandler"
+        "ExceptionHandler",
+        "TemplateBinder"
     ]
 }
