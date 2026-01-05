@@ -1,6 +1,6 @@
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.3.0
+    rev: v6.0.0
     hooks:
       - id: trailing-whitespace
         exclude: (docs|\.phan|src\/templates|src\/UserInterface\/Components|data|scripts|server|public\/resources)
@@ -12,7 +12,7 @@ repos:
       - id: check-yaml
       - id: check-added-large-files
   - repo: https://github.com/commitizen-tools/commitizen
-    rev: v4.9.1
+    rev: v4.11.1
     hooks:
     - id: commitizen
     - id: commitizen-branch

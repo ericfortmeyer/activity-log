@@ -39,7 +39,7 @@ class TimeEntry extends TenantData
     public int $month;
 
     #[Min(2025)]
-    #[Max(2026)]
+    #[Max(2028)]
     #[Required]
     public string $year;
 
@@ -56,7 +56,7 @@ class TimeEntry extends TenantData
     // phpcs:disable
     public DateTimeImmutable $createdOn {
         set(string|DateTimeImmutable $value) {
-            $this->createdOnVal  = match(true) {
+            $this->createdOnVal  = match (true) {
                 $value instanceof DateTimeImmutable => $value,
                 default => new DateTimeImmutable($value),
             };

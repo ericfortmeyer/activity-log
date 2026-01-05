@@ -217,8 +217,7 @@ final class TimeEntriesContextTest extends TestCase
 
     #[Test]
     #[TestDox("Shall get year filter default")]
-    #[TestWith(["expectedYearFilterDefault" => "2025"])]
-    public function cangetyearfilterdefault(string $expectedYearFilterDefault)
+    public function cangetyearfilterdefault()
     {
         $sut = new TimeEntriesContext(
             appVersion: "",
@@ -227,7 +226,10 @@ final class TimeEntriesContextTest extends TestCase
             timeEntries: [],
         );
 
-        $this->assertSame($expectedYearFilterDefault, $sut->getYearFilter());
+        $this->assertSame(
+            new DateTimeImmutable()->format("Y"),
+            $sut->getYearFilter()
+        );
     }
 
     #[Test]

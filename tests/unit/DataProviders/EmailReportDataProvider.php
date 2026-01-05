@@ -11,6 +11,8 @@ final readonly class EmailReportDataProvider
         return [
             [
                 "mailTo" => "fake@fake.com",
+                "month" => 12,
+                "year" => "2026",
             ]
         ];
     }

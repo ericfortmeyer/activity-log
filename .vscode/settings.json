@@ -78,5 +78,10 @@
     "intelephense.completion.suggestRelativeToPartialUseDeclaration": 2,
     "[json]": {
         "editor.defaultFormatter": "vscode.json-language-features"
-    }
+    },
+    "conventionalCommits.scopes": [
+        "ExceptionHandler",
+        "TemplateBinder",
+        "TenantService"
+    ]
 }
