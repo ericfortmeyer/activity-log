@@ -34,7 +34,7 @@ final class DeleteAllData extends AbstractTenantBasedRequestProcessor
             );
         }
 
-        $this->tenantService->deleteAllData($this->getTenantId());
+        $this->tenantService->purge($this->getTenantId());
 
         return $this->templateEngine->apply(
             "logout",

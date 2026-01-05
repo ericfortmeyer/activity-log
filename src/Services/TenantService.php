@@ -19,9 +19,7 @@ readonly class TenantService
 {
     public function __construct(
         private PDO $connection,
-    )
-    {
-    }
+    ) {}
 
     public function exists(string $tenantId): bool
     {
@@ -43,7 +41,7 @@ readonly class TenantService
         $stmt->execute(["id" => $tenantId]);
         $stmt->fetch();
 
-        return $exists;
+        return (bool) $exists;
     }
 
     /**
@@ -82,7 +80,7 @@ readonly class TenantService
         $stmt->execute(["id" => $tenant->getPrimaryKey()]);
     }
 
-    public function deleteAllData(string $tenantId): void
+    public function purge(string $tenantId): void
     {
         $stmt = $this->connection->prepare(
             <<<SQL
