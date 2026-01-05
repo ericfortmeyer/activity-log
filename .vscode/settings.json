@@ -81,6 +81,7 @@
     },
     "conventionalCommits.scopes": [
         "ExceptionHandler",
-        "TemplateBinder"
+        "TemplateBinder",
+        "TenantService"
     ]
 }
